@@ -48,33 +48,35 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFC740),
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child:Form(
             key: formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 30,),
                 //To Insert Logo or App Name
-                const Center(
-                  child: Text(
-                    "Daily Fair Deal",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFFC740)
-                    ),
+                Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(60),
+                    child: Image.asset(
+                      "images/logo.png",
+                      height: 120,
+                      width: 200,
+                      fit: BoxFit.cover,
+                    ), 
                   ),
                 ),
-                const SizedBox(height: 50,),
+                const SizedBox(height: 30,),
                 //Email Field
+                const Text('Email', style: TextStyle(fontSize: 18)),
+                const SizedBox(height: 10,),
                 TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    label: const Text('Email'),
                     hintText: "Enter Email",
                     prefixIcon: const Icon(Icons.email),
                     border: OutlineInputBorder(
@@ -97,12 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
+                const Text('Password', style: TextStyle(fontSize: 18)),
+                const SizedBox(height: 10,),
                 //Password Field
                 TextFormField(
                   controller: passwordController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    label: const Text('Password'),
                     hintText: "Enter Password",
                     prefixIcon: const Icon(Icons.password),
                      border: OutlineInputBorder(
@@ -128,7 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 //Login Button
                 ElevatedButton(
                   onPressed: (){
-                    login();
+                    if(formKey.currentState!.validate()){
+                      login();
+                    } 
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFC740),

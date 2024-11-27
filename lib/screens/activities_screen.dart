@@ -14,7 +14,8 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Activities'),
+          title: const Text('Activities', style: TextStyle(fontSize:24, fontWeight: FontWeight.bold)),
+          centerTitle: true,
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.fastfood), text: 'Food'),

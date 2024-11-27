@@ -1,3 +1,5 @@
+import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
+import 'package:dailyfairdeal/screens/payment/all_transactions_screen.dart';
 import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -8,20 +10,19 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  // Dummy data for recent transactions
+
   final List<Map<String, String>> recentTransactions = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment'),
+        title: const Text('Payment', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // Navigate to settings or perform settings action
-              debugPrint('Settings clicked');
+
             },
           ),
         ],
@@ -31,18 +32,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Add a Card Section
             GestureDetector(
               onTap: () {
-                // Navigate to 'Add a Card' functionality
-                debugPrint('Add a card clicked');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddCardScreen()));
               },
               child: const Card(
                 child: ListTile(
                   leading: Icon(Icons.credit_card, size: 40),
                   title: Text('Add a card'),
                   subtitle: Text('Go cashless with a credit or debit card'),
-                  trailing: Icon(Icons.arrow_forward_ios),
                 ),
               ),
             ),
@@ -56,7 +54,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            // Recent Transactions or Placeholder
             Expanded(
               child: recentTransactions.isEmpty
                   ? Center(
@@ -77,8 +74,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(height: 5),
                           TextButton(
                             onPressed: () {
-                              // Navigate to past transactions
-                              debugPrint('View past transactions clicked');
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AllTransactionsScreen()));
                             },
                             child: const Text('See past transactions'),
                           ),
