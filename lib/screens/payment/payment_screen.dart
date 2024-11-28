@@ -1,6 +1,7 @@
 import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
 import 'package:dailyfairdeal/screens/payment/all_transactions_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -34,7 +35,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddCardScreen()));
+                Get.to(()=> const AddCardScreen());
               },
               child: const Card(
                 child: ListTile(
@@ -74,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(height: 5),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AllTransactionsScreen()));
+                              Get.to(()=> const AllTransactionsScreen());
                             },
                             child: const Text('See past transactions'),
                           ),

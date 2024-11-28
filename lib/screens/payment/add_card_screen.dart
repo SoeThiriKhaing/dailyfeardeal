@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AddCardScreen extends StatefulWidget {
   const AddCardScreen({super.key});
@@ -15,7 +16,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
         ),
         title: const Text('Add Card', style: TextStyle(fontWeight: FontWeight.bold)),
