@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
 import 'package:dailyfairdeal/screens/payment/all_transactions_screen.dart';
+import 'package:dailyfairdeal/screens/payment/finance_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-
+              Get.to(()=> const FinanceSetting());
             },
           ),
         ],

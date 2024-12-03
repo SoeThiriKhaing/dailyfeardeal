@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/screens/auth/login/login_screen.dart';
+import 'package:dailyfairdeal/screens/payment/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: PaymentScreen(),
     );
   }
 }
