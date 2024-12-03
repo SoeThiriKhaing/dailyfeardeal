@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:dailyfairdeal/screens/auth/signup/merchant_sign_up.dart';
+
+import 'package:dailyfeardeal/screens/auth/signup/merchant_sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

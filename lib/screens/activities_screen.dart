@@ -1,3 +1,4 @@
+import 'package:dailyfeardeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 
 class ActivitiesScreen extends StatefulWidget {
@@ -14,8 +15,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Activities', style: TextStyle(fontSize:24, fontWeight: FontWeight.bold)),
-          centerTitle: true,
+          title: Text('Activities', style: AppWidget.appBarTextStyle()),
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.fastfood), text: 'Food'),

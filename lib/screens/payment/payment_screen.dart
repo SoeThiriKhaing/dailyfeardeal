@@ -1,5 +1,7 @@
-import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
-import 'package:dailyfairdeal/screens/payment/all_transactions_screen.dart';
+import 'package:dailyfeardeal/screens/payment/add_card_screen.dart';
+import 'package:dailyfeardeal/screens/payment/all_transactions_screen.dart';
+import 'package:dailyfeardeal/widget/app_color.dart';
+import 'package:dailyfeardeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/screens/payment/finance_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,14 +14,14 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-
   final List<Map<String, String>> recentTransactions = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Payment', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        title: Text('Payment', style: AppWidget.appBarTextStyle()),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -36,9 +38,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           children: [
             GestureDetector(
               onTap: () {
-                Get.to(()=> const AddCardScreen());
+                Get.to(() => const AddCardScreen());
               },
               child: const Card(
+                color: AppColor.primaryColor,
                 child: ListTile(
                   leading: Icon(Icons.credit_card, size: 40),
                   title: Text('Add a card'),
@@ -76,7 +79,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(height: 5),
                           TextButton(
                             onPressed: () {
-                              Get.to(()=> const AllTransactionsScreen());
+                              Get.to(() => const AllTransactionsScreen());
                             },
                             child: const Text('See past transactions'),
                           ),

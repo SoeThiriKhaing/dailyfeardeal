@@ -1,5 +1,8 @@
-import 'package:dailyfairdeal/screens/auth/login/login_screen.dart';
-import 'package:dailyfairdeal/screens/payment/payment_screen.dart';
+import 'package:dailyfeardeal/screens/auth/login/login_screen.dart';
+import 'package:dailyfeardeal/screens/auth/registerscreen.dart';
+import 'package:dailyfeardeal/screens/auth/signup/merchant_sign_up.dart';
+import 'package:dailyfeardeal/screens/auth/splashscreen.dart';
+import 'package:dailyfeardeal/screens/auth/to_register.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,16 +10,26 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return const GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: PaymentScreen(),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "DailyFairDeal",
+        home: const SplashScreen(),
+        getPages: [
+          GetPage(name: '/', page: () => const SplashScreen()),
+          GetPage(name: '/toregister', page: () => const ToRegister()),
+          GetPage(name: '/register', page: () => const RegisterScreen()),
+          GetPage(name: '/login', page: () => const LoginScreen()),
+          GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
+        ]);
+  }
+}
