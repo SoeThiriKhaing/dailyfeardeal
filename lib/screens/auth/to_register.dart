@@ -1,6 +1,6 @@
-import 'package:dailyfeardeal/screens/auth/registerscreen.dart';
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/screens/auth/registerscreen.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

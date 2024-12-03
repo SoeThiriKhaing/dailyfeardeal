@@ -1,11 +1,9 @@
-import 'package:dailyfeardeal/screens/activities_screen.dart';
-
-import 'package:dailyfeardeal/screens/home/home.dart';
-
-import 'package:dailyfeardeal/screens/home/profile.dart';
-import 'package:dailyfeardeal/screens/payment/payment_screen.dart';
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/bottom_nav.dart';
+import 'package:dailyfairdeal/screens/activities_screen.dart';
+import 'package:dailyfairdeal/screens/home/home.dart';
+import 'package:dailyfairdeal/screens/home/profile.dart';
+import 'package:dailyfairdeal/screens/payment/payment_screen.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

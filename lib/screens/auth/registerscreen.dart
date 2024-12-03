@@ -1,7 +1,6 @@
-import 'package:dailyfeardeal/screens/auth/login/login_screen.dart';
-import 'package:dailyfeardeal/screens/home/main_screen.dart';
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -141,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: "Enter Confirm Password"),
                       )),
                   const SizedBox(height: 30.0),
-                  Container(
+                  SizedBox(
                       width: MediaQuery.sizeOf(context).width,
                       child: ElevatedButton(
                         onPressed: () {

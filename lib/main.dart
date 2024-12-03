@@ -1,9 +1,9 @@
-import 'package:dailyfeardeal/screens/auth/login/login_screen.dart';
-import 'package:dailyfeardeal/screens/auth/registerscreen.dart';
-import 'package:dailyfeardeal/screens/auth/signup/merchant_sign_up.dart';
-import 'package:dailyfeardeal/screens/auth/splashscreen.dart';
-import 'package:dailyfeardeal/screens/auth/to_register.dart';
-import 'package:flutter/material.dart';
+import 'package:dailyfairdeal/screens/auth/login/login_screen.dart';
+import 'package:dailyfairdeal/screens/auth/registerscreen.dart';
+import 'package:dailyfairdeal/screens/auth/signup/merchant_sign_up.dart';
+import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
+
+import 'package:dailyfairdeal/screens/auth/to_register.dart';import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
