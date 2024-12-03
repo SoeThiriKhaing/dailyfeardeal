@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class MerchantSignUp extends StatefulWidget {
   const MerchantSignUp({super.key});
@@ -15,6 +17,58 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   final TextEditingController ownerNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
+  List<String> countryList = [];
+
+  Future<List<String>> getCountries() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/country"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<String> countries = [];
+        for (var country in data['data']) {
+          countries.add(country['name']);
+        }
+        return countries;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load countries");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAddress(); // Fetch the countries when the widget is initialized
+  }
+
+  // Fetch the countries and update the state
+  Future<void> fetchAddress() async {
+    try {
+      List<String> countries = await getCountries();
+      setState(() {
+        countryList = countries;
+      });
+    } catch (e) {
+      // ignore: avoid_print
+      print("Error fetching countries: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +213,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
               child: buildDropdownField(
                 'Country',
                 country,
-                ['Myanmar', 'Thailand'],
+                countryList.isEmpty ? ['No option available'] : countryList,
                 (value) => setState(() { country = value; }),
               ),
             ),

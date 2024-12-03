@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'package:dailyfairdeal/screens/auth/signup/merchant_sign_up.dart';
+import 'package:dailyfairdeal/screens/auth/signup/registerscreen.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -34,8 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         //final data = json.decode(response.body);
           // If login is successful
-          Get.snackbar("Successful", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-          Get.to(() => const MerchantSignUp());  // Navigate to the MerchantSignUp screen
+          Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+          Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
       } else if (response.statusCode == 401) {
         // Unauthorized error (Invalid credentials)
         Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
@@ -158,17 +160,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GestureDetector(
-                  onTap:(){},
-                  child: const Center(
-                    child: Text(
-                      "Don't have an account? Sign Up",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),               
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account? "),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(()=> const RegisterScreen());
+                        },
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.primaryColor),
+                        ),
+                      )
+                    ],
+                  ),       
                 const SizedBox(height: 20),
                 const Row(
                   children: [

@@ -1,3 +1,4 @@
+import 'package:dailyfairdeal/screens/payment/all_payment_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,48 +24,52 @@ class _FinanceSettingState extends State<FinanceSetting> {
           'Finance Settings',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        elevation: 4.0, // Adds elevation to the AppBar
+        elevation: 4.0,
       ),
-      body: ListView(
-        children: [
-          const Text(
-            "Payments",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            )
-          ),
-          const SizedBox(height: 10),
-          // Payment Section
-          _buildSection(
-            icon: Icons.payment,
-            title: 'All Payment Methods',
-            subtitle: 'Manage your payment methods and top ups',
-            onTap: () {
-              //Get.to(() => const PaymentMethodsScreen());
-            },
-          ),
-          const Divider(),
-          const SizedBox(height: 10),
-          const Text(
-            "Security",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            )
-          ),
-          const SizedBox(height: 10),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ListView(
+          children: [
+            const SizedBox(height: 10,),
+            const Text(
+              "Payments",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              )
+            ),
+            const SizedBox(height: 10),
+            // Payment Section
+            _buildSection(
+              icon: Icons.payment,
+              title: 'All Payment Methods',
+              subtitle: 'Manage your payment methods and top ups',
+              onTap: () {
+                Get.to(() => const AllPaymentMethods());
+              },
+            ),
 
-          // Security Section
-          _buildSection(
-            icon: Icons.lock,
-            title: 'DFD PIN',
-            subtitle: 'Create or reset your PIN',
-            onTap: () {
-              //Get.to(() => const DfdPinScreen());
-            },
-          ),
-        ],
+            const SizedBox(height: 20),
+            const Text(
+              "Security",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              )
+            ),
+            const SizedBox(height: 10),
+        
+            // Security Section
+            _buildSection(
+              icon: Icons.lock,
+              title: 'DFD PIN',
+              subtitle: 'Create or reset your PIN',
+              onTap: () {
+                //Get.to(() => const DfdPinScreen());
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
