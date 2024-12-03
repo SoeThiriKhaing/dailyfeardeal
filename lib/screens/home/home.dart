@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:dailyfeardeal/widget/app_color.dart';
 import 'package:dailyfeardeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';

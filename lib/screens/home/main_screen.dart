@@ -1,7 +1,9 @@
-import 'package:dailyfeardeal/screens/home/activities.dart';
+import 'package:dailyfeardeal/screens/activities_screen.dart';
+
 import 'package:dailyfeardeal/screens/home/home.dart';
-import 'package:dailyfeardeal/screens/home/payment.dart';
+
 import 'package:dailyfeardeal/screens/home/profile.dart';
+import 'package:dailyfeardeal/screens/payment/payment_screen.dart';
 import 'package:dailyfeardeal/widget/app_color.dart';
 import 'package:dailyfeardeal/widget/bottom_nav.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +15,8 @@ class MainScreen extends StatelessWidget {
   final BottomNav bottomNav = Get.put(BottomNav());
   final List<Widget> pages = [
     const Home(),
-    const Activities(),
-    const Payment(),
+    const ActivitiesScreen(),
+    const PaymentScreen(),
     const Profile(),
   ];
 

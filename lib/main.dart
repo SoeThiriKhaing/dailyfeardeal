@@ -1,4 +1,6 @@
+import 'package:dailyfeardeal/screens/auth/login/login_screen.dart';
 import 'package:dailyfeardeal/screens/auth/registerscreen.dart';
+import 'package:dailyfeardeal/screens/auth/signup/merchant_sign_up.dart';
 import 'package:dailyfeardeal/screens/auth/splashscreen.dart';
 import 'package:dailyfeardeal/screens/auth/to_register.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +21,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "DailyFairDeal",
-      home:const SplashScreen(),
-      getPages:[
-        GetPage(name: '/', page: ()=>const SplashScreen()),
-        GetPage(name: '/toregister', page: ()=>const ToRegister()),
-        GetPage(name: '/register', page: ()=>const RegisterScreen())
-      ]
-    );
+        debugShowCheckedModeBanner: false,
+        title: "DailyFairDeal",
+        home: const SplashScreen(),
+        getPages: [
+          GetPage(name: '/', page: () => const SplashScreen()),
+          GetPage(name: '/toregister', page: () => const ToRegister()),
+          GetPage(name: '/register', page: () => const RegisterScreen()),
+          GetPage(name: '/login', page: () => const LoginScreen()),
+          GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
+        ]);
   }
 }

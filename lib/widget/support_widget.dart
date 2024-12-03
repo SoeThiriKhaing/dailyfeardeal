@@ -19,7 +19,11 @@ class AppWidget {
 
   static carouselTextStyle() {
     return const TextStyle(
-      
         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black);
+  }
+
+  static appBarTextStyle() {
+    return const TextStyle(
+        fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.black);
   }
 }

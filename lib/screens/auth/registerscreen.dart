@@ -1,5 +1,4 @@
-
-import 'package:dailyfeardeal/screens/home/home.dart';
+import 'package:dailyfeardeal/screens/auth/login/login_screen.dart';
 import 'package:dailyfeardeal/screens/home/main_screen.dart';
 import 'package:dailyfeardeal/widget/app_color.dart';
 import 'package:dailyfeardeal/widget/support_widget.dart';
@@ -167,10 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const Text("Already have an account?"),
                       GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const Loginscreen()));
+                          Get.toNamed("/login");
                         },
                         child: const Text(
                           "Sign In",
