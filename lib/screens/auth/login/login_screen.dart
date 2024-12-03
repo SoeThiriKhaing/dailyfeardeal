@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:dailyfairdeal/screens/auth/signup/merchant_sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
     
 class LoginScreen extends StatefulWidget {
@@ -18,30 +20,36 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordVisible = false;
   
   Future<void> login() async {
-    final response = await http.post(
-      Uri.parse("https://example.com/api/login"), 
-      body: {
-        'email': emailController.text,
-        'password': passwordController.text,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['status'] == 'success') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful!')),
-        );
-        // Navigate to another screen
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid credentials')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Server error!')),
+    try {
+      final response = await http.post(
+        Uri.parse("http://api.dailyfairdeal.com/api/login"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'email': emailController.text,
+          'password': passwordController.text,
+        }),
       );
+
+      if (response.statusCode == 200) {
+        //final data = json.decode(response.body);
+          // If login is successful
+          Get.snackbar("Successful", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+          Get.to(() => const MerchantSignUp());  // Navigate to the MerchantSignUp screen
+      } else if (response.statusCode == 401) {
+        // Unauthorized error (Invalid credentials)
+        Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      } else if (response.statusCode == 500) {
+        // Server error
+        Get.snackbar("Error", "Internal server error. Please try again later.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      } else {
+        // Other errors
+        Get.snackbar("Error", "Something went wrong. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      }
+    } catch (e) {
+      // Handle any exceptions
+      Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
   }
 
@@ -76,6 +84,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: emailController,
+                  maxLength: 255,
+                  buildCounter: (BuildContext context, {required int currentLength, required bool isFocused, int? maxLength}) {
+                    return null; // This hides the counter
+                  },
                   decoration: InputDecoration(
                     hintText: "Enter Email",
                     prefixIcon: const Icon(Icons.email),
@@ -98,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10,),
                 const Text('Password', style: TextStyle(fontSize: 18)),
                 const SizedBox(height: 10,),
                 //Password Field
@@ -118,12 +130,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       return "Enter Your Password";
                     }
                     // Regular expression for strong password validation
-                    final RegExp passwordRegex = RegExp(
-                      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
-                    );
-                    if (!passwordRegex.hasMatch(val)) {
-                      return '*Password must be at least 8 characters,\ninclude upper and lowercase letters,\na number, and a special character.';
-                    }
+                    // final RegExp passwordRegex = RegExp(
+                    //   r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+                    // );
+                    // if (!passwordRegex.hasMatch(val)) {
+                    //   return '*Password must be at least 8 characters,\ninclude upper and lowercase letters,\na number, and a special character.';
+                    // }
                     return null;
                   },
                 ),
