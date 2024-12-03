@@ -68,11 +68,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 //To Insert Logo or App Name
                 Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      "images/logo.png",
-                      height: 120,
-                      width: 200,
+                      "assets/images/logo.png",
+                      height: 100,
+                      width: 100,
                       fit: BoxFit.cover,
                     ), 
                   ),

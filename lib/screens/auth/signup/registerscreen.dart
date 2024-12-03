@@ -21,7 +21,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Form(
             key: _formkey,
@@ -31,6 +30,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(
+                    height: 40.0,
+                  ),
                   Center(
                     child: Image.asset(
                       "assets/images/logo.png",
@@ -55,13 +57,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       )
                     ]),
                     child: TextFormField(
+                      validator: (val){
+                        if(val == null || val.isEmpty){
+                          return "Please Enter Your Name";
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(10.0),
                           border: InputBorder.none,
                           errorBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
-                          hintText: "Enter Your Name"),
+                          hintText: "Enter Your Name",
+                          ),
                     ),
                   ),
                   const SizedBox(
@@ -80,6 +89,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           blurStyle: BlurStyle.outer)
                     ]),
                     child: TextFormField(
+                      validator: (val){
+                        if(val == null || val.isEmpty){
+                          return "Please Enter Your Email";
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(10.0),
                           border: InputBorder.none,
@@ -106,6 +121,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           blurStyle: BlurStyle.outer)
                     ]),
                     child: TextFormField(
+                      validator: (val){
+                        if(val == null || val.isEmpty){
+                          return "Please Enter Your Password";
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(10.0),
                           border: InputBorder.none,
@@ -131,6 +152,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             blurStyle: BlurStyle.outer)
                       ]),
                       child: TextFormField(
+                        validator: (val){
+                        if(val == null || val.isEmpty){
+                          return "Please Enter Your Confirm Password";
+                        }else if(val != confirmController.text){
+                          return "Passowrds are not match. Try again";
+                        }
+                        return null;
+                      },
                         decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(10.0),
                             border: InputBorder.none,
@@ -144,7 +173,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       width: MediaQuery.sizeOf(context).width,
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.to(() => MainScreen());
+                          if(_formkey.currentState!.validate()){
+                            Get.to(() => MainScreen());
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
@@ -162,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account?"),
+                      const Text("Already have an account? "),
                       GestureDetector(
                         onTap: () {
                           Get.toNamed("/login");
