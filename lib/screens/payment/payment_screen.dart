@@ -20,6 +20,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Payment', style: AppWidget.appBarTextStyle()),
         actions: [
           IconButton(

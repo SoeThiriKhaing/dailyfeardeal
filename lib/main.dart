@@ -3,6 +3,7 @@ import 'package:dailyfeardeal/screens/auth/registerscreen.dart';
 import 'package:dailyfeardeal/screens/auth/signup/merchant_sign_up.dart';
 import 'package:dailyfeardeal/screens/auth/splashscreen.dart';
 import 'package:dailyfeardeal/screens/auth/to_register.dart';
+import 'package:dailyfeardeal/screens/food/food_category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/register', page: () => const RegisterScreen()),
           GetPage(name: '/login', page: () => const LoginScreen()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
+          GetPage(name: '/foodcategory', page: ()=> FoodPage()),
         ]);
   }
 }

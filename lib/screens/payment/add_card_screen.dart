@@ -19,7 +19,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
             Get.back();
           },
         ),
-        title: const Text('Add Card', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Add Card',
+            style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -43,7 +44,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
-      
+
             // Expiry Date and CVV Section
             Row(
               children: [
@@ -54,7 +55,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     children: [
                       const Text(
                         'Expiry Date',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       TextField(
@@ -70,7 +72,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-      
+
                 // CVV
                 Expanded(
                   child: Column(
@@ -78,7 +80,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     children: [
                       const Text(
                         'CVV',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       TextField(
@@ -97,7 +100,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               ],
             ),
             const SizedBox(height: 24),
-      
+
             // Information Section
             const Text(
               "Your card details will be saved securely.",
@@ -110,13 +113,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const Spacer(),
-             // Continue Button
+            // Continue Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-      
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
