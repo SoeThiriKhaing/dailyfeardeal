@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:dailyfeardeal/screens/auth/login/login_screen.dart';
-import 'package:dailyfeardeal/screens/home/main_screen.dart';
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/support_widget.dart';
-import 'package:dailyfeardeal/widget/validation.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

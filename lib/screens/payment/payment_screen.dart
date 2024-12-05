@@ -1,7 +1,8 @@
-import 'package:dailyfeardeal/screens/payment/add_card_screen.dart';
-import 'package:dailyfeardeal/screens/payment/all_transactions_screen.dart';
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
+import 'package:dailyfairdeal/screens/payment/all_transactions_screen.dart';
+import 'package:dailyfairdeal/screens/payment/finance_setting.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +26,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {},
+            onPressed: () {
+              Get.to(()=> const FinanceSetting());
+            },
           ),
         ],
       ),

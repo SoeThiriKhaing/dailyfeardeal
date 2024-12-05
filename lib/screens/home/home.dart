@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,36 +13,46 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final TextEditingController _searchController = TextEditingController();
-  List<dynamic> searchResults = [];
+  List<Map<String, dynamic>> searchResults = [];
   bool isLoading = false;
 
-  Future<void> searchItems(String query, String type) async {
+  Future<void> searchItems(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        searchResults.clear();
+      });
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });
 
     try {
-      final url =
-          Uri.parse("http://api.dailyfairdeal.com/api/restaurant_food_topping");
+      final Uri url = Uri.parse("http://api.dailyfairdeal.com/api/search")
+          .replace(queryParameters: {'q': query});
+
       final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final List<dynamic> data = json.decode(response.body);
         setState(() {
-          searchResults = (data['foods'] ?? [])
-              .where((item) =>
-                  item['name']?.toLowerCase()?.contains(query.toLowerCase()) ??
-                  false)
-              .toList();
+          searchResults = data.map((e) => e as Map<String, dynamic>).toList();
         });
       } else {
-        print("Error: ${response.statusCode}");
+        print("Error: Received status code ${response.statusCode}");
+        setState(() {
+          searchResults.clear();
+        });
       }
     } catch (e) {
-      print("Error: $e");
+      print("Exception: $e");
+      setState(() {
+        searchResults.clear();
+      });
     } finally {
       setState(() {
         isLoading = false;
@@ -74,7 +84,7 @@ class _HomeState extends State<Home> {
                 borderRadius: BorderRadius.circular(50.0),
                 child: TextFormField(
                   onFieldSubmitted: (query) {
-                    searchItems(query, "foods");
+                    searchItems(query);
                   },
                   controller: _searchController,
                   decoration: const InputDecoration(
@@ -101,7 +111,7 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: searchResults.map<Widget>((item) {
                     return ListTile(
-                      title: Text(item['type'] ?? 'Unknown'),
+                      title: Text(item['name'] ?? 'Unknown Item'),
                       subtitle: Text(item['created_at'] ?? 'No date'),
                     );
                   }).toList(),

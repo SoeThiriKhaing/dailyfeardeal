@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:dailyfeardeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.green,
         );
         Get.to(() => MainScreen());
+        //final data = json.decode(response.body);
+        // If login is successful
+        Get.snackbar("Success", "Login Successfully",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+        Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
       } else if (response.statusCode == 401) {
         Get.snackbar(
           "Error",
@@ -113,11 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 30),
                 Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      "images/logo.png",
-                      height: 120,
-                      width: 200,
+                      "assets/images/logo.png",
+                      height: 100,
+                      width: 100,
                       fit: BoxFit.cover,
                     ),
                   ),

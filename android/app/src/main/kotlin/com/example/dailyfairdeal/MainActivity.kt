@@ -1,4 +1,4 @@
-package com.example.dailyfeardeal
+package com.example.dailyfairdeal
 
 import io.flutter.embedding.android.FlutterActivity
 

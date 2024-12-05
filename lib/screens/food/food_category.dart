@@ -1,5 +1,5 @@
-import 'package:dailyfeardeal/widget/app_color.dart';
-import 'package:dailyfeardeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'food_controller.dart';
@@ -10,7 +10,7 @@ class FoodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Softer background color.
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
         title: Text(
@@ -31,11 +31,10 @@ class FoodPage extends StatelessWidget {
               child: TextField(
                 onChanged: controller.updateSearchQuery,
                 decoration: const InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 15.0),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
                   hintText: "Search your favorite food...",
-                  prefixIcon:
-                      const Icon(Icons.search, color: AppColor.primaryColor),
+                  prefixIcon: Icon(Icons.search, color: AppColor.primaryColor),
                   border: InputBorder.none,
                   filled: true,
                   fillColor: Colors.white,
@@ -44,10 +43,33 @@ class FoodPage extends StatelessWidget {
             ),
           ),
 
-          // Food Categories List
+          // Scrollable Row of Buttons
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildCategoryButton('Featured Restaurants', () {
+                    print("Featured Restaurants clicked");
+                  }),
+                  _buildCategoryButton('Popular Items', () {
+                    print("Popular Items clicked");
+                  }),
+                  _buildCategoryButton('Your Favourite Cuisines', () {
+                    print("Your Favourite Cuisines clicked");
+                  }),
+                  _buildCategoryButton('Order It Again', () {
+                    print("Order It Again clicked");
+                  }),
+                ],
+              ),
+            ),
+          ),
+
+          // Dynamic Content
           Expanded(
             child: Obx(() {
-                                                                                
               final categories = controller.filteredCategories;
               if (categories.isEmpty) {
                 return const Center(
@@ -105,6 +127,26 @@ class FoodPage extends StatelessWidget {
             }),
           ),
         ],
+      ),
+    );
+  }
+
+  // Helper Method to Build Category Buttons
+  Widget _buildCategoryButton(String title, VoidCallback onPressed) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColor.primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          title,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
