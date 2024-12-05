@@ -1,11 +1,48 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+  TextEditingController searchController = TextEditingController();
+  List<Map<String, dynamic>> searchResults = [];
+  bool isLoading = false;
+  String selectedType = "food";
+
+  Future<void> performSearch() async {
+    String query = searchController.text.trim();
+    if (query.isEmpty) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      List<Map<String, dynamic>> results = await APIMethods().searchItemsByType(query, selectedType);
+      setState(() {
+        searchResults = results;
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error: $e");
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +62,17 @@ class Home extends StatelessWidget {
                 elevation: 8.0,
                 shadowColor: Colors.grey.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(50.0),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: searchController,
+                  decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10.0),
                       hintText: "Search.....",
                       prefixIcon: Icon(Icons.search),
                       border: InputBorder.none,
                       filled: true,
-                      fillColor: Colors.white),
+                      fillColor: Colors.white,
+                  ),
+                  onSubmitted: (value) => performSearch(),
                 ),
               ),
             ),

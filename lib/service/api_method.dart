@@ -213,4 +213,40 @@ class APIMethods{
     }
   }
 
+  Future<List<Map<String, dynamic>>> searchItemsByType(String query, String type) async {
+    try {
+      final uri = Uri.parse("http://api.dailyfairdeal.com/api/search");
+
+      // JSON body
+      final body = json.encode({
+        'q': query,
+        'type': type,
+      });
+
+      // Make the POST request
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+
+      // Handle the response
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return List<Map<String, dynamic>>.from(data['data']);
+      } else if (response.statusCode == 401) {
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load search results");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+
 }

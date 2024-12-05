@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +41,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   @override
   void initState() {
     super.initState();
-    fetchAddress(); // Fetch the countries when the widget is initialized
+    fetchAddress();
   }
 
   // Fetch the countries and update the state
@@ -93,8 +94,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 buildDropdownField('Select Business Type', businessType, businessTypeList, (value) {
                   setState(() { businessType = value; });
                 }),
+                const SizedBox(height: 10),
                 buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
+                const SizedBox(height: 10),
                 buildPhoneField(),
+                const SizedBox(height: 10),
                 const Text("Restaurant/Shop Address", style:TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 buildAddressFields(),
@@ -102,8 +106,9 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
                 const SizedBox(height: 20),
                 buildSubmitButton(),
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
                 buildLoginRedirectButton(),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -133,7 +138,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             return null;
           },
         ),
-        const SizedBox(height: 20),
       ],
     );
   }
@@ -144,37 +148,44 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       children: [
         Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
-        DropdownButtonFormField<String>(
-          value: value,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Select Value',
+          DropdownButtonFormField<String>(
+            value: value,
+            isExpanded: true,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Select Value',
+            ),
+            items: items.isEmpty ?
+              [
+                const DropdownMenuItem(
+                  enabled: false,
+                  value: "No option availabel",
+                  child: Text('No option available'),
+                ),
+              ]:
+            items.map((type) {
+              return DropdownMenuItem<String>(
+                value: type['name'],
+                child: Text(
+                  type['name']!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              );
+            }).toList(),
+            onChanged:  (value) {
+              if(value != null){
+                onChanged(value);
+              }
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please select $label';
+              }
+              return null;
+            },
           ),
-          items: items.isEmpty ?
-            [
-              const DropdownMenuItem(
-                value: 'No option available',
-                child: Text('No option available'),
-              ),
-            ]:
-           items.map((type) {
-            return DropdownMenuItem<String>(
-              value: type['name'],
-              child: Text(
-                type['name']!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please select $label';
-            }
-            return null;
-          },
-        ),
       ],
     );
   }
@@ -202,80 +213,37 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(
+            Flexible(
+              flex: 1,
               child: buildDropdownField(
                 'Country',
                 country,
                 countryList,
-                (value) async{
-                  setState(() { 
+                (value) async {
+                  setState(() {
                     country = value;
-                    selectedCountryId = countryList.firstWhere(
-                      (item) => item['name'] == value)['id'] as int?; 
+                    selectedCountryId = int.tryParse(
+                        countryList.firstWhere((item) => item['name'] == value)['id']!);
                   });
-                  if (selectedCountryId != null) {
-                    await APIMethods().getDivisions(selectedCountryId!);
-                  }
-                },
-              ),
-            ),
-            const SizedBox(width: 10), // Add spacing between the dropdowns
-            Expanded(
-              child: buildDropdownField(
-                'Division',
-                division,
-                divisionList,
-                (value) async{
-                  setState(() { 
-                    division = value;
-                    selectedDivisionId = divisionList.firstWhere(
-                      (item) => item['name'] == value)['id'] as int?; 
-                  });
-                  if (selectedDivisionId != null) {
-                    await APIMethods().getCities(selectedDivisionId!);
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10), // Spacing between rows
-
-        // Second row: City and Township
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: buildDropdownField(
-                'City',
-                city,
-                cityList,
-                (value) async{
-                  setState(() { 
-                    city = value;
-                    selectedCityId = cityList.firstWhere(
-                      (item) => item['name'] == value)['id'] as int?; 
-                  });
-                  if (selectedCityId != null) {
-                    await APIMethods().getTownships(selectedCityId!);
-                  }
                 },
               ),
             ),
             const SizedBox(width: 10),
-            Expanded(
+            Flexible(
+              flex: 1,
               child: buildDropdownField(
-                'Township',
-                township,
-                townshipList,
-                (value) async{
-                  setState(() { 
-                    township = value;
-                    selectedTownshipId = townshipList.firstWhere(
-                      (item) => item['name'] == value)['id'] as int?; 
+                'Division',
+                division,
+                divisionList,
+                (value) async {
+                  setState(() {
+                    division = value;
+                    selectedDivisionId = int.tryParse(
+                        divisionList.firstWhere((item) => item['name'] == value)['id']!);
                   });
-                  if (selectedTownshipId != null) {
-                    await APIMethods().getWards(selectedTownshipId!);
+                  if (selectedDivisionId != null) {
+                    divisionList = await safeAPICall(() => APIMethods().getCities(selectedDivisionId!));
+                    setState(() {}); // Refresh dropdown
                   }
                 },
               ),
@@ -283,36 +251,86 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           ],
         ),
         const SizedBox(height: 10),
-
-        // Third row: Ward and Street
+    
+        // Second row: City and Township
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(
+            Flexible(
+              flex: 1,
               child: buildDropdownField(
-                'Ward',
-                ward,
-                wardList,
-                (value) async{
-                  setState(() { 
-                    ward = value;
-                    selectedWardId = wardList.firstWhere(
-                      (item) => item['name'] == value)['id'] as int?; 
+                'City',
+                city,
+                cityList,
+                (value) async {
+                  setState(() {
+                    city = value;
+                    selectedCityId = int.tryParse(
+                        cityList.firstWhere((item) => item['name'] == value)['id']!);
                   });
-                  if (selectedWardId != null) {
-                    await APIMethods().getStreets(selectedWardId!);
+                  if (selectedCityId != null) {
+                    townshipList = await safeAPICall(() => APIMethods().getTownships(selectedCityId!));
+                    setState(() {});
                   }
                 },
               ),
             ),
             const SizedBox(width: 10),
-            Expanded(
+            Flexible(
+              flex: 1,
+              child: buildDropdownField(
+                'Township',
+                township,
+                townshipList,
+                (value) async {
+                  setState(() {
+                    township = value;
+                    selectedTownshipId = int.tryParse(
+                        townshipList.firstWhere((item) => item['name'] == value)['id']!);
+                  });
+                  if (selectedTownshipId != null) {
+                    wardList = await safeAPICall(() => APIMethods().getWards(selectedTownshipId!));
+                    setState(() {});
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+    
+        // Third row: Ward and Street
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              flex: 1,
+              child: buildDropdownField(
+                'Ward',
+                ward,
+                wardList,
+                (value) async {
+                  setState(() {
+                    ward = value;
+                    selectedWardId = int.tryParse(
+                        wardList.firstWhere((item) => item['name'] == value)['id']!);
+                  });
+                  if (selectedWardId != null) {
+                    streetList = await safeAPICall(() => APIMethods().getStreets(selectedWardId!));
+                    setState(() {});
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 10),
+            Flexible(
+              flex: 1,
               child: buildDropdownField(
                 'Street',
                 street,
                 streetList,
-                (value) async{
-                  setState(() { 
+                (value) {
+                  setState(() {
                     street = value;
                   });
                 },
@@ -323,6 +341,16 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       ],
     );
   }
+
+  Future<List<Map<String, String>>> safeAPICall(Future<List<Map<String, String>>> Function() apiCall) async {
+    try {
+      return await apiCall();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load data');
+      return [];
+    }
+  }
+
 
   Widget buildSubmitButton() {
     return SizedBox(
@@ -347,12 +375,22 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
 
   Widget buildLoginRedirectButton() {
     return Center(
-      child: TextButton(
-        onPressed: (){},//=> Get.to(() => const MerchantLoginScreen()),
-        child: const Text(
-          'Have already an account? Login',
-          style: TextStyle(fontSize: 16),
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Already have an account? "),
+          GestureDetector(
+            onTap: () {
+             // Get.to(()=> const MerchantLogin());
+            },
+            child: const Text(
+              "Sign In",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.primaryColor),
+            ),
+          ),
+        ],
       ),
     );
   }
