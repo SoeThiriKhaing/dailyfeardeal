@@ -19,6 +19,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   final TextEditingController descriptionController = TextEditingController();
 
   List<String> countryList = [];
+  List<String> divisionList = [];
+  List<String> cityList = [];
+  List<String> townshipList = [];
+  List<String> wardList = [];
+  List<String> streetList = [];
 
   Future<List<String>> getCountries() async {
     try {
