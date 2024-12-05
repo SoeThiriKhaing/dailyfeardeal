@@ -1,0 +1,216 @@
+import 'dart:convert'; // For jsonDecode
+import 'package:http/http.dart' as http;
+
+class APIMethods{
+
+  Future<List<Map<String, String>>> getCountries() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/country"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> countries = [];
+        for (var country in data['data']) {
+          countries.add({
+            'id': country['id'],
+            'name': country['name'],
+          });
+        }
+        return countries;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load countries");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+
+  Future<List<Map<String, String>>> getDivisions(int countryId) async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/state/$countryId"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> divisions = [];
+        for (var division in data['data']) {
+          divisions.add({
+            'id': division['id'],
+            'countryId': division['country_id'],
+            'name': division['name'],
+          });
+        }
+        return divisions;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load divisions");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Map<String, String>>> getCities(int divisionId) async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/city/$divisionId"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> cities = [];
+        for (var city in data['data']) {
+          cities.add({
+            'id': city['id'],
+            'divisionId': city['state_id'],
+            'name': city['name'],
+          });
+        }
+        return cities;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load cities");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+   Future<List<Map<String, String>>> getTownships(int cityId) async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/township/$cityId"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> townships = [];
+        for (var township in data['data']) {
+          townships.add({
+            'id': township['id'],
+            'cityId': township['city_id'],
+            'name': township['name'],
+          });
+        }
+        return townships;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load townships");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Map<String, String>>> getWards(int townshipId) async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/ward/$townshipId"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> wards = [];
+        for (var ward in data['data']) {
+          wards.add({
+            'id': ward['id'],
+            'townshipId': ward['township_id'],
+            'name': ward['name'],
+          });
+        }
+        return wards;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load wards");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Map<String, String>>> getStreets(int wardId) async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/street/$wardId"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> streets = [];
+        for (var street in data['data']) {
+          streets.add({
+            'id': street['id'],
+            'wardId': street['ward_id'],
+            'name': street['name'],
+          });
+        }
+        return streets;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load streets");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+}
