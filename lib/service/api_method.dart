@@ -247,6 +247,46 @@ class APIMethods{
       throw Exception("Error: $e");
     }
   }
+  
+  Future<int?> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse("http://api.dailyfairdeal.com/api/login"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'email': email,
+          'password': password,
+        }),
+      );
 
+      return response.statusCode;
+      
+    } catch (e) {
+      // Handle any exceptions
+      return 0;
+    }
+  }
+
+  Future<int?> register(String name, String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse("http://api.dailyfairdeal.com/api/signup"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'name': name,
+          'email': email,
+          'password': password,
+        }),
+      );
+      return response.statusCode;
+    } catch (e) {
+      // Handle any exceptions
+      return 0;
+    }
+  }
 
 }

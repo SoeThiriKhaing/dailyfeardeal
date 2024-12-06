@@ -1,11 +1,9 @@
 import 'package:dailyfairdeal/screens/home/home.dart';
+import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -21,43 +19,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
-  Future<void> register() async {
-    try {
-      final response = await http.post(
-        Uri.parse("http://api.dailyfairdeal.com/api/signup"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'name': nameController.text,
-          'email': emailController.text,
-          'password': passwordController.text,
-        }),
-      );
-      if (response.statusCode == 200) {
-        //final data = json.decode(response.body);
-          // If register is successful
-          Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-          Get.to(() => const Home());  // Navigate to the MerchantSignUp screen
-      }else if (response.statusCode == 302) {
+  Future<void> register() async{
+    int? statusCode = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
+  
+    if (statusCode == 200) {
+        // If register is successful
+        Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+        Get.to(() => const Home());  // Navigate to the MerchantSignUp screen
+      }else if (statusCode == 302) {
         // Unauthorized error (Invalid credentials)
         Get.snackbar("Error", "The email is already used. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (response.statusCode == 401) {
+      } else if (statusCode == 401) {
         // Unauthorized error (Invalid credentials)
         Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (response.statusCode == 500) {
+      } else if (statusCode == 500) {
         // Server error
         Get.snackbar("Error", "Internal server error. Please try again later.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
+      } else if(statusCode == 0) {
+        //Network Error
+        Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      } else{
         // Other errors
         Get.snackbar("Error", "Something went wrong. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
-    } catch (e) {
-      // Handle any exceptions
-      Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
