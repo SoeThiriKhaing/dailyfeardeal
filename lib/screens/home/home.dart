@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
-  _HomeState createState() => _HomeState();
+ State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -44,13 +46,17 @@ class _HomeState extends State<Home> {
           searchResults = data.map((e) => e as Map<String, dynamic>).toList();
         });
       } else {
-        print("Error: Received status code ${response.statusCode}");
+        if (kDebugMode) {
+          print("Error: Received status code ${response.statusCode}");
+        }
         setState(() {
           searchResults.clear();
         });
       }
     } catch (e) {
-      print("Exception: $e");
+      if (kDebugMode) {
+        print("Exception: $e");
+      }
       setState(() {
         searchResults.clear();
       });

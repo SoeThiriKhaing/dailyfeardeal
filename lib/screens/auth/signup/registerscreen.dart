@@ -175,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               hintText: "Enter Confirm Password"),
                         )),
                     const SizedBox(height: 30.0),
-                    Container(
+                    SizedBox(
                         width: MediaQuery.sizeOf(context).width,
                         child: ElevatedButton(
                           onPressed: () {
@@ -202,7 +202,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const Text("Already have an account?"),
                         GestureDetector(
                           onTap: () {
-                            print("Sign In button tapped");
                             Get.toNamed("/login");
                           },
                           child: const Text(

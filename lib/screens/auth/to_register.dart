@@ -1,4 +1,3 @@
-import 'package:dailyfairdeal/screens/auth/signup/registerscreen.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';

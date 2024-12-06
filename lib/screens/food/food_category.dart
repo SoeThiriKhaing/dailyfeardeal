@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
@@ -6,6 +7,8 @@ import 'food_controller.dart';
 
 class FoodPage extends StatelessWidget {
   final FoodController controller = Get.put(FoodController());
+
+  FoodPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +57,19 @@ class FoodPage extends StatelessWidget {
                     controller.fetchFeaturedRestaurants();
                   }),
                   _buildCategoryButton('Popular Items', () {
-                    print("Popular Items clicked");
+                    if (kDebugMode) {
+                      print("Popular Items clicked");
+                    }
                   }),
                   _buildCategoryButton('Your Favourite Cuisines', () {
-                    print("Your Favourite Cuisines clicked");
+                    if (kDebugMode) {
+                      print("Your Favourite Cuisines clicked");
+                    }
                   }),
                   _buildCategoryButton('Order It Again', () {
-                    print("Order It Again clicked");
+                    if (kDebugMode) {
+                      print("Order It Again clicked");
+                    }
                   }),
                 ],
               ),

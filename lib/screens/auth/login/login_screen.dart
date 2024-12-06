@@ -1,11 +1,10 @@
-import 'package:dailyfairdeal/screens/auth/signup/registerscreen.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
-import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

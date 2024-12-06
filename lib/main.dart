@@ -1,12 +1,10 @@
 import 'package:dailyfairdeal/screens/auth/login/login_screen.dart';
 import 'package:dailyfairdeal/screens/auth/signup/merchant_sign_up.dart';
-import 'package:dailyfairdeal/screens/auth/signup/merchant_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/signup/registerscreen.dart';
 import 'package:dailyfairdeal/screens/auth/signup/rider_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/signup/taxi_driver_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
 import 'package:dailyfairdeal/screens/auth/to_register.dart';
-import 'package:dailyfairdeal/screens/food/food_category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
