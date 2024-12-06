@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -90,20 +91,20 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                buildTextFormField('Restaurant/Shop Name', shopNameController, keyboardType: TextInputType.text),
-                buildDropdownField('Select Business Type', businessType, businessTypeList, (value) {
+                FormFieldMethods().buildTextFormField('Restaurant/Shop Name', shopNameController, keyboardType: TextInputType.text),
+                FormFieldMethods().buildDropdownField('Select Business Type', businessType, businessTypeList, (value) {
                   setState(() { businessType = value; });
                 }),
                 const SizedBox(height: 10),
-                buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
+                FormFieldMethods().buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                buildPhoneField(),
+                FormFieldMethods().buildPhoneField(phoneController),
                 const SizedBox(height: 10),
                 const Text("Restaurant/Shop Address", style:TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 buildAddressFields(),
                 const SizedBox(height: 10),
-                buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
+                FormFieldMethods().buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),
@@ -117,94 +118,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     );
   }
 
-  Widget buildTextFormField(String label, TextEditingController controller, {String? Function(String?)? validator, TextInputType? keyboardType, int? maxLines}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 10),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            hintText: label,
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter $label';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget buildDropdownField(String label, String? value, List<Map<String, String>> items, Function(String?) onChanged) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 10),
-          DropdownButtonFormField<String>(
-            value: value,
-            isExpanded: true,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Select Value',
-            ),
-            items: items.isEmpty ?
-              [
-                const DropdownMenuItem(
-                  enabled: false,
-                  value: "No option availabel",
-                  child: Text('No option available'),
-                ),
-              ]:
-            items.map((type) {
-              return DropdownMenuItem<String>(
-                value: type['name'],
-                child: Text(
-                  type['name']!,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontSize: 14),
-                ),
-              );
-            }).toList(),
-            onChanged:  (value) {
-              if(value != null){
-                onChanged(value);
-              }
-            },
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please select $label';
-              }
-              return null;
-            },
-          ),
-      ],
-    );
-  }
-
-  Widget buildPhoneField() {
-    return buildTextFormField(
-      'Phone Number',
-      phoneController,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter the phone number';
-        } else if (!RegExp(r'^\d{10,}$').hasMatch(value)) {
-          return 'Enter a valid phone number';
-        }
-        return null;
-      },
-      keyboardType: TextInputType.phone,  // Use phone keyboard
-    );
-  }
 
   Widget buildAddressFields() {
     return Column(
@@ -215,7 +128,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           children: [
             Flexible(
               flex: 1,
-              child: buildDropdownField(
+              child: FormFieldMethods().buildDropdownField(
                 'Country',
                 country,
                 countryList,
@@ -231,7 +144,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: buildDropdownField(
+              child: FormFieldMethods().buildDropdownField(
                 'Division',
                 division,
                 divisionList,
@@ -258,7 +171,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           children: [
             Flexible(
               flex: 1,
-              child: buildDropdownField(
+              child: FormFieldMethods().buildDropdownField(
                 'City',
                 city,
                 cityList,
@@ -278,7 +191,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: buildDropdownField(
+              child: FormFieldMethods().buildDropdownField(
                 'Township',
                 township,
                 townshipList,
@@ -305,7 +218,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           children: [
             Flexible(
               flex: 1,
-              child: buildDropdownField(
+              child: FormFieldMethods().buildDropdownField(
                 'Ward',
                 ward,
                 wardList,
@@ -325,7 +238,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: buildDropdownField(
+              child: FormFieldMethods().buildDropdownField(
                 'Street',
                 street,
                 streetList,
@@ -350,7 +263,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       return [];
     }
   }
-
 
   Widget buildSubmitButton() {
     return SizedBox(

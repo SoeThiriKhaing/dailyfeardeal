@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,47 +21,6 @@ class _RiderSignUpState extends State<RiderSignUp> {
   final TextEditingController dobController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController referralCodeController = TextEditingController();
-
-  Widget buildTextFormField(String label, TextEditingController controller, {String? Function(String?)? validator, TextInputType? keyboardType, int? maxLines}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 10),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            hintText: label,
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter $label';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget buildPhoneField() {
-    return buildTextFormField(
-      'Phone Number',
-      phoneController,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter the phone number';
-        } else if (!RegExp(r'^\d{10,}$').hasMatch(value)) {
-          return 'Enter a valid phone number';
-        }
-        return null;
-      },
-      keyboardType: TextInputType.phone,  // Use phone keyboard
-    );
-  }
 
   Widget buildDateOfBirthTextFormField() {
     return Column(
@@ -186,17 +146,17 @@ class _RiderSignUpState extends State<RiderSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                buildTextFormField('Name', nameController, keyboardType: TextInputType.text),
+                FormFieldMethods().buildTextFormField('Name', nameController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                buildTextFormField('Email', emailController, keyboardType: TextInputType.emailAddress),
+               FormFieldMethods().buildTextFormField('Email', emailController, keyboardType: TextInputType.emailAddress),
                 const SizedBox(height: 10),
-                buildPhoneField(),
+                FormFieldMethods().buildPhoneField(phoneController),
                 const SizedBox(height: 10),
                 buildDateOfBirthTextFormField(),
                 const SizedBox(height: 10),
-                buildTextFormField('Address', addressController, keyboardType: TextInputType.text),
+                FormFieldMethods().buildTextFormField('Address', addressController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                buildTextFormField('Referral Code', referralCodeController, keyboardType: TextInputType.text),
+                FormFieldMethods().buildTextFormField('Referral Code', referralCodeController, keyboardType: TextInputType.text),
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),
