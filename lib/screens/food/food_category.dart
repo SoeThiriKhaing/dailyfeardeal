@@ -36,7 +36,7 @@ class FoodPage extends StatelessWidget {
                 decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  hintText: "Search your favorite restaurant...",
+                  hintText: "Search food or restaurant...",
                   prefixIcon: Icon(Icons.search, color: AppColor.primaryColor),
                   border: InputBorder.none,
                   filled: true,

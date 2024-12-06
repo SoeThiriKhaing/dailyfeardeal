@@ -1,6 +1,8 @@
 import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
-import 'package:dailyfairdeal/widget/formfield.dart';
+import 'package:dailyfairdeal/widget/dropdown_field_widget.dart';
+import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
+import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -91,20 +93,20 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                FormFieldMethods().buildTextFormField('Restaurant/Shop Name', shopNameController, keyboardType: TextInputType.text),
-                FormFieldMethods().buildDropdownField('Select Business Type', businessType, businessTypeList, (value) {
+                buildTextFormField('Restaurant/Shop Name', shopNameController, keyboardType: TextInputType.text),
+                buildDropdownField('Select Business Type', businessType, businessTypeList, (value) {
                   setState(() { businessType = value; });
                 }),
                 const SizedBox(height: 10),
-                FormFieldMethods().buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
+                buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                FormFieldMethods().buildPhoneField(phoneController),
+                buildPhoneField(phoneController),
                 const SizedBox(height: 10),
                 const Text("Restaurant/Shop Address", style:TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 buildAddressFields(),
                 const SizedBox(height: 10),
-                FormFieldMethods().buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
+                buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),
@@ -128,7 +130,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           children: [
             Flexible(
               flex: 1,
-              child: FormFieldMethods().buildDropdownField(
+              child: buildDropdownField(
                 'Country',
                 country,
                 countryList,
@@ -144,7 +146,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: FormFieldMethods().buildDropdownField(
+              child: buildDropdownField(
                 'Division',
                 division,
                 divisionList,
@@ -171,7 +173,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           children: [
             Flexible(
               flex: 1,
-              child: FormFieldMethods().buildDropdownField(
+              child: buildDropdownField(
                 'City',
                 city,
                 cityList,
@@ -191,7 +193,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: FormFieldMethods().buildDropdownField(
+              child: buildDropdownField(
                 'Township',
                 township,
                 townshipList,
@@ -218,7 +220,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           children: [
             Flexible(
               flex: 1,
-              child: FormFieldMethods().buildDropdownField(
+              child: buildDropdownField(
                 'Ward',
                 ward,
                 wardList,
@@ -238,7 +240,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: FormFieldMethods().buildDropdownField(
+              child: buildDropdownField(
                 'Street',
                 street,
                 streetList,
@@ -259,7 +261,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     try {
       return await apiCall();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load data');
+      Get.snackbar('Error', 'Failed to load data', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       return [];
     }
   }

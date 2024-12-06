@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/widget/app_color.dart';
-import 'package:dailyfairdeal/widget/formfield.dart';
+import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
+import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -146,17 +147,17 @@ class _RiderSignUpState extends State<RiderSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                FormFieldMethods().buildTextFormField('Name', nameController, keyboardType: TextInputType.text),
+                buildTextFormField('Name', nameController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-               FormFieldMethods().buildTextFormField('Email', emailController, keyboardType: TextInputType.emailAddress),
+                buildTextFormField('Email', emailController, keyboardType: TextInputType.emailAddress),
                 const SizedBox(height: 10),
-                FormFieldMethods().buildPhoneField(phoneController),
+                buildPhoneField(phoneController),
                 const SizedBox(height: 10),
                 buildDateOfBirthTextFormField(),
                 const SizedBox(height: 10),
-                FormFieldMethods().buildTextFormField('Address', addressController, keyboardType: TextInputType.text),
+                buildTextFormField('Address', addressController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                FormFieldMethods().buildTextFormField('Referral Code', referralCodeController, keyboardType: TextInputType.text),
+                buildTextFormField('Referral Code', referralCodeController, keyboardType: TextInputType.text),
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),

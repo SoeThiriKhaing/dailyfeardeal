@@ -1,7 +1,9 @@
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -68,7 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: emailController,
                   maxLength: 255,
+                  maxLengthEnforcement: MaxLengthEnforcement.none,
                   decoration: InputDecoration(
+                    counterText: '',
                     hintText: "Enter Email",
                     prefixIcon: const Icon(Icons.email),
                     border: OutlineInputBorder(
@@ -89,8 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         isPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
@@ -124,16 +128,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to SignUp screen
-                  },
-                  child: const Center(
-                    child: Text(
-                      "Don't have an account? Sign Up",
-                      style: TextStyle(color: Colors.black),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account? "),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed("/register");
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 const Row(

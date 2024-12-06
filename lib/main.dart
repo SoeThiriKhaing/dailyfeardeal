@@ -5,6 +5,8 @@ import 'package:dailyfairdeal/screens/auth/signup/rider_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/signup/taxi_driver_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
 import 'package:dailyfairdeal/screens/auth/to_register.dart';
+import 'package:dailyfairdeal/screens/food/food_category.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: "DailyFairDeal",
-        home: const SplashScreen(),
+        home: MainScreen(),
         getPages: [
           GetPage(name: '/', page: () => const SplashScreen()),
           GetPage(name: '/toregister', page: () => const ToRegister()),
@@ -34,6 +36,7 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/driversignup', page: () => const TaxiDriverSignUp()),
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
+          GetPage(name: '/foodcategory', page: () => FoodPage()),         
         ]);
   }
 }

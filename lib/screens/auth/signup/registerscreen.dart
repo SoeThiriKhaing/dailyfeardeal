@@ -49,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.only(top: 100.0),
+        padding: const EdgeInsets.only(top: 60.0),
         child: SingleChildScrollView(
           child: Form(
               key: _formkey,
@@ -199,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Already have an account?"),
+                        const Text("Already have an account? "),
                         GestureDetector(
                           onTap: () {
                             Get.toNamed("/login");
