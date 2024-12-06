@@ -1,7 +1,7 @@
-import 'package:dailyfairdeal/widget/app_color.dart';
-import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'food_controller.dart';
 
 class FoodPage extends StatelessWidget {
@@ -33,7 +33,7 @@ class FoodPage extends StatelessWidget {
                 decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  hintText: "Search your favorite food...",
+                  hintText: "Search your favorite restaurant...",
                   prefixIcon: Icon(Icons.search, color: AppColor.primaryColor),
                   border: InputBorder.none,
                   filled: true,
@@ -51,7 +51,7 @@ class FoodPage extends StatelessWidget {
               child: Row(
                 children: [
                   _buildCategoryButton('Featured Restaurants', () {
-                    print("Featured Restaurants clicked");
+                    controller.fetchFeaturedRestaurants();
                   }),
                   _buildCategoryButton('Popular Items', () {
                     print("Popular Items clicked");
@@ -70,11 +70,11 @@ class FoodPage extends StatelessWidget {
           // Dynamic Content
           Expanded(
             child: Obx(() {
-              final categories = controller.filteredCategories;
-              if (categories.isEmpty) {
+              final restaurants = controller.filteredCategories;
+              if (restaurants.isEmpty) {
                 return const Center(
                   child: Text(
-                    'No categories found.',
+                    'No restaurants found.',
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                 );
@@ -82,9 +82,9 @@ class FoodPage extends StatelessWidget {
               return ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
-                itemCount: categories.length,
+                itemCount: restaurants.length,
                 itemBuilder: (context, index) {
-                  final category = categories[index];
+                  final restaurant = restaurants[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
@@ -94,31 +94,23 @@ class FoodPage extends StatelessWidget {
                       ),
                       elevation: 3.0,
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              category['image'],
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                      child: ListTile(
+                        title: Text(
+                          restaurant['name'],
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          title: Text(
-                            category['name'],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          trailing: const Icon(Icons.arrow_forward_ios,
-                              color: Colors.grey),
-                          onTap: () {
-                            // Define the behavior on category tap.
-                          },
                         ),
+                        subtitle: Text(
+                          "${restaurant['restaurant_type']} - ${restaurant['City_Name']}, ${restaurant['Country_Name']}",
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios,
+                            color: Colors.grey),
+                        onTap: () {
+                          // Define behavior for tapping a restaurant
+                        },
                       ),
                     ),
                   );

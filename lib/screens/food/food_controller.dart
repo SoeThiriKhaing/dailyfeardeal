@@ -1,35 +1,39 @@
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FoodController extends GetxController {
-  // List of food categories
-  final RxList<Map<String, dynamic>> foodCategories = <Map<String, dynamic>>[
-    {'name': 'Pizza House', 'image': 'assets/images/res2.png'},
-    {'name': 'Burger House', 'image': 'assets/images/res3.png'},
-    {'name': 'Pasta House', 'image': 'assets/images/res4.jpg'},
-    {'name': 'Salad House', 'image': 'assets/images/res5.png'},
-    {'name': 'Pizza House', 'image': 'assets/images/res2.png'},
-    {'name': 'Burger House', 'image': 'assets/images/res3.png'},
-    {'name': 'Pasta House', 'image': 'assets/images/res4.jpg'},
-    {'name': 'Salad House', 'image': 'assets/images/res5.png'},
-  ].obs;
+  var featuredRestaurants = [].obs; // Observable for storing fetched data
+  var filteredCategories = [].obs; // Observable for search functionality
 
-  // Search query
-  final RxString searchQuery = ''.obs;
+  // Fetch restaurants from API
+  Future<void> fetchFeaturedRestaurants() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+        headers: {"Content-Type": "application/json"},
+      );
 
-  // Filtered categories based on search
-  List<Map<String, dynamic>> get filteredCategories {
-    if (searchQuery.value.isEmpty) {
-      return foodCategories;
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        featuredRestaurants.value = data['data'];
+        filteredCategories.value =
+            featuredRestaurants; // Initialize with all data
+      } else if (response.statusCode == 401) {
+        Get.snackbar("Error", "Unauthorized access.");
+      } else {
+        Get.snackbar("Error", "Failed to load data.");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
     }
-    return foodCategories
-        .where((category) => category['name']
-            .toLowerCase()
-            .contains(searchQuery.value.toLowerCase()))
-        .toList();
   }
 
-  // Update search query
+  // Filter search results
   void updateSearchQuery(String query) {
-    searchQuery.value = query;
+    filteredCategories.value = featuredRestaurants
+        .where((restaurant) =>
+            restaurant['name'].toLowerCase().contains(query.toLowerCase()))
+        .toList();
   }
 }
