@@ -5,7 +5,7 @@ import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -15,7 +15,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool isLoading = false;
   bool isPasswordVisible = false;
 
   Future<void> login() async{
@@ -47,13 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child:Form(
+          child: Form(
             key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 30,),
-                //To Insert Logo or App Name
+                const SizedBox(height: 30),
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -62,19 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
-                    ), 
+                    ),
                   ),
                 ),
-                const SizedBox(height: 30,),
-                //Email Field
+                const SizedBox(height: 30),
                 const Text('Email', style: TextStyle(fontSize: 18)),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
                   maxLength: 255,
-                  buildCounter: (BuildContext context, {required int currentLength, required bool isFocused, int? maxLength}) {
-                    return null; // This hides the counter
-                  },
                   decoration: InputDecoration(
                     hintText: "Enter Email",
                     prefixIcon: const Icon(Icons.email),
@@ -83,51 +77,36 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (val){
-                    if(val == null || val.isEmpty){
-                      return 'Enter Email Address';
-                    }
-                    // Regular expression for email validation
-                    final RegExp emailRegex = RegExp(
-                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                    );
-                    if (!emailRegex.hasMatch(val)) {
-                      return 'Enter a valid email address';
-                    }
-                    return null;
-                  },
+                  validator: validateEmail,
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 10),
                 const Text('Password', style: TextStyle(fontSize: 18)),
-                const SizedBox(height: 10,),
-                //Password Field
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     hintText: "Enter Password",
                     prefixIcon: const Icon(Icons.password),
-                     border: OutlineInputBorder(
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isPasswordVisible = !isPasswordVisible;
+                        });
+                      },
+                    ),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  obscureText: true,
-                  validator: (val){
-                    if(val == null || val.isEmpty){
-                      return "Enter Your Password";
-                    }
-                    // Regular expression for strong password validation
-                    // final RegExp passwordRegex = RegExp(
-                    //   r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
-                    // );
-                    // if (!passwordRegex.hasMatch(val)) {
-                    //   return '*Password must be at least 8 characters,\ninclude upper and lowercase letters,\na number, and a special character.';
-                    // }
-                    return null;
-                  },
+                  obscureText: !isPasswordVisible,
+                  validator: validatePassword,
                 ),
-                const SizedBox(height: 20,),
-                //Login Button
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: (){
                     if(formKey.currentState!.validate()){
@@ -146,23 +125,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(()=> const RegisterScreen());
-                        },
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.primaryColor),
-                        ),
-                      )
-                    ],
-                  ),       
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to SignUp screen
+                  },
+                  child: const Center(
+                    child: Text(
+                      "Don't have an account? Sign Up",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 const Row(
                   children: [
@@ -178,13 +151,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                // Continue with Facebook
                 ElevatedButton.icon(
-                  onPressed: () {
-                    
-                  },
+                  onPressed: () {},
                   icon: const Icon(Icons.facebook, color: Colors.white),
-                  label: const Text("Continue with Facebook", style: TextStyle(color: Colors.white)),
+                  label: const Text("Continue with Facebook",
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     minimumSize: const Size(double.infinity, 50),
@@ -194,31 +165,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                // Continue with Google
                 ElevatedButton.icon(
-                  onPressed: () {
-                    
-                  },
-                  icon: const Icon(Icons.g_mobiledata_outlined, color: Colors.redAccent),
-                  label: const Text("Continue with Google", style: TextStyle(color: Colors.black)),
+                  onPressed: () {},
+                  icon: const Icon(Icons.g_mobiledata_outlined,
+                      color: Colors.redAccent),
+                  label: const Text("Continue with Google",
+                      style: TextStyle(color: Colors.black)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 50),
-                    side: const BorderSide(
-                      color: Colors.black, 
-                      width: 1,           
-                    ),
+                    side: const BorderSide(color: Colors.black, width: 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 20),
               ],
             ),
-          )
-        )
-      )
+          ),
+        ),
+      ),
     );
   }
 }

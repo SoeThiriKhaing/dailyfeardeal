@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/screens/auth/signup/registerscreen.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +107,7 @@ class ToRegister extends StatelessWidget {
                         ),
                         onPressed: () {
                           // Navigate to the RegisterScreen using GetX
-                          Get.to(() => const RegisterScreen());
+                          Get.to(() => MainScreen());
                         },
                         child: Text(
                           "Sign Up",

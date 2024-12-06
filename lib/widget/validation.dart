@@ -51,6 +51,13 @@ String? validateEmail(String? value) {
   return null;
 }
 
+String? validateName(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Please Enter Your Name";
+  }
+  return null;
+}
+
 String? validateTextField(String? value) {
   if (value == null || value.isEmpty) {
     return 'Please enter text here';
