@@ -1,9 +1,11 @@
-import 'dart:convert';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/widget/formfield.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/widget/validation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,89 +21,31 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordVisible = false;
 
   Future<void> login() async {
-    if (!formKey.currentState!.validate()) {
-      return;
-    }
+    int? statusCode = await APIMethods()
+        .login(emailController.text.trim(), passwordController.text.trim());
 
-    try {
-      final response = await http.post(
-        Uri.parse("http://api.dailyfairdeal.com/api/login"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'email': emailController.text.trim(),
-          'password': passwordController.text.trim(),
-        }),
-      );
-
-      final data = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        Get.snackbar(
-          "Success",
-          data['message'] ?? "Login Successful",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-        );
-        Get.to(() => MainScreen());
-        //final data = json.decode(response.body);
-        // If login is successful
-        Get.snackbar("Success", "Login Successfully",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-        Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
-      } else if (response.statusCode == 401) {
-        Get.snackbar(
-          "Error",
-          data['error'] ?? "Invalid Email or Password. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
-      } else if (response.statusCode == 500) {
-        Get.snackbar(
-          "Error",
-          "Internal server error. Please try again later.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
-      } else {
-        Get.snackbar(
-          "Error",
-          data['error'] ?? "Something went wrong. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
-      }
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Network error. Please check your connection.",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-      );
-      debugPrint("Login error: $e");
+    if (statusCode == 200) {
+      // If login is successful
+      Get.snackbar("Success", "Login Successfully",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
+    } else if (statusCode == 401) {
+      // Unauthorized error (Invalid credentials)
+      Get.snackbar("Error", "Invalid Email or Password. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else if (statusCode == 500) {
+      // Server error
+      Get.snackbar("Error", "Internal server error. Please try again later.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else if (statusCode == 0) {
+      //Network Error
+      Get.snackbar("Error", "Network error. Please check your connection.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else {
+      // Other errors
+      Get.snackbar("Error", "Something went wrong. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
-  }
-
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Email is required";
-    }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value)) {
-      return "Enter a valid email address";
-    }
-    return null;
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Password is required";
-    }
-    if (value.length < 6) {
-      return "Password must be at least 6 characters";
-    }
-    return null;
   }
 
   @override
@@ -129,29 +73,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Text('Email', style: TextStyle(fontSize: 18)),
+                Text('Email', style: AppWidget.FormFieldLabelTextStyle()),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
                   maxLength: 255,
-                  decoration: InputDecoration(
-                    hintText: "Enter Email",
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  decoration: emailInputDecoration(),
                   keyboardType: TextInputType.emailAddress,
                   validator: validateEmail,
                 ),
                 const SizedBox(height: 10),
-                const Text('Password', style: TextStyle(fontSize: 18)),
+                Text('Password', style: AppWidget.FormFieldLabelTextStyle()),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  decoration: InputDecoration(
-                    hintText: "Enter Password",
-                    prefixIcon: const Icon(Icons.password),
+                  decoration:passwordInputDecoration(
                     suffixIcon: IconButton(
                       icon: Icon(
                         isPasswordVisible
@@ -163,26 +99,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           isPasswordVisible = !isPasswordVisible;
                         });
                       },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                    ),),
                   obscureText: !isPasswordVisible,
                   validator: validatePassword,
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: login,
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      APIMethods().login(emailController.text.trim(),
+                          passwordController.text.trim());
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFC740),
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Login",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style:AppWidget.buttonTextStyle(),
                   ),
                 ),
                 const SizedBox(height: 20),

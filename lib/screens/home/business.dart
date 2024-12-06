@@ -38,6 +38,7 @@ class BusinessPage extends StatelessWidget {
   }
 
   Widget _buildCard(String title, Color color, IconData icon, String route) {
+
     return GestureDetector(
       onTap: () {
         Get.toNamed(route);

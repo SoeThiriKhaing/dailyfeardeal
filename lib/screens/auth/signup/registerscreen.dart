@@ -1,12 +1,11 @@
-import 'dart:convert';
-
-import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/screens/home/home.dart';
+import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -22,49 +21,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
   final confirmController = TextEditingController();
   FocusNode focusNode = FocusNode();
-  Future<void> register() async {
-    final client = http.Client();
-    try {
-      final response = await client.post(
-        Uri.parse(
-            "http://api.dailyfairdeal.com/api/signup"), // Use HTTPS if required.
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'name': nameController.text.trim(),
-          'email': emailController.text.trim(),
-          'password': passwordController.text.trim(),
-        }),
-      );
 
-      if (response.statusCode == 302) {
-        final redirectUrl = response.headers['location'];
-        if (redirectUrl != null) {
-          final redirectedResponse = await client.get(Uri.parse(redirectUrl));
-          print('Redirected Response: ${redirectedResponse.body}');
-        } else {
-          print("No redirect location provided.");
-        }
-      } else {
-        print('Response Status Code: ${response.statusCode}');
-        print('Response Body: ${response.body}');
-        if (response.statusCode == 200) {
-          Get.snackbar("Successful", "Register Successfully",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green);
-          Get.to(() => MainScreen());
-        } else {
-          Get.snackbar("Error", "Registration failed. Please try again.",
-              snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-        }
-      }
-    } catch (e) {
-      print('Exception: $e');
+  Future<void> register() async {
+    int? statusCode = await APIMethods().register(
+        nameController.text, emailController.text, passwordController.text);
+
+    if (statusCode == 200) {
+      // If register is successful
+      Get.snackbar("Success", "Register Successfully",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Get.to(() => const Home()); // Navigate to the MerchantSignUp screen
+    } else if (statusCode == 302) {
+      // Unauthorized error (Invalid credentials)
+      Get.snackbar("Error", "The email is already used. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else if (statusCode == 401) {
+      // Unauthorized error (Invalid credentials)
+      Get.snackbar("Error", "Invalid Email or Password. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else if (statusCode == 500) {
+      // Server error
+      Get.snackbar("Error", "Internal server error. Please try again later.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else if (statusCode == 0) {
+      //Network Error
       Get.snackbar("Error", "Network error. Please check your connection.",
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } finally {
-      client.close();
+    } else {
+      // Other errors
+      Get.snackbar("Error", "Something went wrong. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
   }
 
@@ -97,53 +83,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 80.0,
-                          color: Colors.black12,
-                          offset: Offset(1, 1),
-                          blurStyle: BlurStyle.outer,
-                        )
-                      ]),
-                      child: TextFormField(
-                        controller: nameController,
-                        validator: validateName,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: "Enter Your Name"),
-                      ),
+                    TextFormField(
+                      controller: nameController,
+                      validator: validateName,
+                      decoration: nameInputDecoration(),
                     ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Email", style: AppWidget.labelTextStyle()),
+                    Text("Email", style: AppWidget.FormFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            blurRadius: 80.0,
-                            color: Colors.black12,
-                            offset: Offset(1, 1),
-                            blurStyle: BlurStyle.outer)
-                      ]),
-                      child: TextFormField(
-                        controller: emailController,
-                        validator: validateEmail,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: "Enter Your Email"),
-                      ),
+                    TextFormField(
+                      controller: emailController,
+                      validator: validateEmail,
+                      decoration: emailInputDecoration(),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -153,51 +108,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: AppWidget.labelTextStyle(),
                     ),
                     const SizedBox(height: 10.0),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            blurRadius: 80.0,
-                            color: Colors.black12,
-                            offset: Offset(1, 1),
-                            blurStyle: BlurStyle.outer)
-                      ]),
-                      child: TextFormField(
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: "Enter Your Password"),
+                    TextFormField(
+                      controller: passwordController,
+                      decoration: passwordInputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
+                      obscureText: !isPasswordVisible,
+                      validator: validatePassword,
                     ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Confirm Password", style: AppWidget.labelTextStyle()),
+                    Text("Confirm Password",
+                        style: AppWidget.FormFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    DecoratedBox(
-                        decoration: const BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              blurRadius: 80.0,
-                              color: Colors.black12,
-                              offset: Offset(1, 1),
-                              blurStyle: BlurStyle.outer)
-                        ]),
-                        child: TextFormField(
-                          controller: confirmController,
-                          validator: validatePassword,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              border: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              hintText: "Enter Confirm Password"),
-                        )),
+                    TextFormField(
+                      controller: confirmController,
+                      validator: validatePassword,
+                      decoration: confirmpasswordInputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                        ),
+                      ),
+                      obscureText: !isPasswordVisible,
+                    ),
                     const SizedBox(height: 30.0),
                     Container(
                         width: MediaQuery.sizeOf(context).width,
