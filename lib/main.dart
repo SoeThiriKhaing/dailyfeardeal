@@ -13,14 +13,10 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -35,7 +31,8 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/driversignup', page: () => const TaxiDriverSignUp()),
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
-          GetPage(name: '/foodcategory', page: () => FoodPage()),         
+          GetPage(name: '/foodcategory', page: () => FoodPage()),
+          GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
         ]);
   }
 }

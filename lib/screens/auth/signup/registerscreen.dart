@@ -1,10 +1,12 @@
 import 'package:dailyfairdeal/screens/home/home.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -20,9 +22,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
-  Future<void> register() async{
-    int? statusCode = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
-  
+  Future<void> register() async {
+    int? statusCode = await APIMethods().register(
+        nameController.text, emailController.text, passwordController.text);
+
     if (statusCode == 200) {
         // If register is successful
         Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
@@ -44,6 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Get.snackbar("Error", "Something went wrong. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,53 +77,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 80.0,
-                          color: Colors.black12,
-                          offset: Offset(1, 1),
-                          blurStyle: BlurStyle.outer,
-                        )
-                      ]),
-                      child: TextFormField(
-                        controller: nameController,
-                        validator: validateName,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: "Enter Your Name"),
-                      ),
+                    TextFormField(
+                      controller: nameController,
+                      validator: validateName,
+                      decoration: nameInputDecoration(),
                     ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Email", style: AppWidget.labelTextStyle()),
+                    Text("Email", style: AppWidget.FormFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            blurRadius: 80.0,
-                            color: Colors.black12,
-                            offset: Offset(1, 1),
-                            blurStyle: BlurStyle.outer)
-                      ]),
-                      child: TextFormField(
-                        controller: emailController,
-                        validator: validateEmail,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: "Enter Your Email"),
-                      ),
+                    TextFormField(
+                      controller: emailController,
+                      validator: validateEmail,
+                      decoration: emailInputDecoration(),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -129,51 +102,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: AppWidget.labelTextStyle(),
                     ),
                     const SizedBox(height: 10.0),
-                    DecoratedBox(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            blurRadius: 80.0,
-                            color: Colors.black12,
-                            offset: Offset(1, 1),
-                            blurStyle: BlurStyle.outer)
-                      ]),
-                      child: TextFormField(
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: "Enter Your Password"),
+                    TextFormField(
+                      controller: passwordController,
+                      decoration: passwordInputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
+                      obscureText: !isPasswordVisible,
+                      validator: validatePassword,
                     ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Confirm Password", style: AppWidget.labelTextStyle()),
+                    Text("Confirm Password",
+                        style: AppWidget.FormFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    DecoratedBox(
-                        decoration: const BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              blurRadius: 80.0,
-                              color: Colors.black12,
-                              offset: Offset(1, 1),
-                              blurStyle: BlurStyle.outer)
-                        ]),
-                        child: TextFormField(
-                          controller: confirmController,
-                          validator: validatePassword,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              border: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              hintText: "Enter Confirm Password"),
-                        )),
+                    TextFormField(
+                      controller: confirmController,
+                      validator: validatePassword,
+                      decoration: confirmpasswordInputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                        ),
+                      ),
+                      obscureText: !isPasswordVisible,
+                    ),
                     const SizedBox(height: 30.0),
                     SizedBox(
                         width: MediaQuery.sizeOf(context).width,

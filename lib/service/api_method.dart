@@ -1,8 +1,11 @@
 import 'dart:convert'; // For jsonDecode
+import 'package:get/get.dart';
+
 import 'package:http/http.dart' as http;
 
-class APIMethods{
-
+class APIMethods extends GetxController {
+   var featuredRestaurants = [].obs; // Observable for storing fetched data
+  var filteredCategories = [].obs; // Observable for filtered data
   Future<List<Map<String, String>>> getCountries() async {
     try {
       final response = await http.get(
@@ -36,7 +39,6 @@ class APIMethods{
       throw Exception("Error: $e");
     }
   }
-
 
   Future<List<Map<String, String>>> getDivisions(int countryId) async {
     try {
@@ -108,7 +110,7 @@ class APIMethods{
     }
   }
 
-   Future<List<Map<String, String>>> getTownships(int cityId) async {
+  Future<List<Map<String, String>>> getTownships(int cityId) async {
     try {
       final response = await http.get(
         Uri.parse("http://api.dailyfairdeal.com/api/township/$cityId"),
@@ -213,7 +215,8 @@ class APIMethods{
     }
   }
 
-  Future<List<Map<String, dynamic>>> searchItemsByType(String query, String type) async {
+  Future<List<Map<String, dynamic>>> searchItemsByType(
+      String query, String type) async {
     try {
       final uri = Uri.parse("http://api.dailyfairdeal.com/api/search");
 
@@ -247,7 +250,7 @@ class APIMethods{
       throw Exception("Error: $e");
     }
   }
-  
+
   Future<int?> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -262,7 +265,6 @@ class APIMethods{
       );
 
       return response.statusCode;
-      
     } catch (e) {
       // Handle any exceptions
       return 0;
@@ -289,4 +291,30 @@ class APIMethods{
     }
   }
 
+  Future<void> fetchFeaturedRestaurants() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        featuredRestaurants.value = data['data'];
+        filteredCategories.value = featuredRestaurants; // Initialize with all data
+      } else if (response.statusCode == 401) {
+        Get.snackbar("Error", "Unauthorized access.");
+      } else {
+        Get.snackbar("Error", "Failed to load data.");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
+    }
+  }
+
+  void updateSearchQuery(String query) {
+    filteredCategories.value = featuredRestaurants
+        .where((restaurant) =>
+            restaurant['name'].toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
 }

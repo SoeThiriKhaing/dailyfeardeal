@@ -1,17 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
-import 'food_controller.dart';
 
 class FoodPage extends StatelessWidget {
-  final FoodController controller = Get.put(FoodController());
+  final APIMethods apiController = Get.put(APIMethods());
 
   FoodPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Fetch data when the page loads
+    apiController.fetchFeaturedRestaurants();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -32,7 +35,7 @@ class FoodPage extends StatelessWidget {
               shadowColor: Colors.grey.withOpacity(0.4),
               borderRadius: BorderRadius.circular(25.0),
               child: TextField(
-                onChanged: controller.updateSearchQuery,
+                onChanged: apiController.updateSearchQuery,
                 decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
@@ -54,7 +57,7 @@ class FoodPage extends StatelessWidget {
               child: Row(
                 children: [
                   _buildCategoryButton('Featured Restaurants', () {
-                    controller.fetchFeaturedRestaurants();
+                    apiController.fetchFeaturedRestaurants();
                   }),
                   _buildCategoryButton('Popular Items', () {
                     if (kDebugMode) {
@@ -79,7 +82,7 @@ class FoodPage extends StatelessWidget {
           // Dynamic Content
           Expanded(
             child: Obx(() {
-              final restaurants = controller.filteredCategories;
+              final restaurants = apiController.filteredCategories;
               if (restaurants.isEmpty) {
                 return const Center(
                   child: Text(

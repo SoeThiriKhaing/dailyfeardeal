@@ -1,9 +1,10 @@
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
-import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/formfield.dart';
+import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,9 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
 
-  Future<void> login() async{
-    int? statusCode = await APIMethods().login(emailController.text.trim(), passwordController.text.trim());
-    
+  Future<void> login() async {
+    int? statusCode = await APIMethods()
+        .login(emailController.text.trim(), passwordController.text.trim());
+
     if (statusCode == 200) {
           // If login is successful
           Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
@@ -65,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Text('Email', style: TextStyle(fontSize: 18)),
+                Text('Email', style: AppWidget.FormFieldLabelTextStyle()),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
@@ -83,13 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: validateEmail,
                 ),
                 const SizedBox(height: 10),
-                const Text('Password', style: TextStyle(fontSize: 18)),
+                Text('Password', style: AppWidget.FormFieldLabelTextStyle()),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  decoration: InputDecoration(
-                    hintText: "Enter Password",
-                    prefixIcon: const Icon(Icons.password),
+                  decoration:passwordInputDecoration(
                     suffixIcon: IconButton(
                       icon: Icon(
                         isPasswordVisible
@@ -101,11 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           isPasswordVisible = !isPasswordVisible;
                         });
                       },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                    ),),
                   obscureText: !isPasswordVisible,
                   validator: validatePassword,
                 ),
@@ -120,11 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: const Color(0xFFFFC740),
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Login",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style:AppWidget.buttonTextStyle(),
                   ),
                 ),
                 const SizedBox(height: 20),
