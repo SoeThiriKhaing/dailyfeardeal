@@ -1,10 +1,12 @@
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -67,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Text('Email', style: AppWidget.FormFieldLabelTextStyle()),
+                Text('Email', style: AppWidget.formFieldLabelTextStyle()),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
@@ -85,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: validateEmail,
                 ),
                 const SizedBox(height: 10),
-                Text('Password', style: AppWidget.FormFieldLabelTextStyle()),
+                Text('Password', style: AppWidget.formFieldLabelTextStyle()),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,

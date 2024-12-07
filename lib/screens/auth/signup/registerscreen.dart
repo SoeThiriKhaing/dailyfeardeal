@@ -85,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Email", style: AppWidget.FormFieldLabelTextStyle()),
+                    Text("Email", style: AppWidget.formFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
@@ -125,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 20.0,
                     ),
                     Text("Confirm Password",
-                        style: AppWidget.FormFieldLabelTextStyle()),
+                        style: AppWidget.formFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),

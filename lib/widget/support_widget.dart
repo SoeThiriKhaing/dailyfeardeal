@@ -28,7 +28,7 @@ class AppWidget {
   }
 
   //TextFormField Label TextStyle
-  static FormFieldLabelTextStyle() {
+  static formFieldLabelTextStyle() {
     return const TextStyle(
       fontSize: 18.0,
     );
