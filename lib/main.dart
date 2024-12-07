@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: "DailyFairDeal",
-        home: MainScreen(),
+        home: SplashScreen(),
         getPages: [
           GetPage(name: '/', page: () => const SplashScreen()),
           GetPage(name: '/toregister', page: () => const ToRegister()),
