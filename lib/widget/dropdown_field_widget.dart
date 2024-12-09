@@ -32,11 +32,7 @@ Widget buildDropdownField(String label, String? value, List<Map<String, String>>
               ),
             );
           }).toList(),
-          onChanged:  (value) {
-            if(value != null){
-              onChanged(value);
-            }
-          },
+          onChanged: onChanged,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please select $label';

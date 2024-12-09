@@ -1,54 +1,50 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:flutter/material.dart';
 
-class FoodPage extends StatelessWidget {
-  final APIMethods apiController = Get.put(APIMethods());
+class FoodPage extends StatefulWidget {
+  const FoodPage({super.key});
 
-  FoodPage({super.key});
+  @override
+  State<FoodPage> createState() => _FoodPageState();
+}
+
+class _FoodPageState extends State<FoodPage> {
+  String selectedCategory = '';
+
+  // Demo data
+  final List<Map<String, dynamic>> featuredRestaurants = [
+    {'image_url': 'https://via.placeholder.com/150', 'name': 'Pizza Hut', 'waiting_time': '30 mins', 'delivery_fee': 5, 'rating': 4.5},
+    {'image_url': 'https://via.placeholder.com/150', 'name': 'Subway', 'waiting_time': '20 mins', 'delivery_fee': 3, 'rating': 4.2},
+  ];
+
+  final List<Map<String, dynamic>> popularItems = [
+    {'image_url': 'https://via.placeholder.com/150', 'food_name': 'Cheeseburger', 'food_type': 'Fast Food', 'rating': 4.3},
+    {'image_url': 'https://via.placeholder.com/150', 'food_name': 'Fried Chicken', 'food_type': 'Fast Food', 'rating': 4.1},
+  ];
+
+  final List<Map<String, dynamic>> favoriteCuisines = [
+    {'images': [{'upload_url': 'https://via.placeholder.com/150'}], 'food-name': 'Italian'},
+    {'images': [{'upload_url': 'https://via.placeholder.com/150'}], 'food-name': 'Chinese'},
+  ];
+
+  final List<Map<String, dynamic>> orderAgain = [
+    {'image_url': 'https://via.placeholder.com/150', 'restaurant_name': 'KFC', 'restaurant_type': 'Fast Food', 'waiting_time': '15 mins', 'delivery_fee': 2, 'rating': 4.0},
+    {'image_url': 'https://via.placeholder.com/150', 'restaurant_name': 'McDonalds', 'restaurant_type': 'Fast Food', 'waiting_time': '25 mins', 'delivery_fee': 4, 'rating': 4.3},
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // Fetch data when the page loads
-    apiController.fetchFeaturedRestaurants();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
-        title: Text(
-          'Food Page',
-          style: AppWidget.appBarTextStyle(),
-        ),
+        title: Text('Food Page', style: AppWidget.appBarTextStyle(),),
         centerTitle: true,
       ),
       body: Column(
         children: [
-          // Search Bar
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Material(
-              elevation: 5.0,
-              shadowColor: Colors.grey.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(25.0),
-              child: TextField(
-                onChanged: apiController.updateSearchQuery,
-                decoration: const InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  hintText: "Search food or restaurant...",
-                  prefixIcon: Icon(Icons.search, color: AppColor.primaryColor),
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-            ),
-          ),
-
           // Scrollable Row of Buttons
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -57,22 +53,24 @@ class FoodPage extends StatelessWidget {
               child: Row(
                 children: [
                   _buildCategoryButton('Featured Restaurants', () {
-                    apiController.fetchFeaturedRestaurants();
+                    setState(() {
+                      selectedCategory = 'featured';
+                    });
                   }),
                   _buildCategoryButton('Popular Items', () {
-                    if (kDebugMode) {
-                      print("Popular Items clicked");
-                    }
+                    setState(() {
+                      selectedCategory = 'popular';
+                    });
                   }),
                   _buildCategoryButton('Your Favourite Cuisines', () {
-                    if (kDebugMode) {
-                      print("Your Favourite Cuisines clicked");
-                    }
+                    setState(() {
+                      selectedCategory = 'cuisines';
+                    });
                   }),
                   _buildCategoryButton('Order It Again', () {
-                    if (kDebugMode) {
-                      print("Order It Again clicked");
-                    }
+                    setState(() {
+                      selectedCategory = 'order';
+                    });
                   }),
                 ],
               ),
@@ -81,61 +79,28 @@ class FoodPage extends StatelessWidget {
 
           // Dynamic Content
           Expanded(
-            child: Obx(() {
-              final restaurants = apiController.filteredCategories;
-              if (restaurants.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'No restaurants found.',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                );
-              }
-              return ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
-                itemCount: restaurants.length,
-                itemBuilder: (context, index) {
-                  final restaurant = restaurants[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 3.0,
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        title: Text(
-                          restaurant['name'],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "${restaurant['restaurant_type']} - ${restaurant['City_Name']}, ${restaurant['Country_Name']}",
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        trailing: const Icon(Icons.arrow_forward_ios,
-                            color: Colors.grey),
-                        onTap: () {
-                          // Define behavior for tapping a restaurant
-                        },
-                      ),
-                    ),
-                  );
-                },
-              );
-            }),
+            child: Builder(
+              builder: (context) {
+                switch (selectedCategory) {
+                  case 'featured':
+                    return _buildFeaturedRestaurants(featuredRestaurants);
+                  case 'popular':
+                    return _buildPopularItems(popularItems);
+                  case 'cuisines':
+                    return _buildFavoriteCuisines(favoriteCuisines);
+                  case 'order':
+                    return _buildOrderAgain(orderAgain);
+                  default:
+                    return const Center(child: Text("Select a category to view items."));
+                }
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  // Helper Method to Build Category Buttons
   Widget _buildCategoryButton(String title, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -152,6 +117,112 @@ class FoodPage extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
       ),
+    );
+  }
+
+  Widget _buildFeaturedRestaurants(List restaurants) {
+    return ListView.builder(
+      itemCount: restaurants.length,
+      itemBuilder: (context, index) {
+        final restaurant = restaurants[index];
+        return ListTile(
+          leading: Image.network(
+            restaurant['image_url'],
+            width: 150,
+            height: 150,
+          ),
+          title: Text(
+            restaurant['name'],
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),  
+          ),
+          subtitle: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Waiting Time: ${restaurant['waiting_time']}"),
+              Text("Delivery Fee: \$${restaurant['delivery_fee']}"),
+              Text("Rating: ${restaurant['rating']}"),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPopularItems(List items) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return ListTile(
+          leading: Image.network(
+            item['image_url'],
+            width: 150,
+            height: 150,  
+          ),
+          title: Text(
+            item['food_name'],
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),  
+          ),
+          subtitle: Text(item['food_type']),
+          trailing: Text("Rating: ${item['rating']}"),
+        );
+      },
+    );
+  }
+
+  Widget _buildFavoriteCuisines(List cuisines) {
+    return CarouselSlider.builder(
+      itemCount: cuisines.length,
+      itemBuilder: (context, index, realIndex) {
+        final cuisine = cuisines[index];
+        return Column(
+          children: [
+            Image.network(
+              cuisine['images'][0]['upload_url'],
+            ),
+            Text(cuisine['food-name']),
+          ],
+        );
+      },
+      options: CarouselOptions(
+        height: 250,
+        autoPlay: true,
+        enlargeCenterPage: true,
+      ),
+    );
+  }
+
+  Widget _buildOrderAgain(List orders) {
+    return ListView.builder(
+      itemCount: orders.length,
+      itemBuilder: (context, index) {
+        final order = orders[index];
+        return ListTile(
+          leading: Image.network(order['image_url']),
+          title: Text(order['restaurant_name']),
+          subtitle: Text(order['restaurant_type']),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Rating: ${order['rating']}"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Waiting Time: ${order['waiting_time']}"),
+                  Text("Delivery Fee: \$${order['delivery_fee']}"),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
 import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -92,28 +91,6 @@ class _RiderSignUpState extends State<RiderSignUp> {
     );
   }
 
-  Widget buildLoginRedirectButton() {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Already have an account? "),
-          GestureDetector(
-            onTap: () {
-             // Get.to(()=> const MerchantLogin());
-            },
-            child: const Text(
-              "Sign In",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.primaryColor),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,8 +138,6 @@ class _RiderSignUpState extends State<RiderSignUp> {
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),
-                buildLoginRedirectButton(),
-                const SizedBox(height: 10),
               ],
             ),
           ),

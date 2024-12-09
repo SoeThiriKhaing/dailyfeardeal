@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
@@ -22,26 +23,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordVisible = false;
 
   Future<void> login() async {
-    int? statusCode = await APIMethods()
-        .login(emailController.text.trim(), passwordController.text.trim());
-
-    if (statusCode == 200) {
-          // If login is successful
-          Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-          Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
-      } else if (statusCode == 401) {
-        // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (statusCode == 500) {
-        // Server error
-        Get.snackbar("Error", "Internal server error. Please try again later.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }else if(statusCode == 0) {
-        //Network Error
-        Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        // Other errors
-        Get.snackbar("Error", "Something went wrong. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
+    String? token = await APIMethods().login(emailController.text.trim(), passwordController.text.trim());
+    if (token!= null || token!.isNotEmpty) {
+      // If login is successful
+      saveToken(token);
+      Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
+    }
   }
 
   @override
@@ -111,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: (){
                     if(formKey.currentState!.validate()){
-                      APIMethods().login(emailController.text.trim(), passwordController.text.trim());
+                     login();
                     } 
                   },
                   style: ElevatedButton.styleFrom(

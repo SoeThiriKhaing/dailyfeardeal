@@ -1,5 +1,4 @@
 import 'package:dailyfairdeal/service/api_method.dart';
-import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/dropdown_field_widget.dart';
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
 import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
@@ -56,7 +55,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       });
     } catch (e) {
       // ignore: avoid_print
-      print("Error fetching countries: $e");
+      print("Error fetching country: $e");
     }
   }
 
@@ -110,8 +109,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),
-                buildLoginRedirectButton(),
-                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -137,9 +134,14 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 (value) async {
                   setState(() {
                     country = value;
-                    selectedCountryId = int.tryParse(
-                        countryList.firstWhere((item) => item['name'] == value)['id']!);
+                    division = city = township = ward = street = null;
+                    selectedCountryId = int.tryParse(countryList.firstWhere(
+                      (item) => item['name'] == value)['id']!) ?? 0;
                   });
+                  if (selectedCountryId != null && selectedCountryId != 0) {
+                    divisionList = await APIMethods().getDivisions(selectedCountryId!);
+                    setState(() {}); // Refresh dropdown
+                  }
                 },
               ),
             ),
@@ -153,14 +155,15 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 (value) async {
                   setState(() {
                     division = value;
+                    city = township = ward = street = null;
                     selectedDivisionId = int.tryParse(
                         divisionList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedDivisionId != null) {
-                    divisionList = await safeAPICall(() => APIMethods().getCities(selectedDivisionId!));
-                    setState(() {}); // Refresh dropdown
+                    cityList = await APIMethods().getCities(selectedDivisionId!);
+                    setState(() {});
                   }
-                },
+                } 
               ),
             ),
           ],
@@ -180,11 +183,12 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 (value) async {
                   setState(() {
                     city = value;
+                    township = ward = street = null;
                     selectedCityId = int.tryParse(
                         cityList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedCityId != null) {
-                    townshipList = await safeAPICall(() => APIMethods().getTownships(selectedCityId!));
+                    townshipList = await APIMethods().getTownships(selectedCityId!);
                     setState(() {});
                   }
                 },
@@ -200,11 +204,12 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 (value) async {
                   setState(() {
                     township = value;
+                    ward = street = null;
                     selectedTownshipId = int.tryParse(
                         townshipList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedTownshipId != null) {
-                    wardList = await safeAPICall(() => APIMethods().getWards(selectedTownshipId!));
+                    wardList = await APIMethods().getWards(selectedTownshipId!);
                     setState(() {});
                   }
                 },
@@ -227,11 +232,12 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 (value) async {
                   setState(() {
                     ward = value;
+                    street = null;
                     selectedWardId = int.tryParse(
                         wardList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedWardId != null) {
-                    streetList = await safeAPICall(() => APIMethods().getStreets(selectedWardId!));
+                    streetList = await APIMethods().getStreets(selectedWardId!);
                     setState(() {});
                   }
                 },
@@ -244,7 +250,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 'Street',
                 street,
                 streetList,
-                (value) {
+                (value) async{
                   setState(() {
                     street = value;
                   });
@@ -255,15 +261,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
         ),
       ],
     );
-  }
-
-  Future<List<Map<String, String>>> safeAPICall(Future<List<Map<String, String>>> Function() apiCall) async {
-    try {
-      return await apiCall();
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to load data', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      return [];
-    }
   }
 
   Widget buildSubmitButton() {
@@ -283,28 +280,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           "Submit",
           style: TextStyle(color: Colors.white),
         ),
-      ),
-    );
-  }
-
-  Widget buildLoginRedirectButton() {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Already have an account? "),
-          GestureDetector(
-            onTap: () {
-             // Get.to(()=> const MerchantLogin());
-            },
-            child: const Text(
-              "Sign In",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.primaryColor),
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -1,5 +1,6 @@
-import 'package:dailyfairdeal/screens/home/home.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
@@ -23,29 +24,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode focusNode = FocusNode();
 
   Future<void> register() async {
-    int? statusCode = await APIMethods().register(
-        nameController.text, emailController.text, passwordController.text);
+    String? token = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
 
-    if (statusCode == 200) {
-        // If register is successful
-        Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-        Get.to(() => const Home());  // Navigate to the MerchantSignUp screen
-      }else if (statusCode == 302) {
-        // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "The email is already used. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (statusCode == 401) {
-        // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (statusCode == 500) {
-        // Server error
-        Get.snackbar("Error", "Internal server error. Please try again later.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if(statusCode == 0) {
-        //Network Error
-        Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else{
-        // Other errors
-        Get.snackbar("Error", "Something went wrong. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
+    if (token!= null || token!.isNotEmpty) {
+      saveToken(token);
+      // If register is successful
+      Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
+    }
   }
 
   @override
