@@ -426,7 +426,8 @@ class APIMethods extends GetxController {
     return null;
   }
 
-  Future<void> fetchFeaturedRestaurants() async {
+  //To show in Home Page
+  Future<List<Map<String, String>>?> getFeaturedRestaurants() async {
     try {
       final token = await getToken();
       if (token == null) {
@@ -441,16 +442,26 @@ class APIMethods extends GetxController {
       );
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        featuredRestaurants.value = data['data'];
-        filteredCategories.value = featuredRestaurants; // Initialize with all data
+        final List<Map<String, String>> featureRestaurants = data;
+        return featureRestaurants;
+        
       } else if (response.statusCode == 401) {
         Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      }else if (response.statusCode == 500) {
+        // Server error
+        Get.snackbar(
+          "Error",
+          "Internal server error. Please try again later.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
       } else {
         Get.snackbar("Error", "Failed to load data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
     } catch (e) {
       Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
+    return null;
   }
 
   void updateSearchQuery(String query) {
