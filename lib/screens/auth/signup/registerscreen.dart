@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> register() async {
     String? token = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
 
-    if (token!= null || token!.isNotEmpty) {
+    if (token != null) {
       saveToken(token);
       // If register is successful
       Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Name", style: AppWidget.labelTextStyle()),
+                    Text("Name", style: AppWidget.formFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
@@ -85,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Text(
                       "Password",
-                      style: AppWidget.labelTextStyle(),
+                      style: AppWidget.formFieldLabelTextStyle(),
                     ),
                     const SizedBox(height: 10.0),
                     TextFormField(

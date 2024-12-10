@@ -24,12 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> login() async {
     String? token = await APIMethods().login(emailController.text.trim(), passwordController.text.trim());
-    if (token!= null || token!.isNotEmpty) {
+    if (token != null) {
       // If login is successful
       saveToken(token);
       Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
       Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
     }
+    
   }
 
   @override

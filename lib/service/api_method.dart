@@ -1,4 +1,5 @@
 import 'dart:convert'; // For jsonDecode
+import 'dart:io';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -315,17 +316,45 @@ class APIMethods extends GetxController {
         return token; // Return the token for future use
       } else if (response.statusCode == 401) {
         // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar(
+          "Error",
+          "Invalid Email or Password. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+        );
       } else if (response.statusCode == 500) {
         // Server error
-        Get.snackbar("Error", "Internal server error. Please try again later.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }else {
+        Get.snackbar(
+          "Error",
+          "Internal server error. Please try again later.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+        );
+      } else {
         // Other errors
-         Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar(
+          "Error",
+          "Something went wrong. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+        );
       }
+    } on SocketException {
+      // Network connection error
+      Get.snackbar(
+        "Error",
+        "Unable to connect. Please check your internet connection.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+      );
     } catch (e) {
-      // Handle any exceptions
-      throw Exception("Error: $e");
+      // Handle any other exceptions
+      Get.snackbar(
+        "Error",
+        "An unexpected error occurred. Please try again.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+      );
     }
     return null;
   }
@@ -351,20 +380,48 @@ class APIMethods extends GetxController {
         return token; // Return the token for future use
       }else if (response.statusCode == 302) {
         // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "The email is already used. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar(
+          "Error",
+          "The email is already used. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
       } else if (response.statusCode == 401) {
         // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "Invalid Email or Password. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar(
+          "Error",
+          "Invalid Email or Password. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
       } else if (response.statusCode == 500) {
         // Server error
-        Get.snackbar("Error", "Internal server error. Please try again later.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar(
+          "Error",
+          "Internal server error. Please try again later.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
       }else {
         // Other errors
-         Get.snackbar("Error", "Network error. Please check your connection.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
+         Get.snackbar(
+          "Error",
+          "Something went wrong. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
+      } 
+    }on SocketException {
+      // Network connection error
+      Get.snackbar(
+        "Error",
+        "Unable to connect. Please check your internet connection.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+      );
     } catch (e) {
       // Handle any exceptions
-      throw Exception("Error: $e");
+      Get.snackbar("Error", "An unexpected error occurred. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
     return null;
   }

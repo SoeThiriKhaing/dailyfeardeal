@@ -17,6 +17,14 @@ class AppWidget {
     );
   }
 
+   static subTitle() {
+    return const TextStyle(
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
+  }
+
   static carouselTextStyle() {
     return const TextStyle(
         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black);
