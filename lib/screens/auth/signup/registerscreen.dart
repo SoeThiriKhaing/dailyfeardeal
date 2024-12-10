@@ -1,6 +1,6 @@
-import 'package:dailyfairdeal/screens/home/home.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
@@ -24,34 +24,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode focusNode = FocusNode();
 
   Future<void> register() async {
-    int? statusCode = await APIMethods().register(
-        nameController.text, emailController.text, passwordController.text);
+    String? token = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
 
-    if (statusCode == 200) {
+    if (token!= null || token!.isNotEmpty) {
+      saveToken(token);
       // If register is successful
-      Get.snackbar("Success", "Register Successfully",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-      Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
-    } else if (statusCode == 302) {
-      // Unauthorized error (Invalid credentials)
-      Get.snackbar("Error", "The email is already used. Please try again.",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } else if (statusCode == 401) {
-      // Unauthorized error (Invalid credentials)
-      Get.snackbar("Error", "Invalid Email or Password. Please try again.",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } else if (statusCode == 500) {
-      // Server error
-      Get.snackbar("Error", "Internal server error. Please try again later.",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } else if (statusCode == 0) {
-      //Network Error
-      Get.snackbar("Error", "Network error. Please check your connection.",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } else {
-      // Other errors
-      Get.snackbar("Error", "Something went wrong. Please try again.",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
     }
   }
 
@@ -60,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.only(top: 100.0),
+        padding: const EdgeInsets.only(top: 60.0),
         child: SingleChildScrollView(
           child: Form(
               key: _formkey,
@@ -92,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    Text("Email", style: AppWidget.FormFieldLabelTextStyle()),
+                    Text("Email", style: AppWidget.formFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
@@ -132,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 20.0,
                     ),
                     Text("Confirm Password",
-                        style: AppWidget.FormFieldLabelTextStyle()),
+                        style: AppWidget.formFieldLabelTextStyle()),
                     const SizedBox(
                       height: 10.0,
                     ),
@@ -156,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: !isPasswordVisible,
                     ),
                     const SizedBox(height: 30.0),
-                    Container(
+                    SizedBox(
                         width: MediaQuery.sizeOf(context).width,
                         child: ElevatedButton(
                           onPressed: () {
@@ -180,10 +159,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Already have an account?"),
+                        const Text("Already have an account? "),
                         GestureDetector(
                           onTap: () {
-                            print("Sign In button tapped");
                             Get.toNamed("/login");
                           },
                           child: const Text(

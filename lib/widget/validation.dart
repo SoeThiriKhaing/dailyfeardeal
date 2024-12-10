@@ -7,15 +7,15 @@ String? validatePassword(String? value) {
   if (value.length < 6) {
     return 'Password must be at least 6 characters long';
   }
-  if (value.length > 8) {
-    return 'Password must not exceed 8 characters';
-  }
+  // if (value.length > 8) {
+  //   return 'Password must not exceed 8 characters';
+  // }
 
   // Check for at least one special character
-  final specialCharacterPattern = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
-  if (!specialCharacterPattern.hasMatch(value)) {
-    return 'Password must contain at least one special character';
-  }
+  // final specialCharacterPattern = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+  // if (!specialCharacterPattern.hasMatch(value)) {
+  //   return 'Password must contain at least one special character';
+  // }
 
   // Check for at least one letter
   final letterPattern = RegExp(r'[a-zA-Z]');
