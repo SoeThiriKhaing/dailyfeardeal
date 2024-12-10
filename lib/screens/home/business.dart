@@ -25,7 +25,7 @@ class BusinessPage extends StatelessWidget {
                 margin: const EdgeInsets.all(10),
                 child: Image.asset("assets/images/dfd.png")),
             // Three card views
-            _buildCard('Merchant/Food Owner Account', Colors.white, Icons.shop,
+            _buildCard('Restaurant/Shop Owner Account', Colors.white, Icons.shop,
                 '/merchantsignup'),
             _buildCard('DFD Driver Account', Colors.white,
                 Icons.taxi_alert, '/driversignup'),

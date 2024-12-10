@@ -1,3 +1,4 @@
+import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_owner_dashboard.dart';
 import 'package:dailyfairdeal/screens/home/business.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
@@ -84,7 +85,7 @@ class Profile extends StatelessWidget {
             // Card View
             GestureDetector(
               onTap: () {
-               // Get.to(() => const MerchantDashboard()); 
+                Get.to(() => const RestaurantOwnerDashboard()); 
               },
               child: Card(
                 color: Colors.white,
