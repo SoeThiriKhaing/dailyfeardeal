@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class APIMethods extends GetxController {
-   var featuredRestaurants = [].obs; // Observable for storing fetched data
-  var filteredCategories = [].obs; // Observable for filtered data
+  
   Future<List<Map<String, String>>> getCountries() async {
     try {
       final response = await http.get(
@@ -291,30 +290,70 @@ class APIMethods extends GetxController {
     }
   }
 
-  Future<void> fetchFeaturedRestaurants() async {
-    try {
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
-        headers: {"Content-Type": "application/json"},
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        featuredRestaurants.value = data['data'];
-        filteredCategories.value = featuredRestaurants; // Initialize with all data
-      } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.");
-      } else {
-        Get.snackbar("Error", "Failed to load data.");
-      }
-    } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e");
+  
+  // Fetch Feature and Popular Restaurant
+
+  var currentCategory = 'featured'.obs;
+
+  var filteredCategories = <Map<String, String>>[].obs;
+  var popularItems = <Map<String, String>>[].obs;
+
+  // Fetch data methods
+  void fetchFeaturedRestaurants() {
+    // Simulate API call
+    filteredCategories.value = [
+      {
+        'image': "assets/images/res1.jpg",
+        'name': 'The Gourmet Spot',
+        'description': 'Fine dining restaurant'
+      },
+      {
+        'image': "assets/images/res2.png",
+        'name': 'Pizza Paradise',
+        'description': 'Delicious pizzas'
+      },
+    ];
+  }
+
+  void fetchPopularItems() {
+    // Simulate API call
+    popularItems.value = [
+      {
+        'image': "assets/images/res3.png",
+        'name': 'Burger Bliss',
+        'description': 'Juicy burgers'
+      },
+      {
+        'image': "assets/images/res4.jpg",
+        'name': 'Sushi Haven',
+        'description': 'Fresh sushi'
+      },
+    ];
+  }
+
+  // Update category
+  void updateCategory(String category) {
+    currentCategory.value = category;
+    if (category == 'featured') {
+      fetchFeaturedRestaurants();
+    } else if (category == 'popular') {
+      fetchPopularItems();
     }
   }
 
+  // Handle search query
   void updateSearchQuery(String query) {
-    filteredCategories.value = featuredRestaurants
-        .where((restaurant) =>
-            restaurant['name'].toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    // Simulate filtering logic
+    if (currentCategory.value == 'featured') {
+      filteredCategories.value = filteredCategories
+          .where((item) =>
+              item['name']!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } else if (currentCategory.value == 'popular') {
+      popularItems.value = popularItems
+          .where((item) =>
+              item['name']!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
   }
 }

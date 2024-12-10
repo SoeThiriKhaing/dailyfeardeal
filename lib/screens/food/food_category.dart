@@ -1,3 +1,4 @@
+import 'package:dailyfairdeal/service/featureres_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
@@ -9,7 +10,7 @@ class FoodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch data when the page loads
+    // Fetch initial data when the page loads
     apiController.fetchFeaturedRestaurants();
 
     return Scaffold(
@@ -54,16 +55,16 @@ class FoodPage extends StatelessWidget {
               child: Row(
                 children: [
                   _buildCategoryButton('Featured Restaurants', () {
-                    apiController.fetchFeaturedRestaurants();
+                    FeatureresApi().fetchFeaturedRestaurants();
                   }),
                   _buildCategoryButton('Popular Items', () {
-                    print("Popular Items clicked");
+                    apiController.updateCategory('popular');
                   }),
                   _buildCategoryButton('Your Favourite Cuisines', () {
-                    print("Your Favourite Cuisines clicked");
+                    apiController.updateCategory('favourite');
                   }),
                   _buildCategoryButton('Order It Again', () {
-                    print("Order It Again clicked");
+                    apiController.updateCategory('orderAgain');
                   }),
                 ],
               ),
@@ -73,48 +74,51 @@ class FoodPage extends StatelessWidget {
           // Dynamic Content
           Expanded(
             child: Obx(() {
-              final restaurants = apiController.filteredCategories;
-              if (restaurants.isEmpty) {
+              final category = apiController.currentCategory.value;
+              final items = category == 'popular'
+                  ? apiController.popularItems
+                  : apiController.filteredCategories;
+
+              if (items.isEmpty) {
                 return const Center(
                   child: Text(
-                    'No restaurants found.',
+                    'No items found.',
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                 );
               }
+
               return ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
-                itemCount: restaurants.length,
+                itemCount: items.length,
                 itemBuilder: (context, index) {
-                  final restaurant = restaurants[index];
+                  final item = items[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 3.0,
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        title: Text(
-                          restaurant['name'],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    child: ListTile(
+                      leading: item['image'] != null
+                          ? Image.asset(
+                              item['image']!,
+                              width: 100,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            )
+                          : const Icon(Icons.image_not_supported),
+                      title: Text(
+                        item['name']!,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        subtitle: Text(
-                          "${restaurant['restaurant_type']} - ${restaurant['City_Name']}, ${restaurant['Country_Name']}",
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        trailing: const Icon(Icons.arrow_forward_ios,
-                            color: Colors.grey),
-                        onTap: () {
-                          // Define behavior for tapping a restaurant
-                        },
                       ),
+                      subtitle: Text(
+                        "${item['description']}",
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      onTap: () {
+                        // Define behavior for tapping an item
+                      },
                     ),
                   );
                 },

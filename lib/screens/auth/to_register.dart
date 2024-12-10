@@ -107,7 +107,7 @@ class ToRegister extends StatelessWidget {
                         ),
                         onPressed: () {
                           // Navigate to the RegisterScreen using GetX
-                          Get.to(() => MainScreen());
+                          Get.to(() => const RegisterScreen());
                         },
                         child: Text(
                           "Sign Up",

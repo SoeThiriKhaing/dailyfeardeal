@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/screens/home/home.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
@@ -30,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // If register is successful
       Get.snackbar("Success", "Register Successfully",
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-      Get.to(() => const Home()); // Navigate to the MerchantSignUp screen
+      Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
     } else if (statusCode == 302) {
       // Unauthorized error (Invalid credentials)
       Get.snackbar("Error", "The email is already used. Please try again.",

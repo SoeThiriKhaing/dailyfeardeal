@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  decoration:passwordInputDecoration(
+                  decoration: passwordInputDecoration(
                     suffixIcon: IconButton(
                       icon: Icon(
                         isPasswordVisible
@@ -99,7 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           isPasswordVisible = !isPasswordVisible;
                         });
                       },
-                    ),),
+                    ),
+                  ),
                   obscureText: !isPasswordVisible,
                   validator: validatePassword,
                 ),
@@ -107,8 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      APIMethods().login(emailController.text.trim(),
-                          passwordController.text.trim());
+                      login();
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: Text(
                     "Login",
-                    style:AppWidget.buttonTextStyle(),
+                    style: AppWidget.buttonTextStyle(),
                   ),
                 ),
                 const SizedBox(height: 20),
