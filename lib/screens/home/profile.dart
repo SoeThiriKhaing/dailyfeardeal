@@ -6,7 +6,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  Profile({super.key});
+
+  final List<Map<String, String>> items = [
+    {'title': 'Profile Details'},
+    {'title': 'Order & Reordering'},
+    {'title': 'Vouchers'},
+    {'title': 'Favourites'},
+    {'title': 'Setting'},
+    {'title': 'Safety Setting'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +36,7 @@ class Profile extends StatelessWidget {
               items: [
                 Image.asset("assets/images/dfd.png"),
                 Image.asset("assets/images/food1.jpeg"),
-                Image.asset("assets/images/food2.jpeg")
+                Image.asset("assets/images/food2.jpeg"),
               ],
               options: CarouselOptions(
                 height: 200,
@@ -36,6 +45,14 @@ class Profile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                "List Your Business on DailyFairDeal! Be Our Partner?",
+                style: AppWidget.labelTextStyle(),
+              ),
+            ),
+            const SizedBox(height: 20),
 
             // Card View
             GestureDetector(
@@ -78,18 +95,19 @@ class Profile extends StatelessWidget {
               shrinkWrap: true, // Prevents infinite height error
               physics:
                   const NeverScrollableScrollPhysics(), // Prevents list view from scrolling
-              itemCount: 10,
+              itemCount: items.length,
               itemBuilder: (context, index) {
+                final item = items[index];
                 return ListTile(
-                  leading: const Icon(
-                    Icons.check_circle,
-                    color: AppColor.primaryColor,
-                  ),
-                  title: Text('List Item ${index + 1}'),
-                  subtitle: Text('This is the subtitle of item ${index + 1}.'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  leading: const Icon(Icons.star),
+                  title: Text(item['title']!), // Access the predefined title
+                  trailing:
+                      const Icon(Icons.arrow_forward), // Add a forward arrow
                   onTap: () {
-                    // Add functionality here
+                    // Handle onTap event if needed
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Selected: ${item['title']}')),
+                    );
                   },
                 );
               },

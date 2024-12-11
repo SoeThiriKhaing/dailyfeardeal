@@ -15,7 +15,7 @@ class MainScreen extends StatelessWidget {
     const Home(),
     const ActivitiesScreen(),
     const PaymentScreen(),
-    const Profile(),
+     Profile(),
   ];
 
   @override

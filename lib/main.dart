@@ -32,9 +32,11 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/driversignup', page: () => const TaxiDriverSignUp()),
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
-          GetPage(name: '/foodcategory', page: () => const FoodPage()),
+          GetPage(name: '/foodcategory', page: () => FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
-          GetPage(name: '/popularrestaurant', page:()=>const PopularRestaurantsPage()),
+          GetPage(
+              name: '/popularrestaurant',
+              page: () => const PopularRestaurantsPage()),
         ]);
   }
 }
