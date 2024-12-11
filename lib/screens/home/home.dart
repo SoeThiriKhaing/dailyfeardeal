@@ -18,7 +18,15 @@ class _HomeState extends State<Home> {
   List<Map<String, dynamic>> searchResults = [];
   bool isLoading = false;
   String selectedType = "food";
-  List<Map<String, String>> featureRestaurantsList = [];
+  //List<Map<String, String>> featureRestaurantsList = [];
+  final List<Map<String, String>> featureRestaurantsList = [
+    {'name': 'Pizza Paradise', 'restaurant_type': 'Italian'},
+    {'name': 'Burger Haven', 'restaurant_type': 'Fast Food'},
+    {'name': 'Sushi Central', 'restaurant_type': 'Japanese'},
+    {'name': 'Taco Fiesta', 'restaurant_type': 'Mexican'},
+    {'name': 'Curry House', 'restaurant_type': 'Indian'},
+    {'name': 'Dragon Wok', 'restaurant_type': 'Chinese'},
+  ];
 
   Future<void> performSearch() async {
     String query = searchController.text.trim();
@@ -48,14 +56,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    fetchFeaturedRestaurants();
+    //fetchFeaturedRestaurants();
   }
 
  Future<void> fetchFeaturedRestaurants() async {
     try {
-      List<Map<String, String>>? restaurants = await APIMethods().getFeaturedRestaurants();
+      //List<Map<String, String>>? restaurants = await APIMethods().getFeaturedRestaurants();
       setState(() {
-        featureRestaurantsList = restaurants!;
+        //featureRestaurantsList = restaurants!;
       });
     } catch (e) {
       // ignore: avoid_print
@@ -161,63 +169,127 @@ class _HomeState extends State<Home> {
             ),
 
             //Feature Restaurants
-            if(featureRestaurantsList.isNotEmpty)
-              Text("Feature Restaurants", style: AppWidget.subTitle()),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: featureRestaurantsList.length > 5 ? 6 : featureRestaurantsList.length,
-                  itemBuilder: (context, index) {
-                    if (index == 5) {
-                      return GestureDetector(
-                        onTap: () {
-                          //Go to Feature Restaurants Page
-                        },
-                        child: const Card(
-                          color: Colors.orangeAccent,
-                          elevation: 4,
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          child: Center(
-                            child: Icon(Icons.arrow_forward,
-                                size: 50, color: Colors.white),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Feature Restaurants",
+                    style: AppWidget.subTitle(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: featureRestaurantsList.length > 5 ? 6 : featureRestaurantsList.length,
+                    itemBuilder: (context, index) {
+                      if (index == 5) {
+                        return GestureDetector(
+                          onTap: () {
+                            // Go to Feature Restaurants Page
+                            Get.snackbar("Success", "Go to Feature Restaurants Page");
+                          },
+                          child: const Center(
+                            child: Icon(Icons.arrow_forward, size: 50, color: Colors.black),
+                          ),
+                        );
+                      }
+
+                      final restaurant = featureRestaurantsList[index];
+                      return Card(
+                        elevation: 4,
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        child: SizedBox(
+                          width: 150,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.restaurant, size: 50, color: Colors.orangeAccent),
+                              const SizedBox(height: 8),
+                              Text(
+                                restaurant['name']!,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                restaurant['restaurant_type']!,
+                                style: const TextStyle(fontSize: 14),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
                       );
-                    }
-
-                    final restaurant = featureRestaurantsList[index];
-                    return Card(
-                      elevation: 4,
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      child: SizedBox(
-                        width: 150,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.restaurant,
-                                size: 50, color: Colors.orangeAccent),
-                            const SizedBox(height: 8),
-                            Text(
-                              restaurant['name']!,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              restaurant['restaurant_type']!,
-                              style: const TextStyle(fontSize: 14),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                    },
+                  ),
                 ),
-              ),
+              ],
+            ),
+           
+
+            // if(featureRestaurantsList.isNotEmpty)
+            //   Text("Feature Restaurants", style: AppWidget.subTitle()),
+            //   SizedBox(
+            //     height: 200,
+            //     child: ListView.builder(
+            //       scrollDirection: Axis.horizontal,
+            //       itemCount: featureRestaurantsList.length > 5 ? 6 : featureRestaurantsList.length,
+            //       itemBuilder: (context, index) {
+            //         if (index == 5) {
+            //           return GestureDetector(
+            //             onTap: () {
+            //               //Go to Feature Restaurants Page
+            //             },
+            //             child: const Card(
+            //               color: Colors.orangeAccent,
+            //               elevation: 4,
+            //               margin: EdgeInsets.symmetric(horizontal: 8),
+            //               child: Center(
+            //                 child: Icon(Icons.arrow_forward,
+            //                     size: 50, color: Colors.white),
+            //               ),
+            //             ),
+            //           );
+            //         }
+
+            //         final restaurant = featureRestaurantsList[index];
+            //         return Card(
+            //           elevation: 4,
+            //           margin: const EdgeInsets.symmetric(horizontal: 8),
+            //           child: SizedBox(
+            //             width: 150,
+            //             child: Column(
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               children: [
+            //                 const Icon(Icons.restaurant,
+            //                     size: 50, color: Colors.orangeAccent),
+            //                 const SizedBox(height: 8),
+            //                 Text(
+            //                   restaurant['name']!,
+            //                   style: const TextStyle(
+            //                     fontSize: 16,
+            //                     fontWeight: FontWeight.bold,
+            //                   ),
+            //                   textAlign: TextAlign.center,
+            //                 ),
+            //                 Text(
+            //                   restaurant['restaurant_type']!,
+            //                   style: const TextStyle(fontSize: 14),
+            //                   textAlign: TextAlign.center,
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
 
             // Two Row Card View
             Column(
