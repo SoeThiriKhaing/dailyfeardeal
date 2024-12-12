@@ -14,7 +14,7 @@ class MerchantSignUp extends StatefulWidget {
 
 class _MerchantSignUpState extends State<MerchantSignUp> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  String? businessType, country, division, city, township, ward, street;
+  String? restaurantType, country, division, city, township, ward, street;
   final TextEditingController shopNameController = TextEditingController();
   final TextEditingController ownerNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -26,19 +26,16 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   List<Map<String, String>> townshipList = [];
   List<Map<String, String>> wardList = [];
   List<Map<String, String>> streetList = [];
+  List<Map<String, String>> restaurantTypeList = [];
 
-  int? selectedCountryId, selectedDivisionId, selectedCityId, selectedTownshipId, selectedWardId;
+  int? selectedRestaurantTypeId, selectedCountryId, selectedDivisionId, selectedCityId, selectedTownshipId, selectedWardId;
 
-  List<Map<String, String>> businessTypeList = [
-    {
-      'id': '1', 
-      'name': 'Shop'
-    },
-    {
-      'id': '2',
-      'name':'Restaurant',
-    }
+  final List<Map<String, String>> businessTypeList = [
+    {'id': '1', 'name': 'Restaurant'},
+    {'id': '2', 'name': 'Shop'},
   ];
+
+  String? selectedBusinessType;
 
   @override
   void initState() {
@@ -50,8 +47,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   Future<void> fetchAddress() async {
     try {
       List<Map<String, String>> countries = await APIMethods().getCountries();
+      List<Map<String, String>> restaurantTypes = await APIMethods().getRestaurantTypes();
       setState(() {
         countryList = countries;
+        restaurantTypeList = restaurantTypes;
+        selectedBusinessType = businessTypeList.first['name'];
       });
     } catch (e) {
       // ignore: avoid_print
@@ -93,10 +93,44 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 ),
                 const SizedBox(height: 20),
                 buildTextFormField('Restaurant/Shop Name', shopNameController, keyboardType: TextInputType.text),
-                buildDropdownField('Select Business Type', businessType, businessTypeList, (value) {
-                  setState(() { businessType = value; });
+                const SizedBox(height: 10),
+                const Text("Choose Business Type", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                ...businessTypeList.map((business) {
+                  return Row(
+                    children: [
+                      Radio<String>(
+                        value: business['name']!,
+                        groupValue: selectedBusinessType,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedBusinessType = value;
+                          });
+                        },
+                      ),
+                      Text(
+                        business['name']!,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  );
                 }),
                 const SizedBox(height: 10),
+
+                if(selectedBusinessType =='Restaurant')
+                  buildDropdownField(
+                    'Select Restaurant Type',
+                    restaurantType,
+                    restaurantTypeList, 
+                    (value) async{
+                      setState(() { 
+                        restaurantType = value; 
+                        selectedRestaurantTypeId = int.tryParse(restaurantTypeList.firstWhere(
+                        (item) => item['name'] == value)['id']!) ?? 0;
+                      });
+                  }),
+                  const SizedBox(height: 10),
+                
                 buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
                 buildPhoneField(phoneController),
@@ -116,7 +150,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       ),
     );
   }
-
 
   Widget buildAddressFields() {
     return Column(

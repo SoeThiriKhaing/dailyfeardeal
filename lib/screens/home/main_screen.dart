@@ -1,6 +1,6 @@
 import 'package:dailyfairdeal/screens/activities_screen.dart';
 import 'package:dailyfairdeal/screens/home/home.dart';
-import 'package:dailyfairdeal/screens/home/profile.dart';
+import 'package:dailyfairdeal/screens/profile/profile.dart';
 import 'package:dailyfairdeal/screens/payment/payment_screen.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/bottom_nav.dart';

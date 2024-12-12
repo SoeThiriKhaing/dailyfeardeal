@@ -16,6 +16,44 @@ class APIMethods extends GetxController {
 
   var selectedCategory = ''.obs;
 
+   Future<List<Map<String, String>>> getRestaurantTypes() async {
+    try {
+      final token = await getToken();
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/restaurant_types"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> restaurantTypes = [];
+        for (var type in data) {
+          restaurantTypes.add({
+            'id': type['id'].toString(),
+            'name': type['name'],
+          });
+        }
+        return restaurantTypes;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid token");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load restaurant type");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
   Future<List<Map<String, String>>> getCountries() async {
     try {
       final token = await getToken();
