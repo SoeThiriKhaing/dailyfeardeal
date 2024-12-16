@@ -1,4 +1,5 @@
 import 'dart:convert'; // For jsonDecode
+import 'dart:io';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,8 @@ class APIMethods extends GetxController {
   var favoriteCuisines = [].obs;
   var orderAgain = [].obs;
   var filteredFoods = [].obs;
+  var restaurant = [].obs;
+  var popularRestaurant = [].obs;
 
   var filteredCategories = [].obs;
 
@@ -328,8 +331,13 @@ class APIMethods extends GetxController {
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
     } catch (e) {
-      // Handle any exceptions
-      throw Exception("Error: $e");
+      // Handle any other exceptions
+      Get.snackbar(
+        "Error",
+        "An unexpected error occurred. Please try again.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+      );
     }
     return null;
   }
@@ -365,36 +373,120 @@ class APIMethods extends GetxController {
         // Server error
         Get.snackbar("Error", "Internal server error. Please try again later.",
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        // Other errors
-        Get.snackbar("Error", "Network error. Please check your connection.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
     } catch (e) {
       // Handle any exceptions
-      throw Exception("Error: $e");
+      Get.snackbar("Error", "An unexpected error occurred. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
     return null;
   }
 
-  Future<void> fetchFeaturedRestaurants() async {
+  //To show in Home Page
+  // Future<List<Map<String, String>>?> getFeaturedRestaurants() async {
+  //   try {
+  //     final token = await getToken();
+  //     if (token == null) {
+  //       throw Exception("Unauthorized: Token not found");
+  //     }
+  //     final response = await http.get(
+  //       Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Authorization': 'Bearer $token',
+  //       },
+  //     );
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> rawData = jsonDecode(response.body);
+  //       // Map data to ensure correct types
+  //       final data = rawData.map((item) {
+  //         return {
+  //           'name': item['name'] ?? 'Unknown',
+  //           'restaurant_type': item['restaurant_type'].toString() ?? 'N/A',
+  //           'open_time': item['open_time']
+  //         };
+  //       }).toList();
+  //       featuredRestaurants.value = data;
+  //       filteredCategories.value = data; // Initialize with all data
+  //     } else if (response.statusCode == 401) {
+  //       Get.snackbar("Error", "Unauthorized access.",
+  //           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+  //     } else {
+  //       Get.snackbar("Error", "Failed to load data.",
+  //           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", "An error occurred: $e",
+  //         snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+  //   }
+  //   return null;
+  // }
+
+  Future<List<Map<String, String>>> getFeatureRestauratns() async {
+    try {
+      final token = await getToken();
+      if (token == null) {
+        throw Exception("Unauthorized:Token not found");
+      }
+      final response = await http.get(
+          Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+          headers: {
+            'Content-Type': 'application/josn',
+            'Authorization': 'Bearer $token',
+          });
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<Map<String, String>> featureRestauratns = [];
+        for (var featureRes in data) {
+          featureRestauratns.add({
+            'name': featureRes['name'],
+            'res_type': featureRes['restaurant_type'],
+          });
+        }
+        return featureRestauratns;
+      } else if (response.statusCode == 401) {
+        throw Exception("Unauthorized:Invalid credentials");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load streets");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  // Handle search query
+  void updateSearchQuery(String query) {
+    filteredCategories.value = featuredRestaurants
+        .where((restaurant) =>
+            restaurant['name'].toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+//Feature Restaurants API
+
+  Future<void> fetchFeatureRestaurants() async {
     try {
       final token = await getToken();
       if (token == null) {
         throw Exception("Unauthorized: Token not found");
       }
       final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
+          Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+          });
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        featuredRestaurants.value = data['data'];
-        filteredCategories.value =
-            featuredRestaurants; // Initialize with all data
+        final List<dynamic> rawData = jsonDecode(response.body);
+        final data = rawData.map((item) {
+          return {
+            'name': item['name'] ?? 'Unknown',
+            'restaurant_type': item['restaurant_type'] ?? 'N/A',
+          };
+        }).toList();
       } else if (response.statusCode == 401) {
         Get.snackbar("Error", "Unauthorized access.",
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
@@ -406,14 +498,6 @@ class APIMethods extends GetxController {
       Get.snackbar("Error", "An error occurred: $e",
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
-  }
-
-  // Handle search query
-  void updateSearchQuery(String query) {
-    filteredCategories.value = featuredRestaurants
-        .where((restaurant) =>
-            restaurant['name'].toLowerCase().contains(query.toLowerCase()))
-        .toList();
   }
 
   Future<void> fetchFavouriteCuisines() async {
@@ -523,6 +607,42 @@ class APIMethods extends GetxController {
     }
   }
 
+  //Fetch Restaurants
+  Future<void> fetchRestaurants() async {
+    try {
+      final token = await getToken();
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/restaurant'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> rawData = jsonDecode(response.body);
+        final data = rawData.map((item) {
+          return {
+            'name': item['name'] ?? 'Unknown',
+            'restaurant_type': item['restaurant_type'] ?? 'N/A',
+          };
+        }).toList();
+        restaurant.value = data;
+      } else if (response.statusCode == 401) {
+        Get.snackbar("Error", "Unauthorized access.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      } else {
+        Get.snackbar("Error", "Failed to load data.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    }
+  }
+
   Future<void> fetchOrderAgain() async {
     try {
       final token = await getToken();
@@ -537,7 +657,13 @@ class APIMethods extends GetxController {
         },
       );
       if (response.statusCode == 200) {
-        popularFoods.value = jsonDecode(response.body);
+        final List<dynamic> rawData = jsonDecode(response.body);
+        final data = rawData.map((item) {
+          return {
+            'name': item['name'] ?? 'Unknown',
+            'restaurant_type': item['restaurant_type'] ?? 'N/A',
+          };
+        }).toList();
       } else if (response.statusCode == 401) {
         Get.snackbar("Error", "Unauthorized access.",
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);

@@ -10,7 +10,7 @@ class FoodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch data when the page loads
-    apiController.fetchFeaturedRestaurants();
+    apiController.fetchFeatureRestaurants();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -54,16 +54,26 @@ class FoodPage extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
+                  _buildCategoryButton("Restaurants", () {
+                    apiController.selectedCategory.value = "Restaurants";
+                    apiController.fetchRestaurants();
+                  }),
                   _buildCategoryButton('Featured Restaurants', () {
-                    apiController.fetchFeaturedRestaurants();
+                    apiController.selectedCategory.value =
+                        "Featured Restaurants";
+                    apiController.getFeatureRestauratns();
                   }),
                   _buildCategoryButton('Popular Restaurants', () {
-                    print("Popular Items clicked");
+                    apiController.selectedCategory.value =
+                        "Popular Restaurants";
+                    apiController.fetchOrderAgain();
                   }),
                   _buildCategoryButton('Popular Foods', () {
+                    apiController.selectedCategory.value = "Popular Foods";
                     apiController.fetchPopularFoods();
                   }),
                   _buildCategoryButton('Order It Again', () {
+                    apiController.selectedCategory.value = "Order It Again";
                     apiController.fetchOrderAgain();
                   }),
                 ],
@@ -74,21 +84,25 @@ class FoodPage extends StatelessWidget {
           // Dynamic Content
           Expanded(
             child: Obx(() {
-              final popularFood = apiController.filteredFoods;
-              if (popularFood.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'No restaurants found.',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                );
+              final selectedCategory = apiController.selectedCategory.value;
+              final datatoDisplay = selectedCategory == "Featured Restaurants"
+                  ? apiController.featuredRestaurants
+                  : selectedCategory == "Popular Restaurants"
+                      ? apiController.orderAgain
+                      : selectedCategory == "Popular Foods"
+                          ? apiController.popularFoods
+                          : selectedCategory == "Restaurants"
+                              ? apiController.restaurant
+                              : apiController.orderAgain;
+              if (datatoDisplay.isEmpty) {
+                return const Text("No Data For selected category");
               }
               return ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
-                itemCount: popularFood.length,
+                itemCount: datatoDisplay.length,
                 itemBuilder: (context, index) {
-                  final popularFoods = popularFood[index];
+                  final item = datatoDisplay[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
@@ -100,21 +114,39 @@ class FoodPage extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ListTile(
                         title: Text(
-                          popularFoods['name'] ?? 'Unnamed Food',
+                          selectedCategory == "Popular Foods"
+                              ? item['name'] ?? 'Unnamed Food'
+                              : selectedCategory == "Feature Restaurants"
+                                  ? item['name'] ?? "No Feature Restaurant"
+                                  : selectedCategory == "Restaurants"
+                                      ? item['name'] ?? "Unnamed Restaurants"
+                                      : item['name'] ??
+                                          "No Data for Restaurants",
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        subtitle: Text(
-                          "${popularFoods['sub_category_id'] ?? 'No Subcategory'}",
-                          style: const TextStyle(fontSize: 14),
-                        ),
+                        subtitle: selectedCategory == "Featured Restaurants"
+                            ? Text(
+                                "${item['res_type'] ?? 'No Subcategory'}\n",
+                                // "${item['open_time'] ?? 'No Opening Time'} - ${item['close_time'] ?? 'No Closing Time'}\n"
+                                // "${item['phone_number'] ?? 'No Phone Number'}",
+                                style: const TextStyle(fontSize: 14),
+                              )
+                            : selectedCategory == "Popular Foods"
+                                ? Text(
+                                    "${item['sub_category_id'] ?? 'No Subcategory'}",
+                                    style: const TextStyle(fontSize: 14),
+                                  )
+                                : selectedCategory == "Order It Again"
+                                    ? Text(
+                                        "${item['res_type'] ?? 'No Subcategory'}",
+                                      )
+                                    : Text("No Data Available"),
                         trailing: const Icon(Icons.arrow_forward_ios,
                             color: Colors.grey),
-                        onTap: () {
-                         
-                        },
+                        onTap: () {},
                       ),
                     ),
                   );

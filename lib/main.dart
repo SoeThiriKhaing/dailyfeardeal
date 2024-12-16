@@ -7,6 +7,7 @@ import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
 import 'package:dailyfairdeal/screens/auth/to_register.dart';
 import 'package:dailyfairdeal/screens/food/food_category.dart';
 import 'package:dailyfairdeal/screens/food/popularitem.dart';
+import 'package:dailyfairdeal/screens/home/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,10 +15,14 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -34,6 +39,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
           GetPage(name: '/foodcategory', page: () => FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
+          GetPage(name: '/profile', page: () => Profile()),
           GetPage(
               name: '/popularrestaurant',
               page: () => const PopularRestaurantsPage()),
