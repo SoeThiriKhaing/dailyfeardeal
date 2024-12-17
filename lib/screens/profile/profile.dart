@@ -1,6 +1,4 @@
-
-import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_owner_dashboard.dart';
-import 'package:dailyfairdeal/screens/home/business.dart';
+import 'package:dailyfairdeal/screens/profile/business.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +99,7 @@ class Profile extends StatelessWidget {
               shrinkWrap: true, // Prevents infinite height error
               physics: const NeverScrollableScrollPhysics(), // Prevents list view from scrolling
               children: [
-                buildListTile(icon: Icons.dashboard_customize, iconColor: Colors.yellow, title: "Your Dashboard", subtitle: "Go and view your dashboard.", onTap: (){ Get.to(()=> const RestaurantOwnerDashboard());}),
+                buildListTile(icon: Icons.dashboard_customize, iconColor: Colors.yellow, title: "Your Dashboard", subtitle: "Go and view your dashboard.", onTap: (){ Get.toNamed("/dashboard");}),
                 buildListTile(icon: Icons.person, iconColor: Colors.blue, title: "Profile Details", subtitle: "View and edit your profile information.", onTap: (){}),
                 buildListTile(icon: Icons.shopping_cart, iconColor: Colors.green, title: "Orders & Reordering", subtitle: "Track and reorder your past orders.", onTap: (){}),
                 buildListTile(icon: Icons.card_giftcard, iconColor: Colors.orange, title: "Vouchers", subtitle: "Check available vouchers and discounts.", onTap: (){}),
