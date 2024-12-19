@@ -10,8 +10,9 @@ import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_owner_dash
 import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/change_restaurant_address.dart';
 import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/profile_setting.dart';
 import 'package:dailyfairdeal/screens/food/food_category.dart';
+import 'package:dailyfairdeal/screens/food/popularitem.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
-import 'package:dailyfairdeal/screens/profile/profile.dart';
+import 'package:dailyfairdeal/screens/home/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,10 +20,14 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -37,10 +42,13 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/driversignup', page: () => const TaxiDriverSignUp()),
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
-          GetPage(name: '/foodcategory', page: () => const FoodPage()),
+          GetPage(name: '/foodcategory', page: () => FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
-          GetPage(name: '/profile', page: () => const Profile()),
+          GetPage(name: '/profile', page: () => Profile()),
           GetPage(name: '/main', page: () => MainScreen()),
+          GetPage(
+              name: '/popularrestaurant',
+              page: () => const PopularRestaurantsPage()),
           GetPage(name: '/dashboard', page: () => const Dashboard()),
           GetPage(name: '/restaurantownerdashboard', page: () => const RestaurantOwnerDashboard()),
           GetPage(name: '/profilesetting', page: () => const ProfileSetting()),

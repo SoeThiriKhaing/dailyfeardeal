@@ -8,15 +8,18 @@ import 'package:http/http.dart' as http;
 
 class APIMethods extends GetxController {
   var featuredRestaurants = [].obs;
-  var popularItems = [].obs;
+  var popularFoods = [].obs;
   var favoriteCuisines = [].obs;
   var orderAgain = [].obs;
-
+  var filteredFoods = [].obs;
+  var restaurant = [].obs;
+  var popularRestaurant = [].obs;
+  var favouriteCuisines = [].obs;
   var filteredCategories = [].obs;
 
   var selectedCategory = ''.obs;
 
-   Future<List<Map<String, String>>> getRestaurantTypes() async {
+  Future<List<Map<String, String>>> getRestaurantTypes() async {
     try {
       final token = await getToken();
       if (token == null) {
@@ -110,23 +113,22 @@ class APIMethods extends GetxController {
         // Parse the response body into a list of countries
         final data = json.decode(response.body);
         final List<Map<String, String>> divisions = [];
-          
-          for (var division in data) {
-            divisions.add({
-              'id': division['id'].toString(),
-              'countryId': division['country_id'].toString(),
-              'name': division['name'],
-            });
-          }         
-          return divisions;
-        
+
+        for (var division in data) {
+          divisions.add({
+            'id': division['id'].toString(),
+            'countryId': division['country_id'].toString(),
+            'name': division['name'],
+          });
+        }
+        return divisions;
       } else if (response.statusCode == 401) {
         // Handle unauthorized error
         throw Exception("Unauthorized: Invalid credentials");
       } else if (response.statusCode == 500) {
         // Handle internal server error
         throw Exception("Server error. Please try again later.");
-      } else {  
+      } else {
         throw Exception("Failed to load divisions");
       }
     } catch (e) {
@@ -272,7 +274,7 @@ class APIMethods extends GetxController {
         // Parse the response body into a list of countries
         final data = json.decode(response.body);
         final List<Map<String, String>> streets = [];
-        for (var street in data ) {
+        for (var street in data) {
           streets.add({
             'id': street['id'].toString(),
             'wardId': street['ward_id'].toString(),
@@ -294,7 +296,8 @@ class APIMethods extends GetxController {
     }
   }
 
-  Future<List<Map<String, dynamic>>> searchItemsByType(String query, String type) async {
+  Future<List<Map<String, dynamic>>> searchItemsByType(
+      String query, String type) async {
     try {
       final token = await getToken();
       if (token == null) {
@@ -354,37 +357,17 @@ class APIMethods extends GetxController {
         return token; // Return the token for future use
       } else if (response.statusCode == 401) {
         // Unauthorized error (Invalid credentials)
-        Get.snackbar(
-          "Error",
-          "Invalid Email or Password. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
+        Get.snackbar("Error", "Invalid Email or Password. Please try again.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       } else if (response.statusCode == 500) {
         // Server error
-        Get.snackbar(
-          "Error",
-          "Internal server error. Please try again later.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
+        Get.snackbar("Error", "Internal server error. Please try again later.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       } else {
         // Other errors
-        Get.snackbar(
-          "Error",
-          "Something went wrong. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
+        Get.snackbar("Error", "Network error. Please check your connection.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
-    } on SocketException {
-      // Network connection error
-      Get.snackbar(
-        "Error",
-        "Unable to connect. Please check your internet connection.",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-      );
     } catch (e) {
       // Handle any other exceptions
       Get.snackbar(
@@ -416,98 +399,153 @@ class APIMethods extends GetxController {
         // Extract the token from the response
         final token = data['access_token'];
         return token; // Return the token for future use
-      }else if (response.statusCode == 302) {
+      } else if (response.statusCode == 302) {
         // Unauthorized error (Invalid credentials)
-        Get.snackbar(
-          "Error",
-          "The email is already used. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
+        Get.snackbar("Error", "The email is already used. Please try again.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       } else if (response.statusCode == 401) {
         // Unauthorized error (Invalid credentials)
-        Get.snackbar(
-          "Error",
-          "Invalid Email or Password. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
+        Get.snackbar("Error", "Invalid Email or Password. Please try again.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       } else if (response.statusCode == 500) {
         // Server error
-        Get.snackbar(
-          "Error",
-          "Internal server error. Please try again later.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
-      }else {
-        // Other errors
-         Get.snackbar(
-          "Error",
-          "Something went wrong. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
-      } 
-    }on SocketException {
-      // Network connection error
-      Get.snackbar(
-        "Error",
-        "Unable to connect. Please check your internet connection.",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-      );
+        Get.snackbar("Error", "Internal server error. Please try again later.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      }
     } catch (e) {
       // Handle any exceptions
-      Get.snackbar("Error", "An unexpected error occurred. Please try again.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      Get.snackbar("Error", "An unexpected error occurred. Please try again.",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
     return null;
   }
 
-  //To show in Home Page
-  Future<List<Map<String, String>>?> getFeaturedRestaurants() async {
+  Future<void> getFeatureRestaurants() async {
     try {
       final token = await getToken();
       if (token == null) {
-        throw Exception("Unauthorized: Token not found");
+        throw Exception("Unauthorized:Token not found");
       }
       final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+          Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        featuredRestaurants.value = dataList;
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
+      } else if (response.statusCode == 401) {
+        showError("Unauthorized access. Please log in again.");
+      } else {
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
+    } catch (e) {
+      showError("An error occurred: $e");
+    }
+  }
+
+  //Order Again
+
+  Future<void> fetchOrderAgain() async {
+    try {
+      final token = await getToken(); // Retrieve the token
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $token',
-          },
+        },
       );
+
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<Map<String, String>> featureRestaurants = data;
-        return featureRestaurants;
-        
+        // Decode the response body
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+
+        // Extract and return the 'data' list
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        // Ensure correct typing as List<Map<String, dynamic>>
+        orderAgain.value = dataList;
+        // return List<Map<String, dynamic>>.from(dataList);
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
       } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }else if (response.statusCode == 500) {
-        // Server error
-        Get.snackbar(
-          "Error",
-          "Internal server error. Please try again later.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
+        showError("Unauthorized access. Please log in again.");
       } else {
-        Get.snackbar("Error", "Failed to load data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      showError("An error occurred: $e");
     }
-    return null;
   }
 
+//Fetch Popular Restaurants
+
+  Future<void> fetchPopularRestaurants() async {
+    try {
+      final token = await getToken(); // Retrieve the token
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        // Decode the response body
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+
+        // Extract and return the 'data' list
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        // Ensure correct typing as List<Map<String, dynamic>>
+        orderAgain.value = dataList;
+        // return List<Map<String, dynamic>>.from(dataList);
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
+      } else if (response.statusCode == 401) {
+        showError("Unauthorized access. Please log in again.");
+      } else {
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
+    } catch (e) {
+      showError("An error occurred: $e");
+    }
+  }
+
+  // Handle search queryf
   void updateSearchQuery(String query) {
     filteredCategories.value = featuredRestaurants
         .where((restaurant) =>
             restaurant['name'].toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
+//Fetch FeatureRestaurants
 
   Future<void> fetchFavouriteCuisines() async {
     try {
@@ -517,41 +555,75 @@ class APIMethods extends GetxController {
       }
       final response = await http.get(
         Uri.parse("http://api.dailyfairdeal.com/api/favorite-cuisine"),
-        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token',},
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
       );
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        favoriteCuisines.value = data['data'];
+        favouriteCuisines.value = data;
       } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar("Error", "Unauthorized access.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       } else {
-        Get.snackbar("Error", "Failed to load data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar("Error", "Failed to load data.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      Get.snackbar("Error", "An error occurred: $e",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
   }
 
-  Future<void> fetchPopularItems() async {
+  Future<void> fetchPopularFoods() async {
     try {
       final token = await getToken();
       if (token == null) {
         throw Exception("Unauthorized: Token not found");
       }
-      final response = await http.get(Uri.parse('http://api.dailyfairdeal.com/api/popular-foods'),
-        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token',},
+
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/popular-foods'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
       );
+
       if (response.statusCode == 200) {
-        popularItems.value = jsonDecode(response.body);
-      }
-      else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        final List<dynamic> rawData = jsonDecode(response.body);
+        // Map data to ensure correct types
+        final data = rawData.map((item) {
+          return {
+            'name': item['name'] ?? 'Unknown',
+            'sub_category_id': item['sub_category_id'].toString() ?? 'N/A',
+            'date': item['created_at']
+          };
+        }).toList();
+
+        popularFoods.value = data;
+        // filteredFoods.value = data; // Initialize filtered list
+      } else if (response.statusCode == 401) {
+        showError("Unauthorized access. Please log in again.");
       } else {
-        Get.snackbar("Error", "Failed to load data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        showError("Failed to load data. Please try again.");
       }
-    }catch (e) {
-      Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } 
+    } catch (e) {
+      showError("An error occurred: $e");
+    }
+  }
+
+  void showError(String message) {
+    Get.snackbar(
+      "Error",
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(10),
+      borderRadius: 10,
+    );
   }
 
   Future<void> fetchFavoriteCuisines() async {
@@ -560,42 +632,65 @@ class APIMethods extends GetxController {
       if (token == null) {
         throw Exception("Unauthorized: Token not found");
       }
-      final response = await http.get(Uri.parse('http://api.dailyfairdeal.com/api/favorite-cuisine'),
-        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token',},
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/favorite-cuisine'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
       );
       if (response.statusCode == 200) {
-        popularItems.value = jsonDecode(response.body);
-      }
-      else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        popularFoods.value = jsonDecode(response.body);
+      } else if (response.statusCode == 401) {
+        Get.snackbar("Error", "Unauthorized access.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       } else {
-        Get.snackbar("Error", "Failed to load data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        Get.snackbar("Error", "Failed to load data.",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       }
-    }catch (e) {
-      Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } 
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    }
   }
 
-    Future<void> fetchOrderAgain() async {
+  //Fetch Restaurants
+  Future<void> fetchRestaurants() async {
     try {
       final token = await getToken();
       if (token == null) {
         throw Exception("Unauthorized: Token not found");
       }
-      final response = await http.get(Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
-        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token',},
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/restaurant'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        popularItems.value = jsonDecode(response.body);
-      }
-      else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        // Decode the response body
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+
+        // Extract and return the 'data' list
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        // Ensure correct typing as List<Map<String, dynamic>>
+        restaurant.value = dataList;
+        // return List<Map<String, dynamic>>.from(dataList);
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
+      } else if (response.statusCode == 401) {
+        showError("Unauthorized access. Please log in again.");
       } else {
-        Get.snackbar("Error", "Failed to load data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
       }
-    }catch (e) {
-      Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    } 
+    } catch (e) {
+      showError("An error occurred: $e");
+    }
   }
 
   void updateCategory(String category) {

@@ -60,6 +60,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     } catch (e) {
       // ignore: avoid_print
       print("Error fetching country: $e");
+      
     }
   }
 

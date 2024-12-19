@@ -4,7 +4,7 @@ class AppWidget {
   static labelTextStyle() {
     return const TextStyle(
       color: Colors.black,
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: FontWeight.bold,
     );
   }
@@ -49,5 +49,4 @@ class AppWidget {
       fontWeight: FontWeight.bold,
     );
   }
-
 }

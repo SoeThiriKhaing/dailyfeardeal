@@ -8,7 +8,13 @@ import 'package:get/get.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
-  Widget buildListTile({required IconData icon, required Color iconColor, required String title, required String subtitle, required VoidCallback onTap,}) {
+  Widget buildListTile({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
     return ListTile(
       leading: Icon(icon, color: iconColor),
       title: Text(title),
@@ -48,14 +54,16 @@ class Profile extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            Center(child: Text("List your business on DailyFairDeal!", style: AppWidget.subTitle())),
+            Center(
+                child: Text("List your business on DailyFairDeal!",
+                    style: AppWidget.subTitle())),
             Center(child: Text("Be Our Partner?", style: AppWidget.subTitle())),
             const SizedBox(height: 5),
 
             // Card View
             GestureDetector(
               onTap: () {
-                Get.to(() => const BusinessPage()); 
+                Get.to(() => const BusinessPage());
               },
               child: Card(
                 color: Colors.white,
@@ -93,11 +101,12 @@ class Profile extends StatelessWidget {
               child: Text("General", style: AppWidget.subTitle()),
             ),
             const SizedBox(height: 10),
-            
+
             // List View
             ListView(
               shrinkWrap: true, // Prevents infinite height error
-              physics: const NeverScrollableScrollPhysics(), // Prevents list view from scrolling
+              physics:
+                  const NeverScrollableScrollPhysics(), // Prevents list view from scrolling
               children: [
                 buildListTile(icon: Icons.dashboard_customize, iconColor: Colors.yellow, title: "Your Dashboard", subtitle: "Go and view your dashboard.", onTap: (){ Get.toNamed("/dashboard");}),
                 buildListTile(icon: Icons.person, iconColor: Colors.blue, title: "Profile Details", subtitle: "View and edit your profile information.", onTap: (){}),

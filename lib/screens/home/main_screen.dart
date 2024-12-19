@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
   final BottomNav bottomNav = Get.put(BottomNav());
   final List<Widget> pages = [
-    const Home(),
+    Home(),
     const ActivitiesScreen(),
     const PaymentScreen(),
     const Profile(),
@@ -39,6 +39,9 @@ class MainScreen extends StatelessWidget {
                 icon: Icon(Icons.local_activity), label: "Activities"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.payment), label: "Payment"),
+            // BottomNavigationBarItem(
+            //     icon: Icon(Icons.notification_important),
+            //     label: "Notifications"),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           ],
         )));
