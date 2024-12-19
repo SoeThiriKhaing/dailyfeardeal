@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  Home({super.key});
+  final APIMethods apiController = Get.put(APIMethods());
 
   @override
   State<Home> createState() => _HomeState();
@@ -238,9 +239,9 @@ class _HomeState extends State<Home> {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Get.to(SeeMorePage());
+                          Get.to(const SeeMorePage());
                         },
-                        child: Text(
+                        child: const Text(
                           "see more",
                           style: TextStyle(color: AppColor.primaryColor),
                         )),
@@ -389,7 +390,7 @@ class _HomeState extends State<Home> {
 
 // See More Page Implementation
 class SeeMorePage extends StatelessWidget {
-  const SeeMorePage({Key? key}) : super(key: key);
+  const SeeMorePage({super.key});
 
   @override
   Widget build(BuildContext context) {

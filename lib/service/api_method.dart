@@ -14,10 +14,48 @@ class APIMethods extends GetxController {
   var filteredFoods = [].obs;
   var restaurant = [].obs;
   var popularRestaurant = [].obs;
-
+  var favouriteCuisines = [].obs;
   var filteredCategories = [].obs;
 
   var selectedCategory = ''.obs;
+
+  Future<List<Map<String, String>>> getRestaurantTypes() async {
+    try {
+      final token = await getToken();
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+      final response = await http.get(
+        Uri.parse("http://api.dailyfairdeal.com/api/restaurant_types"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        // Parse the response body into a list of countries
+        final data = json.decode(response.body);
+        final List<Map<String, String>> restaurantTypes = [];
+        for (var type in data) {
+          restaurantTypes.add({
+            'id': type['id'].toString(),
+            'name': type['name'],
+          });
+        }
+        return restaurantTypes;
+      } else if (response.statusCode == 401) {
+        // Handle unauthorized error
+        throw Exception("Unauthorized: Invalid token");
+      } else if (response.statusCode == 500) {
+        // Handle internal server error
+        throw Exception("Server error. Please try again later.");
+      } else {
+        throw Exception("Failed to load restaurant type");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
 
   Future<List<Map<String, String>>> getCountries() async {
     try {
@@ -382,47 +420,7 @@ class APIMethods extends GetxController {
     return null;
   }
 
-  //To show in Home Page
-  // Future<List<Map<String, String>>?> getFeaturedRestaurants() async {
-  //   try {
-  //     final token = await getToken();
-  //     if (token == null) {
-  //       throw Exception("Unauthorized: Token not found");
-  //     }
-  //     final response = await http.get(
-  //       Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         'Authorization': 'Bearer $token',
-  //       },
-  //     );
-  //     if (response.statusCode == 200) {
-  //       final List<dynamic> rawData = jsonDecode(response.body);
-  //       // Map data to ensure correct types
-  //       final data = rawData.map((item) {
-  //         return {
-  //           'name': item['name'] ?? 'Unknown',
-  //           'restaurant_type': item['restaurant_type'].toString() ?? 'N/A',
-  //           'open_time': item['open_time']
-  //         };
-  //       }).toList();
-  //       featuredRestaurants.value = data;
-  //       filteredCategories.value = data; // Initialize with all data
-  //     } else if (response.statusCode == 401) {
-  //       Get.snackbar("Error", "Unauthorized access.",
-  //           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-  //     } else {
-  //       Get.snackbar("Error", "Failed to load data.",
-  //           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", "An error occurred: $e",
-  //         snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-  //   }
-  //   return null;
-  // }
-
-  Future<List<Map<String, String>>> getFeatureRestauratns() async {
+  Future<void> getFeatureRestaurants() async {
     try {
       final token = await getToken();
       if (token == null) {
@@ -431,74 +429,123 @@ class APIMethods extends GetxController {
       final response = await http.get(
           Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
           headers: {
-            'Content-Type': 'application/josn',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer $token',
           });
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<Map<String, String>> featureRestauratns = [];
-        for (var featureRes in data) {
-          featureRestauratns.add({
-            'name': featureRes['name'],
-            'res_type': featureRes['restaurant_type'],
-          });
-        }
-        return featureRestauratns;
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        featuredRestaurants.value = dataList;
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
       } else if (response.statusCode == 401) {
-        throw Exception("Unauthorized:Invalid credentials");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
+        showError("Unauthorized access. Please log in again.");
       } else {
-        throw Exception("Failed to load streets");
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
       }
     } catch (e) {
-      throw Exception("Error: $e");
+      showError("An error occurred: $e");
     }
   }
 
-  // Handle search query
+  //Order Again
+
+  Future<void> fetchOrderAgain() async {
+    try {
+      final token = await getToken(); // Retrieve the token
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        // Decode the response body
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+
+        // Extract and return the 'data' list
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        // Ensure correct typing as List<Map<String, dynamic>>
+        orderAgain.value = dataList;
+        // return List<Map<String, dynamic>>.from(dataList);
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
+      } else if (response.statusCode == 401) {
+        showError("Unauthorized access. Please log in again.");
+      } else {
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
+    } catch (e) {
+      showError("An error occurred: $e");
+    }
+  }
+
+//Fetch Popular Restaurants
+
+  Future<void> fetchPopularRestaurants() async {
+    try {
+      final token = await getToken(); // Retrieve the token
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+
+      final response = await http.get(
+        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        // Decode the response body
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+
+        // Extract and return the 'data' list
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        // Ensure correct typing as List<Map<String, dynamic>>
+        orderAgain.value = dataList;
+        // return List<Map<String, dynamic>>.from(dataList);
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
+      } else if (response.statusCode == 401) {
+        showError("Unauthorized access. Please log in again.");
+      } else {
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
+    } catch (e) {
+      showError("An error occurred: $e");
+    }
+  }
+
+  // Handle search queryf
   void updateSearchQuery(String query) {
     filteredCategories.value = featuredRestaurants
         .where((restaurant) =>
             restaurant['name'].toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
-
-//Feature Restaurants API
-
-  Future<void> fetchFeatureRestaurants() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-          Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': 'Bearer $token',
-          });
-      if (response.statusCode == 200) {
-        final List<dynamic> rawData = jsonDecode(response.body);
-        final data = rawData.map((item) {
-          return {
-            'name': item['name'] ?? 'Unknown',
-            'restaurant_type': item['restaurant_type'] ?? 'N/A',
-          };
-        }).toList();
-      } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        Get.snackbar("Error", "Failed to load data.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
-  }
+//Fetch FeatureRestaurants
 
   Future<void> fetchFavouriteCuisines() async {
     try {
@@ -515,7 +562,7 @@ class APIMethods extends GetxController {
       );
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        favoriteCuisines.value = data['data'];
+        favouriteCuisines.value = data;
       } else if (response.statusCode == 401) {
         Get.snackbar("Error", "Unauthorized access.",
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
@@ -556,7 +603,7 @@ class APIMethods extends GetxController {
         }).toList();
 
         popularFoods.value = data;
-        filteredFoods.value = data; // Initialize filtered list
+        // filteredFoods.value = data; // Initialize filtered list
       } else if (response.statusCode == 401) {
         showError("Unauthorized access. Please log in again.");
       } else {
@@ -621,59 +668,28 @@ class APIMethods extends GetxController {
           'Authorization': 'Bearer $token',
         },
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        final List<dynamic> rawData = jsonDecode(response.body);
-        final data = rawData.map((item) {
-          return {
-            'name': item['name'] ?? 'Unknown',
-            'restaurant_type': item['restaurant_type'] ?? 'N/A',
-          };
-        }).toList();
-        restaurant.value = data;
-      } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        Get.snackbar("Error", "Failed to load data.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
-  }
+        // Decode the response body
+        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
-  Future<void> fetchOrderAgain() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
-      if (response.statusCode == 200) {
-        final List<dynamic> rawData = jsonDecode(response.body);
-        final data = rawData.map((item) {
-          return {
-            'name': item['name'] ?? 'Unknown',
-            'restaurant_type': item['restaurant_type'] ?? 'N/A',
-          };
-        }).toList();
+        // Extract and return the 'data' list
+        final List<dynamic> dataList = decodedResponse['data'];
+        print(dataList);
+        // Ensure correct typing as List<Map<String, dynamic>>
+        restaurant.value = dataList;
+        // return List<Map<String, dynamic>>.from(dataList);
+      } else if (response.statusCode == 204) {
+        showError("No orders available at the moment.");
       } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        showError("Unauthorized access. Please log in again.");
       } else {
-        Get.snackbar("Error", "Failed to load data.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        showError("Failed to load orders. Please try again later.");
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      showError("An error occurred: $e");
     }
   }
 

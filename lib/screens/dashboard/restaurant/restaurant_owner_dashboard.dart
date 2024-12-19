@@ -87,7 +87,7 @@ class RestaurantOwnerDashboard extends StatelessWidget {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                Get.toNamed("/profile");
+                Get.toNamed("/main");
               },
             ),
           ],

@@ -10,7 +10,7 @@ class FoodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch data when the page loads
-    apiController.fetchFeatureRestaurants();
+    apiController.getFeatureRestaurants();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -61,7 +61,7 @@ class FoodPage extends StatelessWidget {
                   _buildCategoryButton('Featured Restaurants', () {
                     apiController.selectedCategory.value =
                         "Featured Restaurants";
-                    apiController.getFeatureRestauratns();
+                    apiController.getFeatureRestaurants();
                   }),
                   _buildCategoryButton('Popular Restaurants', () {
                     apiController.selectedCategory.value =
@@ -74,6 +74,7 @@ class FoodPage extends StatelessWidget {
                   }),
                   _buildCategoryButton('Order It Again', () {
                     apiController.selectedCategory.value = "Order It Again";
+
                     apiController.fetchOrderAgain();
                   }),
                 ],
@@ -128,11 +129,18 @@ class FoodPage extends StatelessWidget {
                           ),
                         ),
                         subtitle: selectedCategory == "Featured Restaurants"
-                            ? Text(
-                                "${item['res_type'] ?? 'No Subcategory'}\n",
-                                // "${item['open_time'] ?? 'No Opening Time'} - ${item['close_time'] ?? 'No Closing Time'}\n"
-                                // "${item['phone_number'] ?? 'No Phone Number'}",
-                                style: const TextStyle(fontSize: 14),
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "${item['restaurant_type'] ?? "No Subcategory"}"),
+                                  Text("${item['avg_rating'] ?? "No Rating"}"),
+                                  Text(
+                                      "${item['open_time'] ?? "No Subcategory"}"),
+                                  Text("${item['close_time'] ?? "No Rating"}"),
+  
+                                   Text("${item['user_name'] ?? "No Rating"}"),
+                                ],
                               )
                             : selectedCategory == "Popular Foods"
                                 ? Text(
@@ -141,9 +149,26 @@ class FoodPage extends StatelessWidget {
                                   )
                                 : selectedCategory == "Order It Again"
                                     ? Text(
-                                        "${item['res_type'] ?? 'No Subcategory'}",
+                                        "${item['restaurant_type'] ?? 'No Subcategory'}",
                                       )
-                                    : Text("No Data Available"),
+                                    : selectedCategory == "Restaurants"
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  "${item['restaurant_type'] ?? "No Subcategory"}"),
+                                              Text(
+                                                  "${item['avg_rating'] ?? "No Rating"}"),
+                                              Text(
+                                                  "${item['open_time'] ?? "No Subcategory"}"),
+                                              Text(
+                                                  "${item['close_time'] ?? "No Rating"}"),
+                                              Text(
+                                                  "${item['user_name'] ?? "No Rating"}"),
+                                            ],
+                                          )
+                                        : const Text("No Data"),
                         trailing: const Icon(Icons.arrow_forward_ios,
                             color: Colors.grey),
                         onTap: () {},

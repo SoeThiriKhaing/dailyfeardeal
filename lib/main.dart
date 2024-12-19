@@ -7,6 +7,7 @@ import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
 import 'package:dailyfairdeal/screens/auth/to_register.dart';
 import 'package:dailyfairdeal/screens/food/food_category.dart';
 import 'package:dailyfairdeal/screens/food/popularitem.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/screens/home/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/foodcategory', page: () => FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/profile', page: () => Profile()),
+          GetPage(name: '/main', page: () => MainScreen()),
           GetPage(
               name: '/popularrestaurant',
               page: () => const PopularRestaurantsPage()),
