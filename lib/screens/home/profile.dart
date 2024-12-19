@@ -1,5 +1,5 @@
 import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_owner_dashboard.dart';
-import 'package:dailyfairdeal/screens/home/business.dart';
+import 'package:dailyfairdeal/screens/profile/business.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
-  Profile({super.key});
-
-  // final List<Map<String, String>> items = [
-  //   {'title': 'Profile Details'},
-  //   {'title': 'Order & Reordering'},
-  //   {'title': 'Vouchers'},
-  //   {'title': 'Favourites'},
-  //   {'title': 'Setting'},
-  //   {'title': 'Safety Setting'},
-  // ];
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
           GetPage(name: '/foodcategory', page: () => FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
-          GetPage(name: '/profile', page: () => Profile()),
+          GetPage(name: '/profile', page: () => const Profile()),
           GetPage(name: '/main', page: () => MainScreen()),
           GetPage(
               name: '/popularrestaurant',

@@ -1,5 +1,4 @@
 import 'dart:convert'; // For jsonDecode
-import 'dart:io';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -432,11 +431,9 @@ class APIMethods extends GetxController {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token',
           });
-      print(response.statusCode);
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
         final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
         featuredRestaurants.value = dataList;
       } else if (response.statusCode == 204) {
         showError("No orders available at the moment.");
@@ -444,8 +441,6 @@ class APIMethods extends GetxController {
         showError("Unauthorized access. Please log in again.");
       } else {
         showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
       }
     } catch (e) {
       showError("An error occurred: $e");
@@ -469,15 +464,12 @@ class APIMethods extends GetxController {
         },
       );
 
-      print(response.statusCode);
-
       if (response.statusCode == 200) {
         // Decode the response body
         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
         // Extract and return the 'data' list
         final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
         // Ensure correct typing as List<Map<String, dynamic>>
         orderAgain.value = dataList;
         // return List<Map<String, dynamic>>.from(dataList);
@@ -487,8 +479,6 @@ class APIMethods extends GetxController {
         showError("Unauthorized access. Please log in again.");
       } else {
         showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
       }
     } catch (e) {
       showError("An error occurred: $e");
@@ -512,15 +502,12 @@ class APIMethods extends GetxController {
         },
       );
 
-      print(response.statusCode);
-
       if (response.statusCode == 200) {
         // Decode the response body
         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
         // Extract and return the 'data' list
         final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
         // Ensure correct typing as List<Map<String, dynamic>>
         orderAgain.value = dataList;
         // return List<Map<String, dynamic>>.from(dataList);
@@ -530,8 +517,6 @@ class APIMethods extends GetxController {
         showError("Unauthorized access. Please log in again.");
       } else {
         showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
       }
     } catch (e) {
       showError("An error occurred: $e");
@@ -597,7 +582,7 @@ class APIMethods extends GetxController {
         final data = rawData.map((item) {
           return {
             'name': item['name'] ?? 'Unknown',
-            'sub_category_id': item['sub_category_id'].toString() ?? 'N/A',
+            'sub_category_id': item['sub_category_id'].toString(),
             'date': item['created_at']
           };
         }).toList();
@@ -668,14 +653,12 @@ class APIMethods extends GetxController {
           'Authorization': 'Bearer $token',
         },
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
         // Decode the response body
         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
         // Extract and return the 'data' list
         final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
         // Ensure correct typing as List<Map<String, dynamic>>
         restaurant.value = dataList;
         // return List<Map<String, dynamic>>.from(dataList);
@@ -685,8 +668,6 @@ class APIMethods extends GetxController {
         showError("Unauthorized access. Please log in again.");
       } else {
         showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
       }
     } catch (e) {
       showError("An error occurred: $e");

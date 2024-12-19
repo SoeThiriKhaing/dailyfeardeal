@@ -7,6 +7,8 @@ import 'package:dailyfairdeal/widget/support_widget.dart';
 class FoodPage extends StatelessWidget {
   final APIMethods apiController = Get.put(APIMethods());
 
+  FoodPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Fetch data when the page loads
