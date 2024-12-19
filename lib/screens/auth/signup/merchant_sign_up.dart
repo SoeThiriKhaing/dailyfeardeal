@@ -19,6 +19,10 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   final TextEditingController ownerNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController floorController = TextEditingController();
+  final TextEditingController blockController = TextEditingController();
+  final TextEditingController openTimeController = TextEditingController();
+  final TextEditingController closeTimeController = TextEditingController();
 
   List<Map<String, String>> countryList = [];
   List<Map<String, String>> divisionList = [];
@@ -28,7 +32,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   List<Map<String, String>> streetList = [];
   List<Map<String, String>> restaurantTypeList = [];
 
-  int? selectedRestaurantTypeId, selectedCountryId, selectedDivisionId, selectedCityId, selectedTownshipId, selectedWardId;
+  int? selectedRestaurantTypeId, selectedCountryId, selectedDivisionId, selectedCityId, selectedTownshipId, selectedWardId, selectedStreetId;
 
   final List<Map<String, String>> businessTypeList = [
     {'id': '1', 'name': 'Restaurant'},
@@ -59,6 +63,69 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     }
   }
 
+  Future<void> selectTime(BuildContext context, TextEditingController controller) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        controller.text = picked.format(context);
+      });
+    }
+  }
+
+  Future <void> saveData() async{
+    final data = {
+      "restaurant_type_id": selectedRestaurantTypeId,
+      "name": shopNameController.text.trim(),
+      "open_time": openTimeController.text,
+      "close_time": closeTimeController.text,
+      "phone_number": phoneController.text.trim(),
+      "addressData": {
+        "street_id": selectedStreetId,
+        "block_no": blockController.text.trim(),
+        "floor": floorController.text.trim(),
+        "latitude": null,
+        "longitude": null,
+      },
+    };
+    try {
+      int statusCode = await APIMethods().saveRestaurantData(data);
+      if(statusCode == 200){
+        Get.snackbar(
+          "Success",
+          "Restaurant data saved successfully!",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
+      else if(statusCode == 500){
+        Get.snackbar(
+          "Error",
+          "Internal Server Error. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+       else if (statusCode == 401) {
+        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      } else {
+        Get.snackbar("Error", "Failed to save data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      }     
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to save restaurant data. Please try again.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,12 +135,6 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           style: TextStyle(
             fontSize: 19,
             fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: GestureDetector(
-          onTap: () => Get.back(),
-          child: const Icon(
-            Icons.arrow_back_ios_new_outlined,
           ),
         ),
       ),
@@ -135,9 +196,35 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 const SizedBox(height: 10),
                 buildPhoneField(phoneController),
                 const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => selectTime(context, openTimeController),
+                        child: AbsorbPointer(
+                          child: buildTextFormField('Open Time', openTimeController),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => selectTime(context, closeTimeController),
+                        child: AbsorbPointer(
+                          child: buildTextFormField('Close Time', closeTimeController),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 const Text("Restaurant/Shop Address", style:TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 buildAddressFields(),
+                const SizedBox(height: 10),
+                 buildTextFormField('Block', blockController, keyboardType: TextInputType.text),
+                const SizedBox(height: 10),
+                 buildTextFormField('Floor', floorController, keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
                 buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
                 const SizedBox(height: 20),
@@ -286,6 +373,8 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 (value) async{
                   setState(() {
                     street = value;
+                    selectedStreetId = int.tryParse(
+                        streetList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                 },
               ),
@@ -302,7 +391,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       child: ElevatedButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
-            Get.snackbar("Successful", "Form submitted successfully!");
+            saveData();
           }
         },
         style: ElevatedButton.styleFrom(

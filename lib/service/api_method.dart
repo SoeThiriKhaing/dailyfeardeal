@@ -602,4 +602,23 @@ class APIMethods extends GetxController {
     selectedCategory.value = category;
   }
 
+  Future<int> saveRestaurantData(Map<String, dynamic> data) async {
+    try{
+      final token = await getToken();
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+      const String url = "http://api.dailyfairdeal.com/api/restaurant";
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token'},
+        body: json.encode(data),
+      );
+      return response.statusCode;
+
+    }catch(e){
+      return 0;
+    }
+    
+  }
 }
