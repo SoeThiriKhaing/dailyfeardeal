@@ -602,7 +602,7 @@ class APIMethods extends GetxController {
     selectedCategory.value = category;
   }
 
-  Future<int> saveRestaurantData(Map<String, dynamic> data) async {
+  Future<void> saveRestaurantData(Map<String, dynamic> data) async {
     try{
       final token = await getToken();
       if (token == null) {
@@ -614,10 +614,42 @@ class APIMethods extends GetxController {
         headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token'},
         body: json.encode(data),
       );
-      return response.statusCode;
+      if(response.statusCode == 201){
+        Get.snackbar(
+          "Success",
+          "Restaurant data saved successfully!",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
+      else if(response.statusCode == 500){
+        Get.snackbar(
+          "Error",
+          "Internal Server Error. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+       else if (response.statusCode == 401) {
+        Get.snackbar(
+          "Error",
+          "Unauthorized access.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed to save data.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
+      }     
 
     }catch(e){
-      return 0;
+      Get.snackbar("Error", "Failed to save data, $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
     
   }

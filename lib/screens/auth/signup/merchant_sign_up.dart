@@ -75,6 +75,19 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     }
   }
 
+  void clear(){
+    shopNameController.clear();
+    selectedRestaurantTypeId=null;
+    ownerNameController.clear();
+    phoneController.clear();
+    openTimeController.clear();
+    closeTimeController.clear();
+    country = division = city = township = ward = street = null;
+    blockController.clear();
+    floorController.clear();
+    descriptionController.clear();
+  }
+
   Future <void> saveData() async{
     final data = {
       "restaurant_type_id": selectedRestaurantTypeId,
@@ -84,37 +97,15 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       "phone_number": phoneController.text.trim(),
       "addressData": {
         "street_id": selectedStreetId,
-        "block_no": blockController.text.trim(),
-        "floor": floorController.text.trim(),
-        "latitude": null,
-        "longitude": null,
+        "block_no": blockController.text,
+        "floor": floorController.text,
+        "latitude": 40.7128,
+        "longitude": -74.0060,
       },
     };
     try {
-      int statusCode = await APIMethods().saveRestaurantData(data);
-      if(statusCode == 200){
-        Get.snackbar(
-          "Success",
-          "Restaurant data saved successfully!",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      }
-      else if(statusCode == 500){
-        Get.snackbar(
-          "Error",
-          "Internal Server Error. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-       else if (statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        Get.snackbar("Error", "Failed to save data.", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }     
+      APIMethods().saveRestaurantData(data);
+      clear();
     } catch (e) {
       Get.snackbar(
         "Error",
