@@ -1,6 +1,7 @@
 import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/dropdown_field_widget.dart';
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
+import 'package:dailyfairdeal/widget/reusabel_button.dart';
 import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -378,23 +379,13 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   }
 
   Widget buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          if (formKey.currentState!.validate()) {
-            saveData();
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFFC740),
-          minimumSize: const Size(double.infinity, 50),
-        ),
-        child: const Text(
-          "Submit",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+    return ReusableButton(
+      text: "Submit",
+      onPressed: () {
+        if (formKey.currentState!.validate()) {
+          saveData();
+        }
+      },
     );
   }
 

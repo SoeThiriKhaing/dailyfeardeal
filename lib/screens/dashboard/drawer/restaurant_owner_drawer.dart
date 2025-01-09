@@ -78,10 +78,10 @@ class RestaurantOwnerDrawer extends StatelessWidget {
           ),
           buildExpansionTile(
             leadingIcon: Icons.restaurant,
-            title: 'Restaurant Setting',
+            title: 'Restaurant',
             children: [
               {'title': 'Profile Setting', 'onTap': () => Get.toNamed("/profilesetting")},
-              {'title': 'Change Address', 'onTap': () => Get.toNamed("/changerestaurantaddress")},
+              {'title': 'Change Image', 'onTap': () => Get.toNamed("/changerestaurantimage")},
             ],
           ),
           buildExpansionTile(

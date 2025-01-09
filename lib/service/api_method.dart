@@ -723,10 +723,8 @@ class APIMethods extends GetxController {
           backgroundColor: Colors.red
         );
       }     
-
     }catch(e){
       Get.snackbar("Error", "Failed to save data, $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
-    
+    }   
   }
 }

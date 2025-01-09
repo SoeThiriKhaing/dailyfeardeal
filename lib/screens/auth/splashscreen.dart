@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,11 +26,7 @@ class SplashScreen extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.white, // Background for the circular logo
               ),
-              child: Image.asset(
-                "assets/images/logo.png",
-                width: 100,
-                height: 100,
-              ),
+              child: logoWidget(),
             ),
 
             const Text(

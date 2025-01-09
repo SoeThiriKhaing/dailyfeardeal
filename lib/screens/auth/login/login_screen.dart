@@ -3,6 +3,7 @@ import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
+import 'package:dailyfairdeal/widget/logo_widget.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // If login is successful
       saveToken(token);
       Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-      Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
+      Get.to(() => MainScreen());
     }
     
   }
@@ -49,12 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      "assets/images/logo.png",
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ),
+                    child: logoWidget(),
                   ),
                 ),
                 const SizedBox(height: 30),
