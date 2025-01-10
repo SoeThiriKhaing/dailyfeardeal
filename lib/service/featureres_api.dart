@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:dailyfairdeal/widget/snackbar_helper.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,12 +19,24 @@ class FeatureresApi extends GetxController{
         featuredRestaurants.value = data['data'];
         filteredCategories.value = featuredRestaurants; // Initialize with all data
       } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.");
+        SnackbarHelper.showSnackbar(
+          title: "Error",
+          message: "Unauthorized access.",
+          backgroundColor: Colors.red,
+        );
       } else {
-        Get.snackbar("Error", "Failed to load data.");
+         SnackbarHelper.showSnackbar(
+          title: "Error",
+          message: "Failed to load data.",
+          backgroundColor: Colors.red,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e");
+      SnackbarHelper.showSnackbar(
+          title: "Error",
+          message: "An error occurred: $e",
+          backgroundColor: Colors.red,
+        );
     }
   }
 
