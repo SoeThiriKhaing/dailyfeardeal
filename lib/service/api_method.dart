@@ -696,4 +696,56 @@ class APIMethods extends GetxController {
   void updateCategory(String category) {
     selectedCategory.value = category;
   }
+
+  Future<void> saveRestaurantData(Map<String, dynamic> data) async {
+    try{
+      final token = await getToken();
+      if (token == null) {
+        throw Exception("Unauthorized: Token not found");
+      }
+      const String url = "http://api.dailyfairdeal.com/api/restaurant";
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token'},
+        body: json.encode(data),
+      );
+      if(response.statusCode == 201){
+        Get.snackbar(
+          "Success",
+          "Restaurant data saved successfully!",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
+      else if(response.statusCode == 500){
+        Get.snackbar(
+          "Error",
+          "Internal Server Error. Please try again.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+       else if (response.statusCode == 401) {
+        Get.snackbar(
+          "Error",
+          "Unauthorized access.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed to save data.",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red
+        );
+      }     
+
+    }catch(e){
+      Get.snackbar("Error", "Failed to save data, $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    }
+    
+  }
 }

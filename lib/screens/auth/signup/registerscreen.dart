@@ -24,13 +24,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode focusNode = FocusNode();
 
   Future<void> register() async {
-    String? token = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
+    String? token = await APIMethods().register(
+        nameController.text, emailController.text, passwordController.text);
 
     if (token != null) {
       saveToken(token);
       // If register is successful
-      Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-      Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
+      Get.snackbar("Success", "Register Successfully",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
     }
   }
 
@@ -65,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextFormField(
                       controller: nameController,
-                      validator: validateName,
+                      validator: Validators.validateName,
                       decoration: nameInputDecoration(),
                     ),
                     const SizedBox(
@@ -77,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextFormField(
                       controller: emailController,
-                      validator: validateEmail,
+                      validator: Validators.validateEmail,
                       decoration: emailInputDecoration(),
                     ),
                     const SizedBox(
@@ -105,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       obscureText: !isPasswordVisible,
-                      validator: validatePassword,
+                      validator: Validators.validatePassword,
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -117,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextFormField(
                       controller: confirmController,
-                      validator: validatePassword,
+                      validator: Validators.validatePassword,
                       decoration: confirmpasswordInputDecoration(
                         suffixIcon: IconButton(
                           icon: Icon(

@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  validator: validateEmail,
+                  validator:Validators.validateEmail,
                 ),
                 const SizedBox(height: 10),
                 Text('Password', style: AppWidget.formFieldLabelTextStyle()),
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),),
                   obscureText: !isPasswordVisible,
-                  validator: validatePassword,
+                  validator: Validators.validatePassword,
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

@@ -5,10 +5,13 @@ import 'package:dailyfairdeal/screens/auth/signup/rider_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/signup/taxi_driver_sign_up.dart';
 import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
 import 'package:dailyfairdeal/screens/auth/to_register.dart';
+import 'package:dailyfairdeal/screens/dashboard/dashboard.dart';
+import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_owner_dashboard.dart';
+import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/change_restaurant_address.dart';
+import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/profile_setting.dart';
 import 'package:dailyfairdeal/screens/food/food_category.dart';
-import 'package:dailyfairdeal/screens/food/popularitem.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
-import 'package:dailyfairdeal/screens/home/profile.dart';
+import 'package:dailyfairdeal/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,14 +19,10 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -34,17 +33,22 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/', page: () => const SplashScreen()),
           GetPage(name: '/toregister', page: () => const ToRegister()),
           GetPage(name: '/register', page: () => const RegisterScreen()),
-          GetPage(name: '/login', page: () => const LoginScreen()),
+          GetPage(name: '/login', page: () =>  LoginScreen()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/driversignup', page: () => const TaxiDriverSignUp()),
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
           GetPage(name: '/foodcategory', page: () => FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
-          GetPage(name: '/profile', page: () => Profile()),
+          GetPage(name: '/profile', page: () => const Profile()),
           GetPage(name: '/main', page: () => MainScreen()),
+          GetPage(name: '/dashboard', page: () => const Dashboard()),
           GetPage(
-              name: '/popularrestaurant',
-              page: () => const PopularRestaurantsPage()),
+              name: '/restaurantownerdashboard',
+              page: () => const RestaurantOwnerDashboard()),
+          GetPage(name: '/profilesetting', page: () => const ProfileSetting()),
+          GetPage(
+              name: '/changerestaurantaddress',
+              page: () => const ChangeRestaurantAddress()),
         ]);
   }
 }

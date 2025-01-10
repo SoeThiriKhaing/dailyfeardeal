@@ -61,8 +61,7 @@ class FoodPage extends StatelessWidget {
                   _buildCategoryButton('Featured Restaurants', () {
                     apiController.selectedCategory.value =
                         "Featured Restaurants";
-                    apiController.getFeatureRestaurants();
-                  }),
+                    apiController.getFeatureRestaurants();                 }),
                   _buildCategoryButton('Popular Restaurants', () {
                     apiController.selectedCategory.value =
                         "Popular Restaurants";
