@@ -1,5 +1,7 @@
 
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
+import 'package:dailyfairdeal/widget/reusabel_button.dart';
+import 'package:dailyfairdeal/widget/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -72,23 +74,17 @@ class _TaxiDriverSignUpState extends State<TaxiDriverSignUp> {
   }
 
   Widget buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          if (formKey.currentState!.validate()) {
-            Get.snackbar("Successful", "Form submitted successfully!");
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFFC740),
-          minimumSize: const Size(double.infinity, 50),
-        ),
-        child: const Text(
-          "Submit",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+    return ReusableButton(
+      text: "Submit",
+      onPressed: () {
+        if (formKey.currentState!.validate()) {
+          SnackbarHelper.showSnackbar(
+            title: "Success",
+            message: "Form is submitted.",
+            backgroundColor: Colors.green,
+          );
+        }
+      },
     );
   }
 

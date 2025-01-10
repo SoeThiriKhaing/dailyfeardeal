@@ -1,7 +1,7 @@
-import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
 import 'package:dailyfairdeal/screens/payment/all_transactions_screen.dart';
 import 'package:dailyfairdeal/screens/payment/finance_setting.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/build_card_widget.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,18 +37,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () {
-                Get.to(() => const AddCardScreen());
-              },
-              child: const Card(
-                color: AppColor.primaryColor,
-                child: ListTile(
-                  leading: Icon(Icons.credit_card, size: 40),
-                  title: Text('Add a card'),
-                  subtitle: Text('Go cashless with a credit or debit card'),
-                ),
-              ),
+            buildCard(
+              'Add a card',
+              AppColor.primaryColor,
+              Icons.credit_card,
+              "/addcardscreen",
             ),
             const SizedBox(height: 20),
             // Recent Transactions Header
@@ -78,6 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             style: TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                           const SizedBox(height: 5),
+                          
                           TextButton(
                             onPressed: () {
                               Get.to(() => const AllTransactionsScreen());

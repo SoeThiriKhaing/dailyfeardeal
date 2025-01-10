@@ -1,7 +1,6 @@
-import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/build_card_widget.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BusinessPage extends StatelessWidget {
   const BusinessPage({super.key});
@@ -25,49 +24,13 @@ class BusinessPage extends StatelessWidget {
                 margin: const EdgeInsets.all(10),
                 child: Image.asset("assets/images/dfd.png")),
             // Three card views
-            _buildCard('Restaurant/Shop Owner Account', Colors.white, Icons.shop,
+            buildCard('Restaurant/Shop Owner Account', Colors.white, Icons.shop,
                 '/merchantsignup'),
-            _buildCard('DFD Driver Account', Colors.white,
+            buildCard('DFD Driver Account', Colors.white,
                 Icons.taxi_alert, '/driversignup'),
-            _buildCard('DFD Rider Account', Colors.white,
+            buildCard('DFD Rider Account', Colors.white,
                 Icons.car_crash, '/dfdridersignup'),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCard(String title, Color color, IconData icon, String route) {
-
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(route);
-      },
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        color: Colors.white,
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Icon(
-                icon,
-                color: AppColor.primaryColor,
-              ),
-            ],
-          ),
         ),
       ),
     );

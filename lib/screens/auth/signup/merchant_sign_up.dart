@@ -2,9 +2,9 @@ import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/dropdown_field_widget.dart';
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
 import 'package:dailyfairdeal/widget/reusabel_button.dart';
+import 'package:dailyfairdeal/widget/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class MerchantSignUp extends StatefulWidget {
   const MerchantSignUp({super.key});
@@ -109,12 +109,10 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       APIMethods().saveRestaurantData(data);
       clear();
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to save restaurant data. Please try again.",
-        snackPosition: SnackPosition.BOTTOM,
+      SnackbarHelper.showSnackbar(
+        title: "Error",
+        message: "Failed to save restaurant data. Please try again.",
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
     }
   }

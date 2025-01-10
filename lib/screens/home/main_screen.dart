@@ -1,4 +1,4 @@
-import 'package:dailyfairdeal/screens/activities_screen.dart';
+import 'package:dailyfairdeal/screens/activities/activities_screen.dart';
 import 'package:dailyfairdeal/screens/home/home.dart';
 import 'package:dailyfairdeal/screens/profile/profile.dart';
 import 'package:dailyfairdeal/screens/payment/payment_screen.dart';

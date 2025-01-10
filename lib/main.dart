@@ -12,7 +12,8 @@ import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/pr
 import 'package:dailyfairdeal/screens/food/food_category.dart';
 import 'package:dailyfairdeal/screens/food/popularitem.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
-import 'package:dailyfairdeal/screens/home/profile.dart';
+import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
+import 'package:dailyfairdeal/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,6 +54,8 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: '/restaurantownerdashboard', page: () => const RestaurantOwnerDashboard()),
           GetPage(name: '/profilesetting', page: () => const ProfileSetting()),
           GetPage(name: '/changerestaurantimage', page: () => const ChangeRestaurantImage()),
+          GetPage(name: '/addcardscreen', page: () => const AddCardScreen()),
+          
         ]);
   }
 }

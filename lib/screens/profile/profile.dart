@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/screens/profile/business.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
+import 'package:dailyfairdeal/widget/build_list_tile_widget.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -7,22 +8,6 @@ import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
-
-  Widget buildListTile({
-    required IconData icon,
-    required Color iconColor,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(icon, color: iconColor),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: onTap,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

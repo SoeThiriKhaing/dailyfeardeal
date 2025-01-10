@@ -1,5 +1,5 @@
 import 'package:dailyfairdeal/widget/app_color.dart';
-import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:dailyfairdeal/widget/reusabel_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -95,23 +95,11 @@ class ToRegister extends StatelessWidget {
                     const SizedBox(height: 20.0),
                     const Text("or"),
                     const SizedBox(height: 20.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.primaryColor,
-                          foregroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(),
-                        ),
-                        onPressed: () {
-                          // Navigate to the RegisterScreen using GetX
-                          Get.toNamed("/register");
-                        },
-                        child: Text(
-                          "Sign Up",
-                          style: AppWidget.buttonTextStyle(),
-                        ),
-                      ),
+                    ReusableButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        Get.toNamed("/register");
+                      },
                     ),
                   ],
                 ),

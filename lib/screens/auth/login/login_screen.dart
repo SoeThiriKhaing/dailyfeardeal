@@ -4,6 +4,8 @@ import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/logo_widget.dart';
+import 'package:dailyfairdeal/widget/reusabel_button.dart';
+import 'package:dailyfairdeal/widget/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 
@@ -28,7 +30,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (token != null) {
       // If login is successful
       saveToken(token);
-      Get.snackbar("Success", "Login Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      SnackbarHelper.showSnackbar(
+        title: "Success",
+        message: "Login Successfully",
+        backgroundColor: Colors.green,
+      );
       Get.to(() => MainScreen());
     }
     
@@ -88,25 +94,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           isPasswordVisible = !isPasswordVisible;
                         });
                       },
-                    ),),
+                    ),
+                  ),
                   obscureText: !isPasswordVisible,
                   validator: validatePassword,
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: (){
-                    if(formKey.currentState!.validate()){
-                     login();
-                    } 
+                ReusableButton(
+                  text: "Login",
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      login();
+                    }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFC740),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: Text(
-                    "Login",
-                    style:AppWidget.buttonTextStyle(),
-                  ),
                 ),
                 const SizedBox(height: 20),
                 Row(

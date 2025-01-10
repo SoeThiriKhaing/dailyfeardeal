@@ -1,3 +1,4 @@
+import 'package:dailyfairdeal/widget/reusabel_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -114,21 +115,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
             ),
             const Spacer(),
             // Continue Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+            ReusableButton(
+              text: "Continue",
+              onPressed: () {},
             ),
           ],
         ),

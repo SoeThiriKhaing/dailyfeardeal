@@ -3,6 +3,9 @@ import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
+import 'package:dailyfairdeal/widget/logo_widget.dart';
+import 'package:dailyfairdeal/widget/reusabel_button.dart';
+import 'package:dailyfairdeal/widget/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +32,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (token != null) {
       saveToken(token);
       // If register is successful
-      Get.snackbar("Success", "Register Successfully", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      SnackbarHelper.showSnackbar(
+        title: "Success",
+        message: "Register Successfully",
+        backgroundColor: Colors.green,
+      );
       Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
     }
   }
@@ -50,11 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child: Image.asset(
-                        "assets/images/logo.png",
-                        width: 100,
-                        height: 100,
-                      ),
+                      child: logoWidget(),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -135,24 +138,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: !isPasswordVisible,
                     ),
                     const SizedBox(height: 30.0),
-                    SizedBox(
-                        width: MediaQuery.sizeOf(context).width,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formkey.currentState!.validate()) {
-                              register();
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.primaryColor,
-                            foregroundColor: Colors.black,
-                            shape: const RoundedRectangleBorder(),
-                          ),
-                          child: Text(
-                            "Sign Up",
-                            style: AppWidget.buttonTextStyle(),
-                          ),
-                        )),
+                    ReusableButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                       if (_formkey.currentState!.validate()) {
+                          register();
+                        }
+                      },
+                    ),
                     const SizedBox(
                       height: 20.0,
                     ),
