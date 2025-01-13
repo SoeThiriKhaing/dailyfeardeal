@@ -37,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         message: "Register Successfully",
         backgroundColor: Colors.green,
       );
-      Get.to(() => MainScreen());  // Navigate to the MerchantSignUp screen
+      Get.to(() => MainScreen());
     }
   }
 
