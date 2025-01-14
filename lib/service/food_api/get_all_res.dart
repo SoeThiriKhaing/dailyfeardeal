@@ -1,8 +1,7 @@
 import 'dart:convert';
-
-import 'package:dailyfairdeal/config/api_messages.dart';
 import 'package:dailyfairdeal/service/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 var allRestaurants = [].obs;
@@ -18,7 +17,9 @@ Future<void> fetchRestaurants() async {
 
       // Extract and return the 'data' list
       final List<dynamic> dataList = decodedResponse['data'];
-      print(dataList);
+      if (kDebugMode) {
+        print(dataList);
+      }
       // Ensure correct typing as List<Map<String, dynamic>>
       allRestaurants.value = dataList;
       // return List<Map<String, dynamic>>.from(dataList);

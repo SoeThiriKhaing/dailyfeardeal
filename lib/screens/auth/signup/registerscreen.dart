@@ -1,12 +1,7 @@
-import 'package:dailyfairdeal/screens/home/main_screen.dart';
-import 'package:dailyfairdeal/service/api_method.dart';
-import 'package:dailyfairdeal/service/auth_api/signup_res.dart';
-import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/logo_widget.dart';
 import 'package:dailyfairdeal/widget/reusabel_button.dart';
-import 'package:dailyfairdeal/widget/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 import 'package:flutter/material.dart';
@@ -33,16 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    if (token != null) {
-      saveToken(token);
-      // If register is successful
-      SnackbarHelper.showSnackbar(
-        title: "Success",
-        message: "Register Successfully",
-        backgroundColor: Colors.green,
-      );
-      Get.to(() => MainScreen());
-    }
+    
   }
 
   @override
@@ -146,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       text: "Sign Up",
                       onPressed: () {
                        if (_formkey.currentState!.validate()) {
-                          register();
+                          registerUser();
                         }
                       },
                     ),

@@ -11,6 +11,7 @@ import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/ch
 import 'package:dailyfairdeal/screens/dashboard/restaurant/restaurant_setting/profile_setting.dart';
 import 'package:dailyfairdeal/screens/food/food_category.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/screens/payment/add_card_screen.dart';
 import 'package:dailyfairdeal/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,13 +38,13 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/driversignup', page: () => const TaxiDriverSignUp()),
           GetPage(name: '/dfdridersignup', page: () => const RiderSignUp()),
-          GetPage(name: '/foodcategory', page: () => FoodPage()),
+          GetPage(name: '/foodcategory', page: () => const FoodPage()),
           GetPage(name: '/merchantsignup', page: () => const MerchantSignUp()),
           GetPage(name: '/profile', page: () => const Profile()),
           GetPage(name: '/main', page: () => MainScreen()),
-          GetPage(
-              name: '/popularrestaurant',
-              page: () => const PopularRestaurantsPage()),
+          // GetPage(
+          //     name: '/popularrestaurant',
+          //     page: () => const PopularRestaurantsPage()),
           GetPage(name: '/dashboard', page: () => const Dashboard()),
           GetPage(
               name: '/restaurantownerdashboard',

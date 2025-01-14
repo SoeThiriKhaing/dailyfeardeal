@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
-  Home({super.key});
+  const Home({super.key});
   // final APIMethods apiController = Get.put(APIMethods());
 
   @override

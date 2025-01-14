@@ -4,11 +4,7 @@ import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
-import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/logo_widget.dart';
-import 'package:dailyfairdeal/widget/reusabel_button.dart';
-import 'package:dailyfairdeal/widget/snackbar_helper.dart';
-import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 
 
@@ -66,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Text('Email', style: TextStyle(fontSize: 16)),
+                const Text('Email', style: TextStyle(fontSize: 16)),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,

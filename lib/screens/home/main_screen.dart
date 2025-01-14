@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
   final BottomNav bottomNav = Get.put(BottomNav());
   final List<Widget> pages = [
-    Home(),
+    const Home(),
     const ActivitiesScreen(),
     const PaymentScreen(),
     const Profile(),

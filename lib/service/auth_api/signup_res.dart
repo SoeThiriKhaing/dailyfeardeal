@@ -4,7 +4,6 @@ import 'package:dailyfairdeal/service/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 final apiService = ApiService();
 Future<String?> register(String name, String email, String password) async {

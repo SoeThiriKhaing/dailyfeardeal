@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dailyfairdeal/service/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 final apiService = ApiService();
@@ -12,7 +13,9 @@ Future<void> getFeatureRestaurants() async {
     if (response.statusCode == 200) {
       final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
       final List<dynamic> dataList = decodedResponse['data'];
-      print(dataList);
+      if (kDebugMode) {
+        print(dataList);
+      }
 
       featuredRestaurants.value = dataList;
     }

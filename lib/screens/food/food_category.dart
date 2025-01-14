@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:dailyfairdeal/service/food_api/get_feature_res.dart';
 import 'package:dailyfairdeal/service/food_api/get_order_again.dart';
 import 'package:dailyfairdeal/service/food_api/get_popular_res.dart';
@@ -8,9 +10,8 @@ import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 
 class FoodPage extends StatelessWidget {
-  final APIMethods apiController = Get.put(APIMethods());
 
-  FoodPage({super.key});
+  const FoodPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,6 @@ class FoodPage extends StatelessWidget {
                   ? featuredRestaurants
                   : selectedCategory == "Popular Restaurants"
                       ? orderAgain
-                      // ignore: unrelated_type_equality_checks
                       : selectedCategory == "Popular Foods"
                           ? popularRestaurant
                           : selectedCategory == "Restaurants"

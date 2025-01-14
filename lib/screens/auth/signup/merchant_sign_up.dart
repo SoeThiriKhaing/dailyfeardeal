@@ -4,7 +4,6 @@ import 'package:dailyfairdeal/service/location_api.dart/cities_res.dart';
 import 'package:dailyfairdeal/service/location_api.dart/countries_res.dart';
 import 'package:dailyfairdeal/service/location_api.dart/divisions_res.dart';
 import 'package:dailyfairdeal/service/location_api.dart/street_res.dart';
-import 'package:dailyfairdeal/service/location_api.dart/township_res.dart';
 import 'package:dailyfairdeal/service/location_api.dart/ward_res.dart';
 import 'package:dailyfairdeal/widget/dropdown_field.widget.dart';
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
@@ -306,7 +305,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         cityList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedCityId != null) {
-                    townshipList = await getTownships(selectedCityId!);
+                    //townshipList = await getTownships(selectedCityId!);
                     setState(() {});
                   }
                 },
