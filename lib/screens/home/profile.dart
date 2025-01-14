@@ -7,7 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   // final List<Map<String, String>> items = [
   //   {'title': 'Profile Details'},
