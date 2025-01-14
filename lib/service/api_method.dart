@@ -1,751 +1,751 @@
-import 'dart:convert'; // For jsonDecode
-import 'dart:io';
-import 'package:dailyfairdeal/service/secure_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'dart:convert'; // For jsonDecode
+// import 'dart:io';
+// import 'package:dailyfairdeal/service/secure_storage.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
 
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
-class APIMethods extends GetxController {
-  var featuredRestaurants = [].obs;
-  var popularFoods = [].obs;
-  var favoriteCuisines = [].obs;
-  var orderAgain = [].obs;
-  var filteredFoods = [].obs;
-  var restaurant = [].obs;
-  var popularRestaurant = [].obs;
-  var favouriteCuisines = [].obs;
-  var filteredCategories = [].obs;
+// class APIMethods extends GetxController {
+//   var featuredRestaurants = [].obs;
+//   var popularFoods = [].obs;
+//   var favoriteCuisines = [].obs;
+//   var orderAgain = [].obs;
+//   var filteredFoods = [].obs;
+//   var restaurant = [].obs;
+//   var popularRestaurant = [].obs;
+//   var favouriteCuisines = [].obs;
+//   var filteredCategories = [].obs;
 
-  var selectedCategory = ''.obs;
+//   var selectedCategory = ''.obs;
 
-  Future<List<Map<String, String>>> getRestaurantTypes() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/restaurant_types"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> restaurantTypes = [];
-        for (var type in data) {
-          restaurantTypes.add({
-            'id': type['id'].toString(),
-            'name': type['name'],
-          });
-        }
-        return restaurantTypes;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid token");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load restaurant type");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//   Future<List<Map<String, String>>> getRestaurantTypes() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/restaurant_types"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> restaurantTypes = [];
+//         for (var type in data) {
+//           restaurantTypes.add({
+//             'id': type['id'].toString(),
+//             'name': type['name'],
+//           });
+//         }
+//         return restaurantTypes;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid token");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load restaurant type");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, String>>> getCountries() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/country"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> countries = [];
-        for (var country in data['data']) {
-          countries.add({
-            'id': country['id'].toString(),
-            'name': country['name'],
-          });
-        }
-        return countries;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid token");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load countries");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//   Future<List<Map<String, String>>> getCountries() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/country"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> countries = [];
+//         for (var country in data['data']) {
+//           countries.add({
+//             'id': country['id'].toString(),
+//             'name': country['name'],
+//           });
+//         }
+//         return countries;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid token");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load countries");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, String>>> getDivisions(int countryId) async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/state/$countryId"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
+//   Future<List<Map<String, String>>> getDivisions(int countryId) async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/state/$countryId"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> divisions = [];
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> divisions = [];
 
-        for (var division in data) {
-          divisions.add({
-            'id': division['id'].toString(),
-            'countryId': division['country_id'].toString(),
-            'name': division['name'],
-          });
-        }
-        return divisions;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid credentials");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load divisions");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//         for (var division in data) {
+//           divisions.add({
+//             'id': division['id'].toString(),
+//             'countryId': division['country_id'].toString(),
+//             'name': division['name'],
+//           });
+//         }
+//         return divisions;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid credentials");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load divisions");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, String>>> getCities(int divisionId) async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/city/$divisionId"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
+//   Future<List<Map<String, String>>> getCities(int divisionId) async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/city/$divisionId"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> cities = [];
-        for (var city in data) {
-          cities.add({
-            'id': city['id'].toString(),
-            'divisionId': city['state_id'].toString(),
-            'name': city['name'],
-          });
-        }
-        return cities;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid credentials");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load cities");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> cities = [];
+//         for (var city in data) {
+//           cities.add({
+//             'id': city['id'].toString(),
+//             'divisionId': city['state_id'].toString(),
+//             'name': city['name'],
+//           });
+//         }
+//         return cities;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid credentials");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load cities");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, String>>> getTownships(int cityId) async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/township/$cityId"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
+//   Future<List<Map<String, String>>> getTownships(int cityId) async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/township/$cityId"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> townships = [];
-        for (var township in data) {
-          townships.add({
-            'id': township['id'].toString(),
-            'cityId': township['city_id'].toString(),
-            'name': township['name'],
-          });
-        }
-        return townships;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid credentials");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load townships");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> townships = [];
+//         for (var township in data) {
+//           townships.add({
+//             'id': township['id'].toString(),
+//             'cityId': township['city_id'].toString(),
+//             'name': township['name'],
+//           });
+//         }
+//         return townships;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid credentials");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load townships");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, String>>> getWards(int townshipId) async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/ward/$townshipId"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
+//   Future<List<Map<String, String>>> getWards(int townshipId) async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/ward/$townshipId"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> wards = [];
-        for (var ward in data) {
-          wards.add({
-            'id': ward['id'].toString(),
-            'townshipId': ward['township_id'].toString(),
-            'name': ward['name'],
-          });
-        }
-        return wards;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid credentials");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load wards");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> wards = [];
+//         for (var ward in data) {
+//           wards.add({
+//             'id': ward['id'].toString(),
+//             'townshipId': ward['township_id'].toString(),
+//             'name': ward['name'],
+//           });
+//         }
+//         return wards;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid credentials");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load wards");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, String>>> getStreets(int wardId) async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/street/$wardId"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
+//   Future<List<Map<String, String>>> getStreets(int wardId) async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/street/$wardId"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      if (response.statusCode == 200) {
-        // Parse the response body into a list of countries
-        final data = json.decode(response.body);
-        final List<Map<String, String>> streets = [];
-        for (var street in data) {
-          streets.add({
-            'id': street['id'].toString(),
-            'wardId': street['ward_id'].toString(),
-            'name': street['name'],
-          });
-        }
-        return streets;
-      } else if (response.statusCode == 401) {
-        // Handle unauthorized error
-        throw Exception("Unauthorized: Invalid credentials");
-      } else if (response.statusCode == 500) {
-        // Handle internal server error
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load streets");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//       if (response.statusCode == 200) {
+//         // Parse the response body into a list of countries
+//         final data = json.decode(response.body);
+//         final List<Map<String, String>> streets = [];
+//         for (var street in data) {
+//           streets.add({
+//             'id': street['id'].toString(),
+//             'wardId': street['ward_id'].toString(),
+//             'name': street['name'],
+//           });
+//         }
+//         return streets;
+//       } else if (response.statusCode == 401) {
+//         // Handle unauthorized error
+//         throw Exception("Unauthorized: Invalid credentials");
+//       } else if (response.statusCode == 500) {
+//         // Handle internal server error
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load streets");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<List<Map<String, dynamic>>> searchItemsByType(
-      String query, String type) async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final uri = Uri.parse("http://api.dailyfairdeal.com/api/search");
+//   Future<List<Map<String, dynamic>>> searchItemsByType(
+//       String query, String type) async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final uri = Uri.parse("http://api.dailyfairdeal.com/api/search");
 
-      // JSON body
-      final body = json.encode({
-        'q': query,
-        'type': type,
-      });
+//       // JSON body
+//       final body = json.encode({
+//         'q': query,
+//         'type': type,
+//       });
 
-      // Make the POST request
-      final response = await http.post(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: body,
-      );
+//       // Make the POST request
+//       final response = await http.post(
+//         uri,
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer $token',
+//         },
+//         body: body,
+//       );
 
-      // Handle the response
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return List<Map<String, dynamic>>.from(data['data']);
-      } else if (response.statusCode == 401) {
-        throw Exception("Unauthorized: Invalid credentials");
-      } else if (response.statusCode == 500) {
-        throw Exception("Server error. Please try again later.");
-      } else {
-        throw Exception("Failed to load search results");
-      }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
-  }
+//       // Handle the response
+//       if (response.statusCode == 200) {
+//         final data = json.decode(response.body);
+//         return List<Map<String, dynamic>>.from(data['data']);
+//       } else if (response.statusCode == 401) {
+//         throw Exception("Unauthorized: Invalid credentials");
+//       } else if (response.statusCode == 500) {
+//         throw Exception("Server error. Please try again later.");
+//       } else {
+//         throw Exception("Failed to load search results");
+//       }
+//     } catch (e) {
+//       throw Exception("Error: $e");
+//     }
+//   }
 
-  Future<String?> login(String email, String password) async {
-    try {
-      final response = await http.post(
-        Uri.parse("http://api.dailyfairdeal.com/api/login"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'email': email,
-          'password': password,
-        }),
-      );
+//   Future<String?> login(String email, String password) async {
+//     try {
+//       final response = await http.post(
+//         Uri.parse("http://api.dailyfairdeal.com/api/login"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: json.encode({
+//           'email': email,
+//           'password': password,
+//         }),
+//       );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        // Extract the token from the response
-        final token = data['access_token'];
-        return token; // Return the token for future use
-      } else if (response.statusCode == 401) {
-        // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "Invalid Email or Password. Please try again.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (response.statusCode == 500) {
-        // Server error
-        Get.snackbar("Error", "Internal server error. Please try again later.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        // Other errors
-        Get.snackbar("Error", "Network error. Please check your connection.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      // Handle any other exceptions
-      Get.snackbar(
-        "Error",
-        "An unexpected error occurred. Please try again.",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-      );
-    }
-    return null;
-  }
+//       if (response.statusCode == 200) {
+//         final data = json.decode(response.body);
+//         // Extract the token from the response
+//         final token = data['access_token'];
+//         return token; // Return the token for future use
+//       } else if (response.statusCode == 401) {
+//         // Unauthorized error (Invalid credentials)
+//         Get.snackbar("Error", "Invalid Email or Password. Please try again.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       } else if (response.statusCode == 500) {
+//         // Server error
+//         Get.snackbar("Error", "Internal server error. Please try again later.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       } else {
+//         // Other errors
+//         Get.snackbar("Error", "Network error. Please check your connection.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       }
+//     } catch (e) {
+//       // Handle any other exceptions
+//       Get.snackbar(
+//         "Error",
+//         "An unexpected error occurred. Please try again.",
+//         snackPosition: SnackPosition.BOTTOM,
+//         backgroundColor: Colors.red,
+//       );
+//     }
+//     return null;
+//   }
 
-  Future<String?> register(String name, String email, String password) async {
-    try {
-      final response = await http.post(
-        Uri.parse("http://api.dailyfairdeal.com/api/signup"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'name': name,
-          'email': email,
-          'password': password,
-        }),
-      );
+//   Future<String?> register(String name, String email, String password) async {
+//     try {
+//       final response = await http.post(
+//         Uri.parse("http://api.dailyfairdeal.com/api/signup"),
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: json.encode({
+//           'name': name,
+//           'email': email,
+//           'password': password,
+//         }),
+//       );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        // Extract the token from the response
-        final token = data['access_token'];
-        return token; // Return the token for future use
-      } else if (response.statusCode == 302) {
-        // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "The email is already used. Please try again.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (response.statusCode == 401) {
-        // Unauthorized error (Invalid credentials)
-        Get.snackbar("Error", "Invalid Email or Password. Please try again.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else if (response.statusCode == 500) {
-        // Server error
-        Get.snackbar("Error", "Internal server error. Please try again later.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      // Handle any exceptions
-      Get.snackbar("Error", "An unexpected error occurred. Please try again.",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
-    return null;
-  }
+//       if (response.statusCode == 200) {
+//         final data = json.decode(response.body);
+//         // Extract the token from the response
+//         final token = data['access_token'];
+//         return token; // Return the token for future use
+//       } else if (response.statusCode == 302) {
+//         // Unauthorized error (Invalid credentials)
+//         Get.snackbar("Error", "The email is already used. Please try again.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       } else if (response.statusCode == 401) {
+//         // Unauthorized error (Invalid credentials)
+//         Get.snackbar("Error", "Invalid Email or Password. Please try again.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       } else if (response.statusCode == 500) {
+//         // Server error
+//         Get.snackbar("Error", "Internal server error. Please try again later.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       }
+//     } catch (e) {
+//       // Handle any exceptions
+//       Get.snackbar("Error", "An unexpected error occurred. Please try again.",
+//           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//     }
+//     return null;
+//   }
 
-  Future<void> getFeatureRestaurants() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized:Token not found");
-      }
-      final response = await http.get(
-          Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
-          });
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
-        final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
-        featuredRestaurants.value = dataList;
-      } else if (response.statusCode == 204) {
-        showError("No orders available at the moment.");
-      } else if (response.statusCode == 401) {
-        showError("Unauthorized access. Please log in again.");
-      } else {
-        showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-      }
-    } catch (e) {
-      showError("An error occurred: $e");
-    }
-  }
+//   Future<void> getFeatureRestaurants() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized:Token not found");
+//       }
+//       final response = await http.get(
+//           Uri.parse("http://api.dailyfairdeal.com/api/feature-restaurants"),
+//           headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': 'Bearer $token',
+//           });
+//       print(response.statusCode);
+//       if (response.statusCode == 200) {
+//         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+//         final List<dynamic> dataList = decodedResponse['data'];
+//         print(dataList);
+//         featuredRestaurants.value = dataList;
+//       } else if (response.statusCode == 204) {
+//         showError("No orders available at the moment.");
+//       } else if (response.statusCode == 401) {
+//         showError("Unauthorized access. Please log in again.");
+//       } else {
+//         showError("Failed to load orders. Please try again later.");
+//         print("Status Code: ${response.statusCode}");
+//         print("Response Body: ${response.body}");
+//       }
+//     } catch (e) {
+//       showError("An error occurred: $e");
+//     }
+//   }
 
-  //Order Again
+//   //Order Again
 
-  Future<void> fetchOrderAgain() async {
-    try {
-      final token = await getToken(); // Retrieve the token
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
+//   Future<void> fetchOrderAgain() async {
+//     try {
+//       final token = await getToken(); // Retrieve the token
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
 
-      final response = await http.get(
-        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
+//       final response = await http.get(
+//         Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
+//         headers: {
+//           "Content-Type": "application/json",
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      print(response.statusCode);
+//       print(response.statusCode);
 
-      if (response.statusCode == 200) {
-        // Decode the response body
-        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+//       if (response.statusCode == 200) {
+//         // Decode the response body
+//         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
-        // Extract and return the 'data' list
-        final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
-        // Ensure correct typing as List<Map<String, dynamic>>
-        orderAgain.value = dataList;
-        // return List<Map<String, dynamic>>.from(dataList);
-      } else if (response.statusCode == 204) {
-        showError("No orders available at the moment.");
-      } else if (response.statusCode == 401) {
-        showError("Unauthorized access. Please log in again.");
-      } else {
-        showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-      }
-    } catch (e) {
-      showError("An error occurred: $e");
-    }
-  }
+//         // Extract and return the 'data' list
+//         final List<dynamic> dataList = decodedResponse['data'];
+//         print(dataList);
+//         // Ensure correct typing as List<Map<String, dynamic>>
+//         orderAgain.value = dataList;
+//         // return List<Map<String, dynamic>>.from(dataList);
+//       } else if (response.statusCode == 204) {
+//         showError("No orders available at the moment.");
+//       } else if (response.statusCode == 401) {
+//         showError("Unauthorized access. Please log in again.");
+//       } else {
+//         showError("Failed to load orders. Please try again later.");
+//         print("Status Code: ${response.statusCode}");
+//         print("Response Body: ${response.body}");
+//       }
+//     } catch (e) {
+//       showError("An error occurred: $e");
+//     }
+//   }
 
-//Fetch Popular Restaurants
+// //Fetch Popular Restaurants
 
-  Future<void> fetchPopularRestaurants() async {
-    try {
-      final token = await getToken(); // Retrieve the token
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
+//   Future<void> fetchPopularRestaurants() async {
+//     try {
+//       final token = await getToken(); // Retrieve the token
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
 
-      final response = await http.get(
-        Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
+//       final response = await http.get(
+//         Uri.parse('http://api.dailyfairdeal.com/api/order-it-again'),
+//         headers: {
+//           "Content-Type": "application/json",
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      print(response.statusCode);
+//       print(response.statusCode);
 
-      if (response.statusCode == 200) {
-        // Decode the response body
-        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+//       if (response.statusCode == 200) {
+//         // Decode the response body
+//         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
-        // Extract and return the 'data' list
-        final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
-        // Ensure correct typing as List<Map<String, dynamic>>
-        orderAgain.value = dataList;
-        // return List<Map<String, dynamic>>.from(dataList);
-      } else if (response.statusCode == 204) {
-        showError("No orders available at the moment.");
-      } else if (response.statusCode == 401) {
-        showError("Unauthorized access. Please log in again.");
-      } else {
-        showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-      }
-    } catch (e) {
-      showError("An error occurred: $e");
-    }
-  }
+//         // Extract and return the 'data' list
+//         final List<dynamic> dataList = decodedResponse['data'];
+//         print(dataList);
+//         // Ensure correct typing as List<Map<String, dynamic>>
+//         orderAgain.value = dataList;
+//         // return List<Map<String, dynamic>>.from(dataList);
+//       } else if (response.statusCode == 204) {
+//         showError("No orders available at the moment.");
+//       } else if (response.statusCode == 401) {
+//         showError("Unauthorized access. Please log in again.");
+//       } else {
+//         showError("Failed to load orders. Please try again later.");
+//         print("Status Code: ${response.statusCode}");
+//         print("Response Body: ${response.body}");
+//       }
+//     } catch (e) {
+//       showError("An error occurred: $e");
+//     }
+//   }
 
-  // Handle search queryf
-  void updateSearchQuery(String query) {
-    filteredCategories.value = featuredRestaurants
-        .where((restaurant) =>
-            restaurant['name'].toLowerCase().contains(query.toLowerCase()))
-        .toList();
-  }
-//Fetch FeatureRestaurants
+//   // Handle search queryf
+//   void updateSearchQuery(String query) {
+//     filteredCategories.value = featuredRestaurants
+//         .where((restaurant) =>
+//             restaurant['name'].toLowerCase().contains(query.toLowerCase()))
+//         .toList();
+//   }
+// //Fetch FeatureRestaurants
 
-  Future<void> fetchFavouriteCuisines() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse("http://api.dailyfairdeal.com/api/favorite-cuisine"),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        favouriteCuisines.value = data;
-      } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        Get.snackbar("Error", "Failed to load data.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
-  }
+//   Future<void> fetchFavouriteCuisines() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse("http://api.dailyfairdeal.com/api/favorite-cuisine"),
+//         headers: {
+//           "Content-Type": "application/json",
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
+//       if (response.statusCode == 200) {
+//         final data = json.decode(response.body);
+//         favouriteCuisines.value = data;
+//       } else if (response.statusCode == 401) {
+//         Get.snackbar("Error", "Unauthorized access.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       } else {
+//         Get.snackbar("Error", "Failed to load data.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       }
+//     } catch (e) {
+//       Get.snackbar("Error", "An error occurred: $e",
+//           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//     }
+//   }
 
-  Future<void> fetchPopularFoods() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
+//   Future<void> fetchPopularFoods() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
 
-      final response = await http.get(
-        Uri.parse('http://api.dailyfairdeal.com/api/popular-foods'),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
+//       final response = await http.get(
+//         Uri.parse('http://api.dailyfairdeal.com/api/popular-foods'),
+//         headers: {
+//           "Content-Type": "application/json",
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
 
-      if (response.statusCode == 200) {
-        final List<dynamic> rawData = jsonDecode(response.body);
-        // Map data to ensure correct types
-        final data = rawData.map((item) {
-          return {
-            'name': item['name'] ?? 'Unknown',
-            'sub_category_id': item['sub_category_id'].toString() ?? 'N/A',
-            'date': item['created_at']
-          };
-        }).toList();
+//       if (response.statusCode == 200) {
+//         final List<dynamic> rawData = jsonDecode(response.body);
+//         // Map data to ensure correct types
+//         final data = rawData.map((item) {
+//           return {
+//             'name': item['name'] ?? 'Unknown',
+//             'sub_category_id': item['sub_category_id'].toString() ?? 'N/A',
+//             'date': item['created_at']
+//           };
+//         }).toList();
 
-        popularFoods.value = data;
-        // filteredFoods.value = data; // Initialize filtered list
-      } else if (response.statusCode == 401) {
-        showError("Unauthorized access. Please log in again.");
-      } else {
-        showError("Failed to load data. Please try again.");
-      }
-    } catch (e) {
-      showError("An error occurred: $e");
-    }
-  }
+//         popularFoods.value = data;
+//         // filteredFoods.value = data; // Initialize filtered list
+//       } else if (response.statusCode == 401) {
+//         showError("Unauthorized access. Please log in again.");
+//       } else {
+//         showError("Failed to load data. Please try again.");
+//       }
+//     } catch (e) {
+//       showError("An error occurred: $e");
+//     }
+//   }
 
-  void showError(String message) {
-    Get.snackbar(
-      "Error",
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      margin: const EdgeInsets.all(10),
-      borderRadius: 10,
-    );
-  }
+//   void showError(String message) {
+//     Get.snackbar(
+//       "Error",
+//       message,
+//       snackPosition: SnackPosition.BOTTOM,
+//       backgroundColor: Colors.red,
+//       colorText: Colors.white,
+//       margin: const EdgeInsets.all(10),
+//       borderRadius: 10,
+//     );
+//   }
 
-  Future<void> fetchFavoriteCuisines() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse('http://api.dailyfairdeal.com/api/favorite-cuisine'),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
-      if (response.statusCode == 200) {
-        popularFoods.value = jsonDecode(response.body);
-      } else if (response.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized access.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      } else {
-        Get.snackbar("Error", "Failed to load data.",
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
-  }
+//   Future<void> fetchFavoriteCuisines() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse('http://api.dailyfairdeal.com/api/favorite-cuisine'),
+//         headers: {
+//           "Content-Type": "application/json",
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
+//       if (response.statusCode == 200) {
+//         popularFoods.value = jsonDecode(response.body);
+//       } else if (response.statusCode == 401) {
+//         Get.snackbar("Error", "Unauthorized access.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       } else {
+//         Get.snackbar("Error", "Failed to load data.",
+//             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//       }
+//     } catch (e) {
+//       Get.snackbar("Error", "An error occurred: $e",
+//           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//     }
+//   }
 
-  //Fetch Restaurants
-  Future<void> fetchRestaurants() async {
-    try {
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      final response = await http.get(
-        Uri.parse('http://api.dailyfairdeal.com/api/restaurant'),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        // Decode the response body
-        final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+//   //Fetch Restaurants
+//   Future<void> fetchRestaurants() async {
+//     try {
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       final response = await http.get(
+//         Uri.parse('http://api.dailyfairdeal.com/api/restaurant'),
+//         headers: {
+//           "Content-Type": "application/json",
+//           'Authorization': 'Bearer $token',
+//         },
+//       );
+//       print(response.statusCode);
+//       if (response.statusCode == 200) {
+//         // Decode the response body
+//         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
 
-        // Extract and return the 'data' list
-        final List<dynamic> dataList = decodedResponse['data'];
-        print(dataList);
-        // Ensure correct typing as List<Map<String, dynamic>>
-        restaurant.value = dataList;
-        // return List<Map<String, dynamic>>.from(dataList);
-      } else if (response.statusCode == 204) {
-        showError("No orders available at the moment.");
-      } else if (response.statusCode == 401) {
-        showError("Unauthorized access. Please log in again.");
-      } else {
-        showError("Failed to load orders. Please try again later.");
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-      }
-    } catch (e) {
-      showError("An error occurred: $e");
-    }
-  }
+//         // Extract and return the 'data' list
+//         final List<dynamic> dataList = decodedResponse['data'];
+//         print(dataList);
+//         // Ensure correct typing as List<Map<String, dynamic>>
+//         restaurant.value = dataList;
+//         // return List<Map<String, dynamic>>.from(dataList);
+//       } else if (response.statusCode == 204) {
+//         showError("No orders available at the moment.");
+//       } else if (response.statusCode == 401) {
+//         showError("Unauthorized access. Please log in again.");
+//       } else {
+//         showError("Failed to load orders. Please try again later.");
+//         print("Status Code: ${response.statusCode}");
+//         print("Response Body: ${response.body}");
+//       }
+//     } catch (e) {
+//       showError("An error occurred: $e");
+//     }
+//   }
 
-  void updateCategory(String category) {
-    selectedCategory.value = category;
-  }
+//   void updateCategory(String category) {
+//     selectedCategory.value = category;
+//   }
 
-  Future<void> saveRestaurantData(Map<String, dynamic> data) async {
-    try{
-      final token = await getToken();
-      if (token == null) {
-        throw Exception("Unauthorized: Token not found");
-      }
-      const String url = "http://api.dailyfairdeal.com/api/restaurant";
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token'},
-        body: json.encode(data),
-      );
-      if(response.statusCode == 201){
-        Get.snackbar(
-          "Success",
-          "Restaurant data saved successfully!",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      }
-      else if(response.statusCode == 500){
-        Get.snackbar(
-          "Error",
-          "Internal Server Error. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-       else if (response.statusCode == 401) {
-        Get.snackbar(
-          "Error",
-          "Unauthorized access.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
-      } else {
-        Get.snackbar(
-          "Error",
-          "Failed to save data.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red
-        );
-      }     
+//   Future<void> saveRestaurantData(Map<String, dynamic> data) async {
+//     try{
+//       final token = await getToken();
+//       if (token == null) {
+//         throw Exception("Unauthorized: Token not found");
+//       }
+//       const String url = "http://api.dailyfairdeal.com/api/restaurant";
+//       final response = await http.post(
+//         Uri.parse(url),
+//         headers: {"Content-Type": "application/json", 'Authorization': 'Bearer $token'},
+//         body: json.encode(data),
+//       );
+//       if(response.statusCode == 201){
+//         Get.snackbar(
+//           "Success",
+//           "Restaurant data saved successfully!",
+//           snackPosition: SnackPosition.BOTTOM,
+//           backgroundColor: Colors.green,
+//           colorText: Colors.white,
+//         );
+//       }
+//       else if(response.statusCode == 500){
+//         Get.snackbar(
+//           "Error",
+//           "Internal Server Error. Please try again.",
+//           snackPosition: SnackPosition.BOTTOM,
+//           backgroundColor: Colors.red,
+//           colorText: Colors.white,
+//         );
+//       }
+//        else if (response.statusCode == 401) {
+//         Get.snackbar(
+//           "Error",
+//           "Unauthorized access.",
+//           snackPosition: SnackPosition.BOTTOM,
+//           backgroundColor: Colors.red
+//         );
+//       } else {
+//         Get.snackbar(
+//           "Error",
+//           "Failed to save data.",
+//           snackPosition: SnackPosition.BOTTOM,
+//           backgroundColor: Colors.red
+//         );
+//       }     
 
-    }catch(e){
-      Get.snackbar("Error", "Failed to save data, $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-    }
+//     }catch(e){
+//       Get.snackbar("Error", "Failed to save data, $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+//     }
     
-  }
-}
+//   }
+// }

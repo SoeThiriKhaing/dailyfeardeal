@@ -1,4 +1,11 @@
-import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/food_api/get_res_type.dart';
+import 'package:dailyfairdeal/service/food_api/set_res.dart';
+import 'package:dailyfairdeal/service/location_api.dart/cities_res.dart';
+import 'package:dailyfairdeal/service/location_api.dart/countries_res.dart';
+import 'package:dailyfairdeal/service/location_api.dart/divisions_res.dart';
+import 'package:dailyfairdeal/service/location_api.dart/street_res.dart';
+import 'package:dailyfairdeal/service/location_api.dart/township_res.dart';
+import 'package:dailyfairdeal/service/location_api.dart/ward_res.dart';
 import 'package:dailyfairdeal/widget/dropdown_field.widget.dart';
 import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
 import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
@@ -50,8 +57,8 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   // Fetch the countries and update the state
   Future<void> fetchAddress() async {
     try {
-      List<Map<String, String>> countries = await APIMethods().getCountries();
-      List<Map<String, String>> restaurantTypes = await APIMethods().getRestaurantTypes();
+      List<Map<String, String>> countries = await getCountries();
+      List<Map<String, String>> restaurantTypes = await getRestaurantTypes();
       setState(() {
         countryList = countries;
         restaurantTypeList = restaurantTypes;
@@ -105,7 +112,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
       },
     };
     try {
-      APIMethods().saveRestaurantData(data);
+      saveRestaurantData(data);
       clear();
     } catch (e) {
       Get.snackbar(
@@ -251,7 +258,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                       (item) => item['name'] == value)['id']!) ?? 0;
                   });
                   if (selectedCountryId != null && selectedCountryId != 0) {
-                    divisionList = await APIMethods().getDivisions(selectedCountryId!);
+                    divisionList = await getDivisions(selectedCountryId!);
                     setState(() {}); // Refresh dropdown
                   }
                 },
@@ -272,7 +279,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         divisionList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedDivisionId != null) {
-                    cityList = await APIMethods().getCities(selectedDivisionId!);
+                    cityList = await getCities(selectedDivisionId!);
                     setState(() {});
                   }
                 } 
@@ -300,7 +307,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         cityList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedCityId != null) {
-                    townshipList = await APIMethods().getTownships(selectedCityId!);
+                    townshipList = await getTownships(selectedCityId!);
                     setState(() {});
                   }
                 },
@@ -321,7 +328,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         townshipList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedTownshipId != null) {
-                    wardList = await APIMethods().getWards(selectedTownshipId!);
+                    wardList = await getWards(selectedTownshipId!);
                     setState(() {});
                   }
                 },
@@ -349,7 +356,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         wardList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedWardId != null) {
-                    streetList = await APIMethods().getStreets(selectedWardId!);
+                    streetList = await getStreets(selectedWardId!);
                     setState(() {});
                   }
                 },

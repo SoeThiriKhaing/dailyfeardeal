@@ -1,4 +1,4 @@
-class validationMessages {
+class ValidationMessages {
   // For Password
   static const String passwordRequired = "Please enter Your Password";
   static const String passwordMinLength =

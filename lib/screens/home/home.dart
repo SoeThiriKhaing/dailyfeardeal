@@ -1,14 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
-  final APIMethods apiController = Get.put(APIMethods());
+  // final APIMethods apiController = Get.put(APIMethods());
 
   @override
   State<Home> createState() => _HomeState();
@@ -37,21 +36,21 @@ class _HomeState extends State<Home> {
       isLoading = true;
     });
 
-    try {
-      List<Map<String, dynamic>> results =
-          await APIMethods().searchItemsByType(query, selectedType);
-      setState(() {
-        searchResults = results;
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error: $e");
-      }
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    // try {
+    //   List<Map<String, dynamic>> results =
+    //       await ApiService.searchItemsByType(query, selectedType);
+    //   setState(() {
+    //     searchResults = results;
+    //   });
+    // } catch (e) {
+    //   if (kDebugMode) {
+    //     print("Error: $e");
+    //   }
+    // } finally {
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // }
   }
 
   @override

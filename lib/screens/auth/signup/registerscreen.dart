@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/auth_api/signup_res.dart';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
@@ -21,18 +22,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   FocusNode focusNode = FocusNode();
 
-  Future<void> register() async {
-    String? token = await APIMethods().register(
-        nameController.text, emailController.text, passwordController.text);
+  Future<void> registerUser() async {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
 
-    if (token != null) {
-      saveToken(token);
-      // If register is successful
-      Get.snackbar("Success", "Register Successfully",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-      Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
+    if (formKey.currentState!.validate()) {
+      String? token = await register(name, email, password);
+      if (token != null) {
+        // Save the token securely
+        await saveToken(token);
+
+        Get.snackbar("Success", "Register Successfully",
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+        Get.to(() => MainScreen()); // Navigate to the MerchantSignUp screen
+      }
     }
   }
 
@@ -142,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formkey.currentState!.validate()) {
-                              register();
+                              registerUser();
                             }
                           },
                           style: ElevatedButton.styleFrom(
