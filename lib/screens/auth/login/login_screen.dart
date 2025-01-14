@@ -1,6 +1,8 @@
-import 'package:dailyfairdeal/screens/home/main_screen.dart';
-import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/auth_api/login_res.dart';
 import 'package:dailyfairdeal/service/secure_storage.dart';
+import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/widget/logo_widget.dart';
@@ -9,9 +11,7 @@ import 'package:dailyfairdeal/widget/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -25,22 +25,29 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
 
-  Future<void> login() async {
-    String? token = await APIMethods().login(emailController.text.trim(), passwordController.text.trim());
-    if (token != null) {
-      // If login is successful
-      saveToken(token);
-      SnackbarHelper.showSnackbar(
-        title: "Success",
-        message: "Login Successfully",
-        backgroundColor: Colors.green,
-      );
-      Get.to(() => MainScreen());
+  Future<void> loginUser() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (formKey.currentState!.validate()) {
+      String? token = await login(email, password);
+      if (token != null) {
+        // Save the token securely
+        await saveToken(token);
+
+        // Navigate to the main screen
+        Get.snackbar(
+          "Success",
+          "Login Successful",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+        );
+        Get.off(() => MainScreen());
+      }
     }
-    
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,7 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 30),
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -60,34 +66,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Text('Email', style: AppWidget.formFieldLabelTextStyle()),
+                Text('Email', style: TextStyle(fontSize: 16)),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
-                  maxLength: 255,
-                  maxLengthEnforcement: MaxLengthEnforcement.none,
                   decoration: InputDecoration(
-                    counterText: '',
                     hintText: "Enter Email",
                     prefixIcon: const Icon(Icons.email),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: validateEmail,
+                  validator: Validators.validateEmail,
                 ),
                 const SizedBox(height: 10),
-                Text('Password', style: AppWidget.formFieldLabelTextStyle()),
+               const Text('Password', style: TextStyle(fontSize: 16)),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  decoration:passwordInputDecoration(
+                  obscureText: !isPasswordVisible,
+                  decoration: InputDecoration(
+                    hintText: "Enter Password",
+                    prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
                       icon: Icon(
                         isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
@@ -95,18 +100,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       },
                     ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  obscureText: !isPasswordVisible,
-                  validator: validatePassword,
+                  validator: Validators.validatePassword,
                 ),
                 const SizedBox(height: 20),
-                ReusableButton(
-                  text: "Login",
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      login();
-                    }
-                  },
+                ElevatedButton(
+                  onPressed: loginUser,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: AppColor.primaryColor,
+                  ),
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -127,51 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                const Row(
-                  children: [
-                    Expanded(child: Divider(thickness: 1)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "or",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    Expanded(child: Divider(thickness: 1)),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.facebook, color: Colors.white),
-                  label: const Text("Continue with Facebook",
-                      style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.g_mobiledata_outlined,
-                      color: Colors.redAccent),
-                  label: const Text("Continue with Google",
-                      style: TextStyle(color: Colors.black)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 50),
-                    side: const BorderSide(color: Colors.black, width: 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
               ],
             ),
           ),

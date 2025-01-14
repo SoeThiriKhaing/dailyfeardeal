@@ -26,7 +26,7 @@ InputDecoration passwordInputDecoration({required IconButton suffixIcon}) {
       prefixIcon: const Icon(Icons.password),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-      ));
+      )); 
 }
 
 InputDecoration confirmpasswordInputDecoration({required IconButton suffixIcon}) {

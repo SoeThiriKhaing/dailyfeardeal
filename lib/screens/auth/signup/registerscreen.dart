@@ -1,5 +1,6 @@
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/service/api_method.dart';
+import 'package:dailyfairdeal/service/auth_api/signup_res.dart';
 import 'package:dailyfairdeal/service/secure_storage.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
@@ -24,10 +25,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   FocusNode focusNode = FocusNode();
 
-  Future<void> register() async {
-    String? token = await APIMethods().register(nameController.text, emailController.text, passwordController.text);
+  Future<void> registerUser() async {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
 
     if (token != null) {
       saveToken(token);
@@ -68,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextFormField(
                       controller: nameController,
-                      validator: validateName,
+                      validator: Validators.validateName,
                       decoration: nameInputDecoration(),
                     ),
                     const SizedBox(
@@ -80,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextFormField(
                       controller: emailController,
-                      validator: validateEmail,
+                      validator: Validators.validateEmail,
                       decoration: emailInputDecoration(),
                     ),
                     const SizedBox(
@@ -108,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       obscureText: !isPasswordVisible,
-                      validator: validatePassword,
+                      validator: Validators.validatePassword,
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -120,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextFormField(
                       controller: confirmController,
-                      validator: validatePassword,
+                      validator: Validators.validatePassword,
                       decoration: confirmpasswordInputDecoration(
                         suffixIcon: IconButton(
                           icon: Icon(

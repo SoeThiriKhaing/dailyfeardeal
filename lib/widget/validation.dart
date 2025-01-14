@@ -1,66 +1,56 @@
-String? validatePassword(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your password';
+import 'package:dailyfairdeal/config/messages.dart';
+
+class Validators {
+  static String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return ValidationMessages.passwordRequired;
+    }
+
+    if (value.length < 6) {
+      return ValidationMessages.passwordMinLength;
+    }
+
+    final letterPattern = RegExp(r'[a-zA-Z]');
+    if (!letterPattern.hasMatch(value)) {
+      return ValidationMessages.passwordDigitRequired;
+    }
+
+    final digitPattern = RegExp(r'[0-9]');
+    if (!digitPattern.hasMatch(value)) {
+      return ValidationMessages.passwordDigitRequired;
+    }
+
+    return null;
   }
 
-  // Check for minimum and maximum length
-  if (value.length < 6) {
-    return 'Password must be at least 6 characters long';
-  }
-  // if (value.length > 8) {
-  //   return 'Password must not exceed 8 characters';
-  // }
+  static String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return ValidationMessages.emailRequired;
+    }
 
-  // Check for at least one special character
-  // final specialCharacterPattern = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
-  // if (!specialCharacterPattern.hasMatch(value)) {
-  //   return 'Password must contain at least one special character';
-  // }
+    final emailPattern = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailPattern.hasMatch(value)) {
+      return ValidationMessages.emailInvalid;
+    }
 
-  // Check for at least one letter
-  final letterPattern = RegExp(r'[a-zA-Z]');
-  if (!letterPattern.hasMatch(value)) {
-    return 'Password must contain at least one letter';
+    if (!value.endsWith('@gmail.com')) {
+      return ValidationMessages.emailDomainInvalid;
+    }
+
+    return null;
   }
 
-  // Check for at least one digit
-  final digitPattern = RegExp(r'[0-9]');
-  if (!digitPattern.hasMatch(value)) {
-    return 'Password must contain at least one digit';
+  static String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return ValidationMessages.nameRequired;
+    }
+    return null;
   }
 
-  return null;
-}
-
-String? validateEmail(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your email';
+  static String? validateTextField(String? value) {
+    if (value == null || value.isEmpty) {
+      return ValidationMessages.textFieldRequired;
+    }
+    return null;
   }
-
-  // Simple email validation
-  final emailPattern = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-  if (!emailPattern.hasMatch(value)) {
-    return 'Please enter a valid email';
-  }
-
-  // Specific domain validation
-  if (!value.endsWith('@gmail.com')) {
-    return 'Email must end with @gmail.com';
-  }
-
-  return null;
-}
-
-String? validateName(String? value) {
-  if (value == null || value.isEmpty) {
-    return "Please Enter Your Name";
-  }
-  return null;
-}
-
-String? validateTextField(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter text here';
-  }
-  return null;
 }

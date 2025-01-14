@@ -1,6 +1,9 @@
+import 'package:dailyfairdeal/service/food_api/get_feature_res.dart';
+import 'package:dailyfairdeal/service/food_api/get_order_again.dart';
+import 'package:dailyfairdeal/service/food_api/get_popular_res.dart';
+import 'package:dailyfairdeal/service/food_api/get_res_type.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dailyfairdeal/service/api_method.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 
@@ -12,7 +15,6 @@ class FoodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch data when the page loads
-    apiController.getFeatureRestaurants();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -34,9 +36,9 @@ class FoodPage extends StatelessWidget {
               elevation: 5.0,
               shadowColor: Colors.grey.withOpacity(0.4),
               borderRadius: BorderRadius.circular(25.0),
-              child: TextField(
-                onChanged: apiController.updateSearchQuery,
-                decoration: const InputDecoration(
+              child:const TextField(
+                //onChanged: apiController.updateSearchQuery,
+                decoration:  InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
                   hintText: "Search your favorite restaurant...",
@@ -57,27 +59,27 @@ class FoodPage extends StatelessWidget {
               child: Row(
                 children: [
                   _buildCategoryButton("Restaurants", () {
-                    apiController.selectedCategory.value = "Restaurants";
-                    apiController.fetchRestaurants();
+                    selectedCategory.value = "Restaurants" as List;
+                    getRestaurantTypes();
                   }),
                   _buildCategoryButton('Featured Restaurants', () {
-                    apiController.selectedCategory.value =
-                        "Featured Restaurants";
-                    apiController.getFeatureRestaurants();
+                    selectedCategory.value =
+                        "Featured Restaurants" as List;
+                    getFeatureRestaurants();
                   }),
                   _buildCategoryButton('Popular Restaurants', () {
-                    apiController.selectedCategory.value =
-                        "Popular Restaurants";
-                    apiController.fetchOrderAgain();
+                    selectedCategory.value =
+                        "Popular Restaurants" as List;
+                    fetchOrderAgain();
                   }),
                   _buildCategoryButton('Popular Foods', () {
-                    apiController.selectedCategory.value = "Popular Foods";
-                    apiController.fetchPopularFoods();
+                  selectedCategory.value = "Popular Foods" as List;
+                    fetchPopularRestaurants();
                   }),
                   _buildCategoryButton('Order It Again', () {
-                    apiController.selectedCategory.value = "Order It Again";
+                    selectedCategory.value = "Order It Again" as List;
 
-                    apiController.fetchOrderAgain();
+                    fetchOrderAgain();
                   }),
                 ],
               ),
@@ -87,16 +89,17 @@ class FoodPage extends StatelessWidget {
           // Dynamic Content
           Expanded(
             child: Obx(() {
-              final selectedCategory = apiController.selectedCategory.value;
+              //final selectedCategory = selectedCategory.value;
               final datatoDisplay = selectedCategory == "Featured Restaurants"
-                  ? apiController.featuredRestaurants
+                  ? featuredRestaurants
                   : selectedCategory == "Popular Restaurants"
-                      ? apiController.orderAgain
+                      ? orderAgain
+                      // ignore: unrelated_type_equality_checks
                       : selectedCategory == "Popular Foods"
-                          ? apiController.popularFoods
+                          ? popularRestaurant
                           : selectedCategory == "Restaurants"
-                              ? apiController.restaurant
-                              : apiController.orderAgain;
+                              ? popularRestaurant
+                              : orderAgain;
               if (datatoDisplay.isEmpty) {
                 return const Text("No Data For selected category");
               }
@@ -140,8 +143,7 @@ class FoodPage extends StatelessWidget {
                                   Text(
                                       "${item['open_time'] ?? "No Subcategory"}"),
                                   Text("${item['close_time'] ?? "No Rating"}"),
-  
-                                   Text("${item['user_name'] ?? "No Rating"}"),
+                                  Text("${item['user_name'] ?? "No Rating"}"),
                                 ],
                               )
                             : selectedCategory == "Popular Foods"
