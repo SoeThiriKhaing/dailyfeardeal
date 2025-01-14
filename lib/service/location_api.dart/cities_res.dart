@@ -7,8 +7,8 @@ import 'package:dailyfairdeal/util/appurl.dart';
 final apiService = ApiService();
 Future<List<Map<String, String>>> getCities(int divisionId) async {
   try {
-    final response =
-        await apiService.request(AppUrl.getCities(divisionId.toString()), method: "GET");
+    final response = await apiService
+        .request(AppUrl.getCities(divisionId.toString()), method: "GET");
 
     if (response.statusCode == 200) {
       // Parse the response body into a list of countries

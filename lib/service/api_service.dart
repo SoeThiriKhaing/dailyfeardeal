@@ -72,8 +72,7 @@ class ApiService {
         throw Exception(ApiMessages.noData);
       } else if (response.statusCode == 401) {
         throw Exception(ApiMessages.unauthorized);
-      } 
-      else if (response.statusCode == 500) {
+      } else if (response.statusCode == 500) {
         throw Exception(ApiMessages.serverError);
       } else {
         throw Exception(ApiMessages.failedToLoad);
@@ -81,8 +80,5 @@ class ApiService {
     } catch (e) {
       throw Exception("Request failed: $e");
     }
-    
-    
   }
-  
 }

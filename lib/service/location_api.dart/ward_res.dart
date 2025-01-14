@@ -8,7 +8,8 @@ final apiService = ApiService();
 
 Future<List<Map<String, String>>> getWards(int townshipId) async {
   try {
-    final response = await apiService.request(AppUrl.getWard(townshipId.toString()),method: "GET");
+    final response = await apiService
+        .request(AppUrl.getWard(townshipId.toString()), method: "GET");
 
     if (response.statusCode == 200) {
       // Parse the response body into a list of countries

@@ -12,7 +12,7 @@ Future<RxList> fetchPopularRestaurants() async {
         await apiService.request(AppUrl.getPopularFood, method: "GET");
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-        for (var popularRes in data) {
+      for (var popularRes in data) {
         popularRestaurant.add({
           'id': popularRes['id'].toString(),
           'name': popularRes['name'],
