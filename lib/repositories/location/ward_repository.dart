@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dailyfairdeal/interfaces/location/i_ward_repository%20copy.dart';
+import 'package:dailyfairdeal/interfaces/location/i_ward_repository.dart';
 import 'package:dailyfairdeal/models/location/ward_model.dart';
 import 'package:dailyfairdeal/services/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
