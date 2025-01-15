@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dailyfairdeal/service/api_service.dart';
+import 'package:dailyfairdeal/services/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
 import 'package:get/get.dart';
 

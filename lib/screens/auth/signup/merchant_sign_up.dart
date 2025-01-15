@@ -1,15 +1,16 @@
-import 'package:dailyfairdeal/service/food_api/get_res_type.dart';
+import 'package:dailyfairdeal/controllers/location/city_controller.dart';
+import 'package:dailyfairdeal/controllers/location/country_controller.dart';
+import 'package:dailyfairdeal/controllers/location/division_controller.dart';
+import 'package:dailyfairdeal/controllers/location/street_controller.dart';
+import 'package:dailyfairdeal/controllers/location/township_controller.dart';
+import 'package:dailyfairdeal/controllers/location/ward_controller.dart';
+import 'package:dailyfairdeal/controllers/restaurant_type_controller.dart';
 import 'package:dailyfairdeal/service/food_api/set_res.dart';
-import 'package:dailyfairdeal/service/location_api.dart/cities_res.dart';
-import 'package:dailyfairdeal/service/location_api.dart/countries_res.dart';
-import 'package:dailyfairdeal/service/location_api.dart/divisions_res.dart';
-import 'package:dailyfairdeal/service/location_api.dart/street_res.dart';
-import 'package:dailyfairdeal/service/location_api.dart/ward_res.dart';
-import 'package:dailyfairdeal/widget/dropdown_field.widget.dart';
-import 'package:dailyfairdeal/widget/phone_text_field_widget.dart';
+import 'package:dailyfairdeal/screens/widgets/dropdown_field_widget.dart';
+import 'package:dailyfairdeal/screens/widgets/phone_text_field_widget.dart';
 import 'package:dailyfairdeal/widget/reusabel_button.dart';
-import 'package:dailyfairdeal/widget/snackbar_helper.dart';
-import 'package:dailyfairdeal/widget/text_form_field_widget.dart';
+import 'package:dailyfairdeal/util/snackbar_helper.dart';
+import 'package:dailyfairdeal/screens/widgets/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class MerchantSignUp extends StatefulWidget {
@@ -48,6 +49,14 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
 
   String? selectedBusinessType;
 
+  late RestaurantTypeController resTypeController;
+  late CountryController countryController;
+  late DivisionController divisionController;
+  late CityController cityController;
+  late TownshipController townshipController;
+  late WardController wardController;
+  late StreetController streetController;
+  
   @override
   void initState() {
     super.initState();
@@ -57,8 +66,8 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   // Fetch the countries and update the state
   Future<void> fetchAddress() async {
     try {
-      List<Map<String, String>> countries = await getCountries();
-      List<Map<String, String>> restaurantTypes = await getRestaurantTypes();
+      List<Map<String, String>> countries = await countryController.loadCountryList();
+      List<Map<String, String>> restaurantTypes = await resTypeController.loadRestaurantTypes();
       setState(() {
         countryList = countries;
         restaurantTypeList = restaurantTypes;
@@ -256,7 +265,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                       (item) => item['name'] == value)['id']!) ?? 0;
                   });
                   if (selectedCountryId != null && selectedCountryId != 0) {
-                    divisionList = await getDivisions(selectedCountryId!);
+                    divisionList = await divisionController.loadDivisionById(selectedCountryId!);
                     setState(() {}); // Refresh dropdown
                   }
                 },
@@ -277,7 +286,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         divisionList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedDivisionId != null) {
-                    cityList = await getCities(selectedDivisionId!);
+                    cityList = await cityController.loadCityById(selectedDivisionId!);
                     setState(() {});
                   }
                 } 
@@ -305,7 +314,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         cityList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedCityId != null) {
-                    //townshipList = await getTownships(selectedCityId!);
+                    townshipList = await townshipController.loadTownshipById(selectedCityId!);
                     setState(() {});
                   }
                 },
@@ -326,7 +335,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         townshipList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedTownshipId != null) {
-                    wardList = await getWards(selectedTownshipId!);
+                    wardList = await wardController.loadWardById(selectedTownshipId!);
                     setState(() {});
                   }
                 },
@@ -354,7 +363,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                         wardList.firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedWardId != null) {
-                    streetList = await getStreets(selectedWardId!);
+                    streetList = await streetController.loadStreetById(selectedWardId!);
                     setState(() {});
                   }
                 },

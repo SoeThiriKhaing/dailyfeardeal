@@ -1,6 +1,6 @@
+import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dailyfairdeal/widget/app_color.dart';
 
 class RestaurantOwnerDrawer extends StatelessWidget {
   const RestaurantOwnerDrawer({super.key});

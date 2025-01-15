@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dailyfairdeal/config/api_messages.dart';
-import 'package:dailyfairdeal/service/api_service.dart';
+import 'package:dailyfairdeal/services/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

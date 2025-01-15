@@ -4,10 +4,10 @@ import 'package:dailyfairdeal/service/food_api/get_feature_res.dart';
 import 'package:dailyfairdeal/service/food_api/get_order_again.dart';
 import 'package:dailyfairdeal/service/food_api/get_popular_res.dart';
 import 'package:dailyfairdeal/service/food_api/get_res_type.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FoodPage extends StatelessWidget {
 

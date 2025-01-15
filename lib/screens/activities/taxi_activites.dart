@@ -1,4 +1,4 @@
-import 'package:dailyfairdeal/widget/activity_card.dart';
+import 'package:dailyfairdeal/screens/activities_screen.dart';
 import 'package:flutter/material.dart';
 
 class TaxiActivities extends StatelessWidget {

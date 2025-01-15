@@ -1,6 +1,7 @@
+import 'package:dailyfairdeal/controllers/auth_controller.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
-import 'package:dailyfairdeal/widget/logo_widget.dart';
+import 'package:dailyfairdeal/screens/widgets/logo_widget.dart';
 import 'package:dailyfairdeal/widget/reusabel_button.dart';
 import 'package:dailyfairdeal/widget/support_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
@@ -22,14 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   FocusNode focusNode = FocusNode();
-
-  Future<void> registerUser() async {
-    String name = nameController.text.trim();
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-
-    
-  }
+  late final AuthController authController;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       text: "Sign Up",
                       onPressed: () {
                        if (_formkey.currentState!.validate()) {
-                          registerUser();
+                          authController.register(nameController.text, emailController.text, passwordController.text);
                         }
                       },
                     ),

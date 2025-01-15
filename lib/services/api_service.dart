@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dailyfairdeal/config/api_messages.dart';
-import 'package:dailyfairdeal/service/secure_storage.dart';
+import 'package:dailyfairdeal/services/secure_storage.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
 import 'package:http/http.dart' as http;
 
@@ -84,5 +84,6 @@ class ApiService {
     
     
   }
-  
+
+  get(String Function(String countryId) getDivisionById, {required String method}) {}
 }

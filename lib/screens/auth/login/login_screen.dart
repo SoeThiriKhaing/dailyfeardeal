@@ -1,10 +1,8 @@
-import 'package:dailyfairdeal/service/auth_api/login_res.dart';
-import 'package:dailyfairdeal/service/secure_storage.dart';
-import 'package:dailyfairdeal/screens/home/main_screen.dart';
+import 'package:dailyfairdeal/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
-import 'package:dailyfairdeal/widget/logo_widget.dart';
+import 'package:dailyfairdeal/screens/widgets/logo_widget.dart';
 import 'package:dailyfairdeal/widget/validation.dart';
 
 
@@ -16,32 +14,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  late final AuthController authController;
+  
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
-
-  Future<void> loginUser() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-
-    if (formKey.currentState!.validate()) {
-      String? token = await login(email, password);
-      if (token != null) {
-        // Save the token securely
-        await saveToken(token);
-
-        // Navigate to the main screen
-        Get.snackbar(
-          "Success",
-          "Login Successful",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-        );
-        Get.off(() => MainScreen());
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,12 +83,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: loginUser,
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      authController.login(emailController.text, passwordController.text);
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                     backgroundColor: AppColor.primaryColor,
                   ),
-                  child: const Text(
+                   child: const Text(
                     "Login",
                     style: TextStyle(color: Colors.white),
                   ),

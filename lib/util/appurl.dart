@@ -14,9 +14,9 @@ class AppUrl {
   //Location Api
 
   static String getCountry = "${baseUrl}country";
-  static String getDivision(String countryId) => '$baseUrl/state/$countryId';
-  static String getCities(String divisionId) => '$baseUrl/city/$divisionId';
-  static String getTownship(String cityId) => '$baseUrl/township/$cityId';
-  static String getWard(String townshipId) => '$baseUrl/ward/$townshipId';
-  static String getStreet(String wardId) => '$baseUrl/street/$wardId';
+  static String getDivisionById(String countryId) => '$baseUrl/state/$countryId';
+  static String getCitiesById(String divisionId) => '$baseUrl/city/$divisionId';
+  static String getTownshipById(String cityId) => '$baseUrl/township/$cityId';
+  static String getWardById(String townshipId) => '$baseUrl/ward/$townshipId';
+  static String getStreetById(String wardId) => '$baseUrl/street/$wardId';
 }
