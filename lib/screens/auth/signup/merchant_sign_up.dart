@@ -1,3 +1,4 @@
+import 'package:dailyfairdeal/service/api_service.dart';
 import 'package:dailyfairdeal/service/food_api/get_res_type.dart';
 import 'package:dailyfairdeal/service/food_api/set_res.dart';
 import 'package:dailyfairdeal/service/location_api.dart/cities_res.dart';
@@ -39,7 +40,13 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   List<Map<String, String>> streetList = [];
   List<Map<String, String>> restaurantTypeList = [];
 
-  int? selectedRestaurantTypeId, selectedCountryId, selectedDivisionId, selectedCityId, selectedTownshipId, selectedWardId, selectedStreetId;
+  int? selectedRestaurantTypeId,
+      selectedCountryId,
+      selectedDivisionId,
+      selectedCityId,
+      selectedTownshipId,
+      selectedWardId,
+      selectedStreetId;
 
   final List<Map<String, String>> businessTypeList = [
     {'id': '1', 'name': 'Restaurant'},
@@ -57,21 +64,21 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
   // Fetch the countries and update the state
   Future<void> fetchAddress() async {
     try {
-      List<Map<String, String>> countries = await getCountries();
-      List<Map<String, String>> restaurantTypes = await getRestaurantTypes();
+      // List<Map<String, String>> countries = await getCountries();
+      // List<Map<String, String>> restaurantTypes = await getRestaurantTypes();
       setState(() {
-        countryList = countries;
-        restaurantTypeList = restaurantTypes;
-        selectedBusinessType = businessTypeList.first['name'];
+        // countryList = countries;
+        // restaurantTypeList = restaurantTypes;
+        // selectedBusinessType = businessTypeList.first['name'];
       });
     } catch (e) {
       // ignore: avoid_print
       print("Error fetching country: $e");
-      
     }
   }
 
-  Future<void> selectTime(BuildContext context, TextEditingController controller) async {
+  Future<void> selectTime(
+      BuildContext context, TextEditingController controller) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -83,9 +90,9 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     }
   }
 
-  void clear(){
+  void clear() {
     shopNameController.clear();
-    selectedRestaurantTypeId=null;
+    selectedRestaurantTypeId = null;
     ownerNameController.clear();
     phoneController.clear();
     openTimeController.clear();
@@ -96,7 +103,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
     descriptionController.clear();
   }
 
-  Future <void> saveData() async{
+  Future<void> saveData() async {
     final data = {
       "restaurant_type_id": selectedRestaurantTypeId,
       "name": shopNameController.text.trim(),
@@ -152,9 +159,12 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                buildTextFormField('Restaurant/Shop Name', shopNameController, keyboardType: TextInputType.text),
+                buildTextFormField('Restaurant/Shop Name', shopNameController,
+                    keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                const Text("Choose Business Type", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const Text("Choose Business Type",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 ...businessTypeList.map((business) {
                   return Row(
@@ -176,22 +186,20 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   );
                 }),
                 const SizedBox(height: 10),
-
-                if(selectedBusinessType =='Restaurant')
-                  buildDropdownField(
-                    'Select Restaurant Type',
-                    restaurantType,
-                    restaurantTypeList, 
-                    (value) async{
-                      setState(() { 
-                        restaurantType = value; 
-                        selectedRestaurantTypeId = int.tryParse(restaurantTypeList.firstWhere(
-                        (item) => item['name'] == value)['id']!) ?? 0;
-                      });
+                if (selectedBusinessType == 'Restaurant')
+                  buildDropdownField('Select Restaurant Type', restaurantType,
+                      restaurantTypeList, (value) async {
+                    setState(() {
+                      restaurantType = value;
+                      selectedRestaurantTypeId = int.tryParse(
+                              restaurantTypeList.firstWhere(
+                                  (item) => item['name'] == value)['id']!) ??
+                          0;
+                    });
                   }),
-                  const SizedBox(height: 10),
-                
-                buildTextFormField('Owner Name', ownerNameController, keyboardType: TextInputType.text),
+                const SizedBox(height: 10),
+                buildTextFormField('Owner Name', ownerNameController,
+                    keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
                 buildPhoneField(phoneController),
                 const SizedBox(height: 10),
@@ -201,7 +209,8 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                       child: GestureDetector(
                         onTap: () => selectTime(context, openTimeController),
                         child: AbsorbPointer(
-                          child: buildTextFormField('Open Time', openTimeController),
+                          child: buildTextFormField(
+                              'Open Time', openTimeController),
                         ),
                       ),
                     ),
@@ -210,22 +219,28 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                       child: GestureDetector(
                         onTap: () => selectTime(context, closeTimeController),
                         child: AbsorbPointer(
-                          child: buildTextFormField('Close Time', closeTimeController),
+                          child: buildTextFormField(
+                              'Close Time', closeTimeController),
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text("Restaurant/Shop Address", style:TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const Text("Restaurant/Shop Address",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 buildAddressFields(),
                 const SizedBox(height: 10),
-                 buildTextFormField('Block', blockController, keyboardType: TextInputType.text),
+                buildTextFormField('Block', blockController,
+                    keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                 buildTextFormField('Floor', floorController, keyboardType: TextInputType.text),
+                buildTextFormField('Floor', floorController,
+                    keyboardType: TextInputType.text),
                 const SizedBox(height: 10),
-                buildTextFormField('Description', descriptionController, keyboardType: TextInputType.text, maxLines: 3),
+                buildTextFormField('Description', descriptionController,
+                    keyboardType: TextInputType.text, maxLines: 3),
                 const SizedBox(height: 20),
                 buildSubmitButton(),
                 const SizedBox(height: 15),
@@ -255,10 +270,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                     country = value;
                     division = city = township = ward = street = null;
                     selectedCountryId = int.tryParse(countryList.firstWhere(
-                      (item) => item['name'] == value)['id']!) ?? 0;
+                            (item) => item['name'] == value)['id']!) ??
+                        0;
                   });
                   if (selectedCountryId != null && selectedCountryId != 0) {
-                    divisionList = await getDivisions(selectedCountryId!);
+                    //divisionList = await ApiService.getDivisions(selectedCountryId!);
                     setState(() {}); // Refresh dropdown
                   }
                 },
@@ -267,28 +283,24 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
             const SizedBox(width: 10),
             Flexible(
               flex: 1,
-              child: buildDropdownField(
-                'Division',
-                division,
-                divisionList,
-                (value) async {
-                  setState(() {
-                    division = value;
-                    city = township = ward = street = null;
-                    selectedDivisionId = int.tryParse(
-                        divisionList.firstWhere((item) => item['name'] == value)['id']!);
-                  });
-                  if (selectedDivisionId != null) {
-                    cityList = await getCities(selectedDivisionId!);
-                    setState(() {});
-                  }
-                } 
-              ),
+              child: buildDropdownField('Division', division, divisionList,
+                  (value) async {
+                setState(() {
+                  division = value;
+                  city = township = ward = street = null;
+                  selectedDivisionId = int.tryParse(divisionList
+                      .firstWhere((item) => item['name'] == value)['id']!);
+                });
+                if (selectedDivisionId != null) {
+                  // cityList = await getCities(selectedDivisionId!);
+                  setState(() {});
+                }
+              }),
             ),
           ],
         ),
         const SizedBox(height: 10),
-    
+
         // Second row: City and Township
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -303,11 +315,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   setState(() {
                     city = value;
                     township = ward = street = null;
-                    selectedCityId = int.tryParse(
-                        cityList.firstWhere((item) => item['name'] == value)['id']!);
+                    selectedCityId = int.tryParse(cityList
+                        .firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedCityId != null) {
-                    townshipList = await getTownships(selectedCityId!);
+                    // townshipList = await getTownships(selectedCityId!);
                     setState(() {});
                   }
                 },
@@ -324,11 +336,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   setState(() {
                     township = value;
                     ward = street = null;
-                    selectedTownshipId = int.tryParse(
-                        townshipList.firstWhere((item) => item['name'] == value)['id']!);
+                    selectedTownshipId = int.tryParse(townshipList
+                        .firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedTownshipId != null) {
-                    wardList = await getWards(selectedTownshipId!);
+                    //  wardList = await getWards(selectedTownshipId!);
                     setState(() {});
                   }
                 },
@@ -337,7 +349,7 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
           ],
         ),
         const SizedBox(height: 10),
-    
+
         // Third row: Ward and Street
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -352,11 +364,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                   setState(() {
                     ward = value;
                     street = null;
-                    selectedWardId = int.tryParse(
-                        wardList.firstWhere((item) => item['name'] == value)['id']!);
+                    selectedWardId = int.tryParse(wardList
+                        .firstWhere((item) => item['name'] == value)['id']!);
                   });
                   if (selectedWardId != null) {
-                    streetList = await getStreets(selectedWardId!);
+                    //streetList = await getStreets(selectedWardId!);
                     setState(() {});
                   }
                 },
@@ -369,11 +381,11 @@ class _MerchantSignUpState extends State<MerchantSignUp> {
                 'Street',
                 street,
                 streetList,
-                (value) async{
+                (value) async {
                   setState(() {
                     street = value;
-                    selectedStreetId = int.tryParse(
-                        streetList.firstWhere((item) => item['name'] == value)['id']!);
+                    selectedStreetId = int.tryParse(streetList
+                        .firstWhere((item) => item['name'] == value)['id']!);
                   });
                 },
               ),

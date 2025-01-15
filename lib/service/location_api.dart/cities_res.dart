@@ -1,11 +1,12 @@
 import 'dart:convert';
-
-import 'package:dailyfairdeal/config/api_messages.dart';
+import 'package:dailyfairdeal/config/handle_error.dart';
 import 'package:dailyfairdeal/service/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
+import 'package:get/get.dart';
 
 final apiService = ApiService();
-Future<List<Map<String, String>>> getCities(int divisionId) async {
+final RxList<Map<String,dynamic>> cities =<Map<String, dynamic>>[].obs;
+Future<void> getCities(int divisionId) async {
   try {
     final response = await apiService
         .request(AppUrl.getCities(divisionId.toString()), method: "GET");
@@ -13,7 +14,7 @@ Future<List<Map<String, String>>> getCities(int divisionId) async {
     if (response.statusCode == 200) {
       // Parse the response body into a list of countries
       final data = json.decode(response.body);
-      final List<Map<String, String>> cities = [];
+
       for (var city in data) {
         cities.add({
           'id': city['id'].toString(),
@@ -21,15 +22,8 @@ Future<List<Map<String, String>>> getCities(int divisionId) async {
           'name': city['name'],
         });
       }
-      return cities;
-    } else if (response.statusCode == 401) {
-      // Handle unauthorized error
-      throw Exception(ApiMessages.unauthorized);
-    } else if (response.statusCode == 500) {
-      // Handle internal server error
-      throw Exception(ApiMessages.serverError);
     } else {
-      throw Exception(ApiMessages.failedToLoad);
+      ApiErrorHandler.handleError(response.statusCode);
     }
   } catch (e) {
     throw Exception("Error: $e");

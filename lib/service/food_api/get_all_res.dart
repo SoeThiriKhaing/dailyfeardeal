@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dailyfairdeal/config/api_messages.dart';
+import 'package:dailyfairdeal/config/handle_error.dart';
 import 'package:dailyfairdeal/service/api_service.dart';
 import 'package:dailyfairdeal/util/appurl.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,8 @@ Future<void> fetchRestaurants() async {
       // Ensure correct typing as List<Map<String, dynamic>>
       allRestaurants.value = dataList;
       // return List<Map<String, dynamic>>.from(dataList);
+    } else {
+      ApiErrorHandler.handleError(response.statusCode);
     }
   } catch (e) {
     rethrow;
