@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dailyfairdeal/config/api_messages.dart';
+import 'package:dailyfairdeal/models/user_model.dart';
 import 'package:dailyfairdeal/repositories/handle_error.dart';
 import 'package:dailyfairdeal/service/auth_api/login_res.dart';
 import 'package:dailyfairdeal/util/snackbar_helper.dart';
@@ -9,11 +10,13 @@ import '../util/appurl.dart';
 
 class AuthRepository implements IAuthRepository {
   @override
-  Future<String?> login(String email, String password) async {
+  Future<UserModel?> login(String email, String password) async {
     try {
       final response = await apiService.request(
-     AppUrl.loginEndpoint,method: "POST"
-    );
+      AppUrl.loginEndpoint,method: "POST"
+      );
+
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -44,7 +47,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<String?> register(String name, String email, String password) async {
+  Future<UserModel?> register(String name, String email, String password) async {
     try {
       final response = await apiService.request(AppUrl.registerEndpoint,method: "POST");
 

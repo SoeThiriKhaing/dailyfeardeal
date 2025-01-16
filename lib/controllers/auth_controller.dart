@@ -1,4 +1,5 @@
 import 'package:dailyfairdeal/config/messages.dart';
+import 'package:dailyfairdeal/models/user_model.dart';
 import 'package:dailyfairdeal/screens/home/main_screen.dart';
 import 'package:dailyfairdeal/services/secure_storage.dart';
 import 'package:dailyfairdeal/services/api_service.dart';
@@ -18,7 +19,7 @@ class AuthController {
     try {
       final token = await authService.login(email, password);
       if (token != null) {
-        await saveToken(token);
+        await saveToken(token as String);
         SnackbarHelper.showSnackbar(
           title: "Success",
           message: Messages.loginSuccess,
@@ -38,7 +39,6 @@ class AuthController {
     try {
       final token = await authService.register(name, email, password);
       if (token != null) {
-        await saveToken(token);
         SnackbarHelper.showSnackbar(
           title: "Success",
           message: Messages.registerSuccess,

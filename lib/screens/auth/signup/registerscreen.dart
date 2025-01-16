@@ -1,4 +1,6 @@
 import 'package:dailyfairdeal/controllers/auth_controller.dart';
+import 'package:dailyfairdeal/repositories/auth_repository.dart';
+import 'package:dailyfairdeal/services/auth_service.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/formfield.dart';
 import 'package:dailyfairdeal/screens/widgets/logo_widget.dart';
@@ -23,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   FocusNode focusNode = FocusNode();
-  late final AuthController authController;
+  final AuthController authController = Get.put(AuthController(authService: AuthService(authRepository: AuthRepository())));
 
   @override
   Widget build(BuildContext context) {
