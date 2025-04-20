@@ -14,12 +14,12 @@ class DriverLocationRepository implements IDriverLocationRepository {
         body: driverLocation.toJson(),
       );
 
-      debugPrint('✅ Response: $response');
+      debugPrint(' $response');
 
       // Ensure we return a valid status code
       return response.containsKey('statusCode') ? response['statusCode'] as int : 200;
     } catch (e) {
-      debugPrint('❌ Error during request: $e');
+      debugPrint('Error during request: $e');
       return 500; // Return an error code if an exception occurs
     }
   }
