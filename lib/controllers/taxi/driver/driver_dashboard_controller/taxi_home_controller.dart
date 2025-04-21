@@ -24,7 +24,7 @@ import 'package:google_places_flutter/model/prediction.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
-import '../../../repositories/taxi/driver/accept_driver_ride_repository.dart';
+import '../../../../repositories/taxi/driver/accept_driver_ride_repository.dart';
 
 class TaxiHomeController extends ChangeNotifier {
   final TextEditingController sourceController = TextEditingController();

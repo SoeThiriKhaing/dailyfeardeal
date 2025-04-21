@@ -17,7 +17,8 @@ class RideRequestController extends GetxController {
   var isLoading = true.obs;
   var rideRequests = <TravelModel>[].obs;
   var errorMessage = "".obs;
-  late int driverId;
+  
+  late final int driverId;
   Timer? _timer;
 
   final travelController = TravelController(
@@ -33,7 +34,8 @@ class RideRequestController extends GetxController {
     String? taxiDriverId = await getDriverId();
     driverId = int.parse(taxiDriverId!);
     fetchRideRequests();
-    _timer = Timer.periodic(const Duration(seconds: 3), (_) => fetchRideRequests());
+    //_timer = Timer.periodic(
+    //   const Duration(seconds: 3), (timer) => fetchRideRequests());
   }
 
   Future<void> fetchRideRequests() async {
@@ -56,7 +58,8 @@ class RideRequestController extends GetxController {
 
   Future<void> submitBidPrice(int travelId, double bidPrice) async {
     try {
-      bool success = await bidPriceController.submitBidPrice(travelId, driverId, bidPrice);
+      bool success =
+          await bidPriceController.submitBidPrice(travelId, driverId, bidPrice);
       SnackbarHelper.showSnackbar(
         title: success ? "Success" : "Error",
         message: success

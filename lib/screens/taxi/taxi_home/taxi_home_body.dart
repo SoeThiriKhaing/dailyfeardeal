@@ -1,5 +1,6 @@
+
 import 'package:dailyfairdeal/screens/taxi/taxi_home/nearby_taxi_driver_list_widget.dart';
-import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_controller.dart';
+import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/taxi_home_controller.dart';
 import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_map.dart';
 import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_search_field.dart';
 import 'package:dailyfairdeal/screens/taxi/taxi_home/selected_driver_info_card.dart';

@@ -1,4 +1,4 @@
-import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_controller.dart';
+import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/taxi_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

@@ -1,4 +1,4 @@
-import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_controller.dart';
+import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/taxi_home_controller.dart';
 import 'package:dailyfairdeal/screens/taxi/taxi_home/build_nearby_taxi_driver_info_row_widget.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:flutter/material.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_controller.dart';
+import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/taxi_home_controller.dart';
 import 'package:dailyfairdeal/screens/auth/splashscreen.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

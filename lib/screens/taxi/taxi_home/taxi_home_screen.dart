@@ -1,7 +1,7 @@
 import 'package:dailyfairdeal/main.dart';
 import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_appbar.dart';
 import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_body.dart';
-import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_controller.dart';
+import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/taxi_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

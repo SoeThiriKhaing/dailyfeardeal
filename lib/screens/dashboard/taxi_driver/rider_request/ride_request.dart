@@ -7,35 +7,40 @@ import 'package:get/get.dart';
 class RideRequest extends StatelessWidget {
   final rideRequestController = Get.put(RideRequestController());
 
-   RideRequest({super.key});
+  RideRequest({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (rideRequestController.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (rideRequestController.errorMessage.isNotEmpty) {
-        return Center(child: Text(rideRequestController.errorMessage.value));
-      }
-      if (rideRequestController.rideRequests.isEmpty) {
-        return const Center(child: Text('No Rider Request'));
-      }
-      return ListView.builder(
-        itemCount: rideRequestController.rideRequests.length,
-        itemBuilder: (context, index) {
-          final request = rideRequestController.rideRequests[index];
-          return RideRequestCard(
-            request: request,
-            onSubmitBid: (travelId) => showBidPriceDialog(
-              context: context,
-              onSubmit: (bidPrice) =>
-                  rideRequestController.submitBidPrice(travelId, bidPrice),
-              travelId: travelId,
-            ),
-          );
-        },
-      );
-    });
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Ride Request List"),
+      ),
+      body: Obx(() {
+        if (rideRequestController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (rideRequestController.errorMessage.isNotEmpty) {
+          return Center(child: Text(rideRequestController.errorMessage.value));
+        }
+        if (rideRequestController.rideRequests.isEmpty) {
+          return const Center(child: Text('No Rider Request'));
+        }
+        return ListView.builder(
+          itemCount: rideRequestController.rideRequests.length,
+          itemBuilder: (context, index) {
+            final request = rideRequestController.rideRequests[index];
+            return RideRequestCard(
+              request: request,
+              onSubmitBid: (travelId) => showBidPriceDialog(
+                context: context,
+                onSubmit: (bidPrice) =>
+                    rideRequestController.submitBidPrice(travelId, bidPrice),
+                travelId: travelId,
+              ),
+            );
+          },
+        );
+      }),
+    );
   }
 }

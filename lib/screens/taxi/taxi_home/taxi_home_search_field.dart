@@ -1,6 +1,6 @@
 import 'package:dailyfairdeal/common_calls/constant.dart';
 import 'package:dailyfairdeal/config/messages.dart';
-import 'package:dailyfairdeal/screens/taxi/taxi_home/taxi_home_controller.dart';
+import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/taxi_home_controller.dart';
 import 'package:dailyfairdeal/screens/taxi/widgets/auto_complete_text_field.dart';
 import 'package:dailyfairdeal/util/snackbar_helper.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
