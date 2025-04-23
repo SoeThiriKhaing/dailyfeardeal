@@ -1,6 +1,8 @@
 import 'package:dailyfairdeal/controllers/taxi/driver/driver_dashboard_controller/ride_request_controller.dart';
+import 'package:dailyfairdeal/screens/dashboard/taxi_driver/driver_dashboard.dart';
 import 'package:dailyfairdeal/screens/dashboard/taxi_driver/rider_request/build_price_dialog.dart';
 import 'package:dailyfairdeal/screens/dashboard/taxi_driver/rider_request/ride_request_card.dart';
+import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,11 +13,8 @@ class RideRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ride Request List"),
-      ),
-      body: Obx(() {
+    return DriverDashboard(
+      child: Obx(() {
         if (rideRequestController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }

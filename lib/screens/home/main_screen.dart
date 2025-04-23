@@ -5,11 +5,13 @@ import 'package:dailyfairdeal/screens/payment/payment_screen.dart';
 import 'package:dailyfairdeal/widget/app_color.dart';
 import 'package:dailyfairdeal/widget/bottom_nav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class MainScreen extends StatelessWidget {
-  MainScreen({super.key});
+  final String email;
+  MainScreen({super.key, required this.email});
   final BottomNav bottomNav = Get.put(BottomNav());
   final List<Widget> pages = [
     const Home(),
@@ -39,9 +41,6 @@ class MainScreen extends StatelessWidget {
                 icon: Icon(Icons.local_activity), label: "Activities"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.payment), label: "Payment"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.notification_important),
-            //     label: "Notifications"),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           ],
         )));

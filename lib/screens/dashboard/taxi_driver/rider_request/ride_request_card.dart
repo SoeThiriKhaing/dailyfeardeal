@@ -15,56 +15,116 @@ class RideRequestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(request.user?.name ?? 'Unknown Rider', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            _infoRow(Icons.location_on, "Pickup: ${request.pickupAddress ?? 'Fetching...'}", Colors.green),
-            const SizedBox(height: 6),
-            _infoRow(Icons.flag, "Dropoff: ${request.destinationAddress ?? 'Fetching...'}", Colors.red),
-            const SizedBox(height: 6),
-            _infoRow(Icons.phone, "Phone: ${request.user?.phone ?? 'N/A'}", Colors.teal),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _actionButton(context, Icons.call, "Call", Colors.teal, () {}),
-                _actionButton(context, Icons.message, "Text", Colors.orange, () {}),
-                _actionButton(context, Icons.attach_money, "Price", AppColor.primaryColor, () {
-                  onSubmitBid(request.travelId!);
-                }),
-              ],
-            ),
-          ],
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Rider name
+              Text(
+                request.user?.name ?? 'Unknown Rider',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              /// Pickup Address
+              _infoRow(Icons.location_on_outlined, "Pickup",
+                  request.pickupAddress ?? 'Fetching...', Colors.green),
+
+              const SizedBox(height: 10),
+
+              /// Dropoff Address
+              _infoRow(Icons.flag_outlined, "Dropoff",
+                  request.destinationAddress ?? 'Fetching...', Colors.red),
+
+              const SizedBox(height: 10),
+
+              /// Phone Number
+              _infoRow(Icons.phone_android_outlined, "Phone",
+                  request.user?.phone ?? 'N/A', Colors.teal),
+
+              const Divider(height: 28, thickness: 1.2),
+
+              /// Action Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _actionButton(context, Icons.call, "Call", Colors.teal, () {
+                    // handle call
+                  }),
+                  _actionButton(context, Icons.chat, "Text", Colors.orange, () {
+                    // handle text
+                  }),
+                  _actionButton(context, Icons.attach_money_rounded, "Price",
+                      AppColor.primaryColor, () {
+                    onSubmitBid(request.travelId!);
+                  }),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _infoRow(IconData icon, String text, Color iconColor) {
+  Widget _infoRow(IconData icon, String label, String value, Color iconColor) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, color: iconColor, size: 20),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
+        const SizedBox(width: 10),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              text: '$label: ',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+                fontWeight: FontWeight.w600,
+              ),
+              children: [
+                TextSpan(
+                  text: value,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black54,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _actionButton(BuildContext context, IconData icon, String label, Color color, VoidCallback onPressed) {
+  Widget _actionButton(BuildContext context, IconData icon, String label,
+      Color color, VoidCallback onPressed) {
     return ElevatedButton.icon(
-      icon: Icon(icon, size: 16),
-      label: Text(label, style: const TextStyle(fontSize: 13)),
+      icon: Icon(icon, size: 18),
+      label: Text(label),
       style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
         backgroundColor: color,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        textStyle: const TextStyle(fontSize: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
       onPressed: onPressed,
     );

@@ -17,7 +17,7 @@ void handleSuccessAuth(UserModel user, String successMessage) {
       title: "Success",
       message: successMessage,
     );
-    Get.off(() => MainScreen());
+    Get.off(() => MainScreen(email: user.email,));
   } else {
     SnackbarHelper.showSnackbar(
       title: "Error",
